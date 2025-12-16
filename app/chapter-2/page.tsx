@@ -1,14 +1,129 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Activity, BarChart3, Calculator, Brain, Terminal, Users, TrendingUp, Check, X } from "lucide-react";
+// ייבוא מלא של כל האייקונים הנדרשים:
+import { 
+    ChevronLeft, Activity, BarChart3, Calculator, Brain, Terminal, Users, TrendingUp, Check, X, Play, RefreshCcw, RotateCcw,
+    BookOpen 
+} from "lucide-react";
 import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
 
-// --- רכיבים ויזואליים פנימיים (Mean/Median & StdDev) ---
+// --- קומפוננטת תצוגת קוד אינטראקטיבית (Codepen Style) ---
+type RunStatus = 'idle' | 'running' | 'done';
 
+interface InteractiveCodeBlockProps {
+    filename: string;
+    code: string;
+    output: string;
+    explanation: string;
+}
+
+const InteractiveCodeBlock: React.FC<InteractiveCodeBlockProps> = ({ filename, code, output, explanation }) => {
+    const [status, setStatus] = useState<RunStatus>('idle');
+    const [visualContent, setVisualContent] = useState<React.ReactNode | null>(null);
+
+    const run = useCallback(() => {
+        setStatus('running');
+        setVisualContent(null);
+
+        // סימולציה של זמן ריצה קצר
+        setTimeout(() => {
+            setStatus('done');
+        }, 800); 
+    }, []);
+
+    const reset = useCallback(() => {
+        setStatus('idle');
+        setVisualContent(null);
+    }, []);
+    
+    // פונקציה שמדגישה תחביר (מאוד בסיסי)
+    const highlightCode = (rawCode: string) => {
+        const displayCode = rawCode
+            .replace(/(import|as|print|np\.(?:array|mean|median|std))/g, '<span class="text-purple-400 font-bold">$1</span>')
+            .replace(/(=|:)/g, '<span class="text-white">$1</span>')
+            .replace(/('[^']*'|"[^"]*")/g, '<span class="text-orange-400">$1</span>') // תיקון לטיפול בגרשיים בודדים וכפולים
+            .replace(/(\d+\.\d+|\d+)/g, '<span class="text-blue-400">$1</span>')
+            .replace(/#.*$/gm, '<span class="text-slate-500 italic">$0</span>');
+        
+        return displayCode;
+    }
+
+    const highlightedCode = highlightCode(code);
+
+    return (
+        <div className="my-8 border border-slate-800 rounded-xl overflow-hidden bg-[#0d1117] shadow-2xl relative group">
+            
+            {/* Control Bar */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-[#161b22]">
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                    <span className="text-xs text-slate-400 font-mono ml-3">{filename}</span>
+                </div>
+                <Button 
+                    onClick={status === 'done' ? reset : run}
+                    disabled={status === 'running'}
+                    size="sm"
+                    className={`h-7 text-xs font-bold gap-2 transition-all ${status === 'done' ? 'bg-slate-700 hover:bg-slate-600' : 'bg-green-600 hover:bg-green-500'}`}
+                >
+                    {status === 'running' ? <RefreshCcw size={12} className="animate-spin"/> : status === 'done' ? <RotateCcw size={12}/> : <Play size={12} fill="currentColor"/>}
+                    {status === 'done' ? 'נקה פלט' : status === 'running' ? 'מריץ...' : 'הרץ קוד'}
+                </Button>
+            </div>
+
+            {/* Code and Terminal Area */}
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Code Editor */}
+                <div className="p-5 font-mono text-sm text-slate-300 border-b lg:border-b-0 lg:border-l border-slate-800 overflow-x-auto leading-relaxed" dir="ltr">
+                    {/* *** הפתרון הסופי: משתמשים במחרוזת HTML שהוכנה *** */}
+                    <pre className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+                </div>
+                
+                {/* Terminal Output */}
+                <div className="bg-[#090c10] p-5 font-mono text-sm relative min-h-[200px] flex flex-col justify-between">
+                    <div className="absolute top-2 right-2 text-[10px] text-slate-600 uppercase tracking-widest font-bold select-none">Terminal Output</div>
+                    <AnimatePresence mode="wait">
+                        {status === 'idle' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex items-center justify-center text-slate-600 italic text-xs">
+                                לחץ על &quot;הרץ קוד&quot; כדי לראות את התוצאה...
+                            </motion.div>
+                        )}
+                        {status === 'running' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col items-center justify-center text-blue-400 gap-3">
+                                <RefreshCcw size={24} className="animate-spin opacity-50" />
+                                <span className="text-xs tracking-wider">EXECUTING SCRIPT...</span>
+                            </motion.div>
+                        )}
+                        {status === 'done' && (
+                            <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-green-400 whitespace-pre-wrap leading-relaxed w-full pt-4" dir="ltr">
+                                <span className="text-slate-500 block mb-2 select-none">$ python3 {filename}</span>
+                                {output}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                    
+                    {/* Explanation / Analysis Area */}
+                    {status === 'done' && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-400">
+                            <span className="text-blue-400 font-bold">ניתוח:</span> {explanation}
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+// --- סוף קומפוננטת קוד אינטראקטיבית ---
+
+
+// --- רכיבים ויזואליים פנימיים (Mean/Median & StdDev) ---
 // 1. המחשה: ממוצע מול חציון (הטיית המיליונר)
 const MeanMedianLab = () => {
   const [hasOutlier, setHasOutlier] = useState(false);
@@ -73,7 +188,7 @@ const MeanMedianLab = () => {
           </div>
 
           {/* שליטה והסבר */}
-          <div className="flex flex-col gap-4 min-w-62.5">
+          <div className="flex flex-col gap-4 min-w-[250px]">
               <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
                   <h4 className="text-white font-bold mb-2 flex items-center gap-2">
                       <Users size={16} className="text-blue-400"/> המשרד
@@ -86,7 +201,7 @@ const MeanMedianLab = () => {
                   <Button 
                     onClick={() => setHasOutlier(!hasOutlier)}
                     variant={hasOutlier ? "destructive" : "default"}
-                    className="w-full"
+                    className="w-full bg-blue-600 hover:bg-blue-500"
                   >
                       {hasOutlier ? "הסר את המנכ\"ל (נרמול)" : "הכנס מנכ\"ל (חריג)"}
                   </Button>
@@ -108,7 +223,7 @@ const StdDevSimulator = () => {
         return 50 + offset;
     });
 
-    const stdDev = spread * 2.5; // חישוב דמה לויזואליזציה
+    const stdDev = spread * 2.5; 
 
     return (
         <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 relative overflow-hidden">
@@ -215,22 +330,67 @@ export default function ChapterTwo() {
                 
                 <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4">
                     <p>
-                        תאר לעצמך שיש לך מסד נתונים עם מיליון שורות של משכורות. הבוס שואל: &quot;כמה אנשים מרוויחים אצלנו?&quot;.
-                        אתה לא יכול להקריא לו מיליון מספרים. אתה צריך מספר אחד שמסכם את הכל. למספר הזה קוראים <strong>מדד מרכזי</strong>.
+                        כשאנחנו אוספים נתונים, הדבר הראשון שאנחנו מנסים
+                        להבין הוא איפה &quot;מרוכז&quot; רוב המידע. אנשים עושים את זה אינטואיטיבית כל הזמן: כששואלים אותך כמה זמן לוקח להגיע לעבודה, אתה לא מחשב נוסחה. אתה זורק מספר שקרוב לתחושת הבטן שלך. זו תפיסה של מרכז.
                     </p>
                     <p>
-                        רוב האנשים הולכים ישר ל<strong>ממוצע (Mean)</strong>. זה אינטואיטיבי: מחברים הכל ומחלקים בכמות.
-                        אבל לממוצע יש חולשה קריטית: הוא &quot;דמוקרטי מדי&quot;. הוא מתחשב בכולם, גם בערכים לא הגיוניים.
+                        במתמטיקה, המרכז הזה נקרא <strong>מדד מרכזי</strong>, והוא עוזר לנו
+                        להבין את הדאטה בלי להסתכל על כל ערך בנפרד. יש שני מדדים מרכזיים
+                        שבדרך כלל מספיקים לרוב עבודת ה-AI: <strong>ממוצע</strong> ו<strong>חציון</strong>.
+                        שניהם מתארים את אותה שאלה: &quot;מה הערך שמסכם את הדאטה בצורה
+                        הטובה ביותר?&quot; אבל כל אחד מהם עושה את זה בדרך אחרת לגמרי.
                     </p>
-                    <p className="bg-slate-900/50 p-4 border-r-4 border-blue-500 rounded-r text-sm">
-                        כאן נכנס ה<strong>חציון (Median)</strong>. החציון לא מחשב חישובים. הוא פשוט מסדר את כולם בשורה ובוחר את האדם שעומד בדיוק באמצע.
-                        למה זה גאוני? כי אם ביל גייטס נכנס לחדר, הממוצע יקפוץ בטירוף, אבל החציון בקושי יזוז.
+                    
+                    <h4 className="text-xl font-bold text-white mt-8 border-r-4 border-blue-500 pr-3">ממוצע – הקול של כולם</h4>
+                    <p>
+                        הממוצע מספר לנו מה הערך שמתקבל אם &quot;נפזר את העומס&quot;
+                        שווה בשווה בין כל הנקודות. הוא נותן משקל לכולם – כולל לחריגים.
                     </p>
+                    <p>
+                        לכן אם רוב האנשים מרוויחים 10,000 ש&quot;ח וחמישה
+                        מנהלים מרוויחים חצי מיליון, הממוצע &quot;נמשך&quot; למעלה, למרות שהוא
+                        לא מייצג אף אדם אמיתי. הממוצע טוב כשאין ערכים חריגים. הוא פחות טוב כשיש פיזור קיצוני.
+                    </p>
+
+                    <h4 className="text-xl font-bold text-white mt-8 border-r-4 border-green-500 pr-3">חציון – הקול של האמצע</h4>
+                    <p>
+                        החציון לא מבצע חישובים מסובכים. הוא פשוט שואל:
+                        &quot;מה הערך שנמצא בדיוק באמצע הרשימה?&quot; זו דרך מדויקת ויציבה יותר להבין מה רוב
+                        האנשים מרגישים, והיא
+                        לא מושפעת ממיעוט קיצוני.
+                    </p>
+                    <p className="bg-slate-950/50 p-4 border-r-4 border-green-500 rounded-r text-sm">
+                        לכן בשכר, בזמן תגובה של שרתים, במספר ביקורים באתר
+                        או בכל דאטה עם &quot;זנב ארוך&quot;, חציון הוא כלי הרבה יותר שימושי מממוצע.
+                    </p>
+
+                    {/* **הוראות שימוש למעבדה** */}
+                    <div className="bg-slate-950/50 p-4 border border-slate-700 rounded-lg mt-8">
+                        <h5 className="text-sm font-bold text-white mb-2">מעבדה 1: בחינת הטיית הממוצע</h5>
+                        <p className="text-xs text-slate-400">
+                            לחץ על כפתור <strong>&quot;הכנס מנכ&quot;ל (חריג)&quot;</strong>.
+                            שים לב איך קו <strong>הממוצע (צהוב)</strong> קופץ למעלה באופן דרסטי עקב הערך הקיצוני (100K), בעוד שקו <strong>החציון (ירוק)</strong> נשאר קרוב לערך האמיתי של רוב הנתונים.
+                        </p>
+                    </div>
+
                 </div>
             </div>
 
             {/* ויזואליזציה: ממוצע מול חציון */}
             <MeanMedianLab />
+
+             <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mt-8">
+                <h3 className="text-xl font-bold text-white mt-8 border-r-4 border-emerald-500 pr-3">למה זה חשוב למפתחי AI?</h3>
+                 <p>
+                    כי מודלים לומדים מתוך המספרים שאנחנו מזינים להם. אם הנתונים מוטים, אם הם מעוותים, ואם יש בהם ערכים חריגים, המודל ילמד דפוס
+                    שגוי. הוא לא יודע להתעלם מרעש, הוא פשוט לומד את מה שהוא
+                    רואה.
+                </p>
+                 <p>
+                    לכן השאלה &quot;מהו המרכז?&quot; היא לא שאלה אקדמית. זו שאלה
+                    פרקטית לגמרי שיכולה לקדם מודל קדימה – או להפיל אותו.
+                </p>
+             </div>
 
           </section>
 
@@ -247,22 +407,66 @@ export default function ChapterTwo() {
                     <p>
                         אחרי שהבנו איפה המרכז, השאלה הבאה היא: <strong>עד כמה המצב יציב?</strong>
                         <br/>
-                        תחשוב על שני שרתים. שניהם עונים בממוצע תוך 50ms.
-                        שרת א&#39; עונה תמיד בין 49ms ל-51ms. שרת ב&#39; עונה פעם ב-1ms ופעם ב-99ms.
+                        שני datasets יכולים לקבל
+                        אותו ממוצע ואותו חציון, ועדיין להיות שונים לגמרי. לדוגמה:
+                    </p>
+                    <ul className="list-disc pr-6 space-y-1">
+                        <li>קבוצה אחת שבה כל הערכים כמעט זהים (דאטה יציב).</li>
+                        <li>קבוצה שנייה שבה חלק מהערכים נמוכים מאוד וחלק קופצים לשמים (דאטה רועש).</li>
+                    </ul>
+                    
+                    <h4 className="text-xl font-bold text-white mt-8 border-r-4 border-purple-500 pr-3">פיזור – כמה הדאטה &quot;רועש&quot;</h4>
+                    <p>
+                        פיזור הוא מושג פשוט: כמה רחוקות הנקודות מהמרכז?
+                        אם רוב הנקודות צמודות למרכז – זה דאטה יציב וצפוי. אם הן מתפזרות לכל הכיוונים – יש רעש שמקשה על מודל ללמוד דפוס ברור.
                     </p>
                     <p>
-                        הממוצע שלהם זהה, אבל המציאות שונה לגמרי. בשרת ב&#39; אי אפשר לסמוך על כלום.
-                        כדי למדוד את &quot;רמת הבלגן&quot; הזו, אנחנו משתמשים ב<strong>סטיית תקן (Standard Deviation)</strong>.
+                        דמיין שרתים: שרת א&apos; עונה תמיד בין 49ms ל-51ms. שרת ב&apos; עונה פעם ב-1ms ופעם ב-99ms.
+                        הממוצע שלהם זהה (50ms), אבל הפיזור שונה לחלוטין. במערכת
+                        אמיתית – הקבוצה השנייה תהיה סיוט תפעולי.
+                    </p>
+
+                    <h4 className="text-xl font-bold text-white mt-8 border-r-4 border-red-500 pr-3">סטיית תקן – המדד הפשוט לפיזור</h4>
+                    <p>
+                        כאן מגיע הכלי שנשמע מסובך אבל הוא הכי פשוט בסיפור: <strong>סטיית תקן (Standard Deviation)</strong>.
+                        זו דרך למדוד במדויק כמה רחוקות הנקודות מהממוצע. היא לוקחת את כל הפיזור, &quot;ממירה&quot; אותו למספר אחד, ומאפשרת להשוות datasets שונים בצורה ברורה.
                     </p>
                     <div className="flex gap-4 text-sm mt-2">
                         <div className="text-green-400 font-bold bg-green-900/20 px-2 py-1 rounded">סטייה נמוכה = המידע אמין</div>
                         <div className="text-red-400 font-bold bg-red-900/20 px-2 py-1 rounded">סטייה גבוהה = רעש וכאוס</div>
+                    </div>
+                    
+                    {/* **הוראות שימוש לסימולטור** */}
+                    <div className="bg-slate-950/50 p-4 border border-slate-700 rounded-lg mt-8">
+                        <h5 className="text-sm font-bold text-white mb-2">סימולטור 2: רעש וסטיית תקן</h5>
+                        <p className="text-xs text-slate-400">
+                            גרור את הסליידר משמאל לימין (High Std).
+                            שים לב: ככל שאתה מגדיל את הפיזור (Spread), הנקודות מתרחקות מקו האמצע (50ms) וסטיית התקן עולה (std_dev). 
+                            **תובנה:** פיזור גדול מדי אומר שהמודל יתקשה להבחין בדפוסים, והתוצאות יהיו לא יציבות.
+                        </p>
                     </div>
                 </div>
             </div>
 
             {/* ויזואליזציה: סטיית תקן */}
             <StdDevSimulator />
+
+             <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mt-8">
+                <h3 className="text-xl font-bold text-white mt-8 border-r-4 border-emerald-500 pr-3">למה פיזור חשוב ל-AI?</h3>
+                 <p>
+                    כי מודל לומד מהממוצע והחציון – אבל חי בתוך הפיזור. פיזור
+                    גדול מדי אומר:
+                </p>
+                <ul className="list-disc pr-6 space-y-1">
+                    <li>המודל יתקשה להבחין בדפוסים.</li>
+                    <li>התוצאות יהיו לא יציבות.</li>
+                    <li>המודל &quot;יתבלבל&quot; ויזוז לכיוונים אקראיים בזמן האימון.</li>
+                </ul>
+                <p>
+                    סטטיסטיקה בסיסית היא לא &quot;קישוט&quot;. היא
+                    חלק מהאיכות של המודל.
+                </p>
+             </div>
 
           </section>
 
@@ -274,7 +478,7 @@ export default function ChapterTwo() {
                 <div>
                     <h2 className="text-2xl font-bold text-white">3. דוגמאות על נתונים אמיתיים</h2>
                     <p className="text-slate-400 text-sm">
-                        איפה תפגוש את המספרים האלה ביום יום שלך?
+                        איפה תפגוש את המדדים האלה ביום יום שלך?
                     </p>
                 </div>
             </div>
@@ -287,52 +491,70 @@ export default function ChapterTwo() {
                     icon={<Activity size={18} />} color="blue"
                 />
                 <ExampleCard 
-                    title="מחירי דירות" 
+                    title="מחירי דירות/מוצרים" 
                     scenario="ניקוי דאטה"
-                    desc="דירות יוקרה בודדות יכולות להקפיץ את המחיר הממוצע בעיר שלמה. מודל למידת מכונה חייב להשתמש בחציון כדי לא להתבלבל."
+                    desc="ערכי קיצון בודדים (כמו מוצר יקר בטעות או סייל קיצוני) יכולים להקפיץ את הממוצע. מודל חייב להשתמש בחציון כדי לא להתבלבל."
                     icon={<Calculator size={18} />} color="purple"
                 />
                 <ExampleCard 
                     title="דירוג באפליקציה" 
                     scenario="מערכות המלצה"
-                    desc="מוצר עם ממוצע 4.0 יכול להיות שכולם נתנו לו 4 (יציב), או שחצי נתנו 1 וחצי נתנו 5 (שנוי במחלוקת). הפיזור מספר את הסיפור."
+                    desc="הפיזור מספר את הסיפור: מוצר שבו הסטייה נמוכה אומר שרוב הדירוגים עקביים. סטייה גבוהה מעידה על מחלוקת או התנהגות חשודה."
                     icon={<Brain size={18} />} color="emerald"
                 />
             </div>
           </section>
 
 
-          {/* סעיף 4: NumPy Demo */}
-          <section id="part-4" className="scroll-mt-24 bg-slate-900/40 border border-slate-800 rounded-2xl p-8 relative overflow-hidden">
-             <div className="flex flex-col md:flex-row gap-8 items-start">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 shrink-0">
-                    <Terminal className="text-yellow-400 w-6 h-6" />
-                </div>
-                <div className="space-y-4 w-full">
-                    <h2 className="text-2xl font-bold text-white">4. איך זה נראה בקוד?</h2>
-                    <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none">
-                        <p>
-                            בעולם ה-Python וה-AI, אנחנו כמעט אף פעם לא נכתוב לולאות כדי לחשב ממוצע. זה איטי.
-                            אנחנו משתמשים בספרייה <strong>NumPy</strong> שעושה את זה ב-C++ וטסה במהירות.
-                        </p>
-                    </div>
-                    
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-sm relative overflow-hidden group shadow-lg" dir="ltr">
-                        <div className="absolute top-0 right-0 p-2 opacity-50 text-xs text-slate-500">main.py</div>
-                        
-                        <div className="space-y-2 text-xs md:text-sm">
-                            <span className="text-purple-400">import</span> numpy <span className="text-purple-400">as</span> np<br/><br/>
-                            
-                            <span className="text-slate-500"># 1. המערך שלנו (למשל: זמני תגובה במילי-שניות)</span><br/>
-                            latencies = np.array([98, 102, 100, 101, 99, 103])<br/><br/>
-                            
-                            <span className="text-slate-500"># 2. פקודות הקסם</span><br/>
-                            <span className="text-blue-400">print</span>(np.<span className="text-yellow-300">mean</span>(latencies))   <span className="text-slate-600">{'// 100.5 (הממוצע)'}</span><br/>
-                            <span className="text-blue-400">print</span>(np.<span className="text-yellow-300">median</span>(latencies)) <span className="text-slate-600">{'// 100.5 (החציון)'}</span><br/>
-                            <span className="text-blue-400">print</span>(np.<span className="text-yellow-300">std</span>(latencies))    <span className="text-slate-600">{'// 1.70  (סטיית התקן - נמוכה ויציבה)'}</span><br/>
-                        </div>
-                    </div>
-                </div>
+          {/* סעיף 4: NumPy Demo - שימוש ב-CodeBlockDisplay המשודרג */}
+          <section id="part-4" className="scroll-mt-24">
+            <h2 className="text-2xl font-bold text-white mb-4">4. הדגמה קצרה ב-NumPy</h2>
+            <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4">
+                <p>
+                    אחרי שהבנו את הרעיונות מאחורי ממוצע, חציון וסטיית
+                    תקן דרך דוגמאות מהעולם האמיתי, הגיע הזמן לראות איך זה נראה בקוד.
+                    NumPy נועדה לעבוד עם מספרים במהירות וביעילות. 
+                </p>
+                <p>
+                    בכל מה שקשור לדאטה – היא הכלי שהופך מתמטיקה &quot;על נייר&quot; למשהו שמתחבר ישירות למערכות
+                    אמיתיות.
+                </p>
+            </div>
+             
+             {/* CodeBlockDisplay מחליף את SimpleCodeDisplay */}
+             <InteractiveCodeBlock
+                filename="stat_analysis.py"
+                code={`import numpy as np
+
+# דאטה: זמני תגובה במילי-שניות
+latencies = np.array([98, 102, 100, 101, 99, 103])
+
+# חישובים:
+avg = np.mean(latencies)      # ממוצע
+med = np.median(latencies)    # חציון
+std = np.std(latencies)       # סטיית תקן
+
+print(f'Average: {avg}')
+print(f'Std Dev: {std:.2f}')`}
+                output={`Average: 100.5
+Std Dev: 1.70`}
+                explanation="תוצאה: ממוצע וחציון קרובים (דאטה מאוזן). סטיית תקן נמוכה (מערכת יציבה). NumPy מחשבת את המדדים במהירות הנדרשת ל-AI."
+            />
+
+            <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mt-8">
+                <h3 className="text-xl font-bold text-white mt-8 border-r-4 border-red-500 pr-3">למה זה קריטי לראות את זה בקוד?</h3>
+                 <p>
+                    כי ברגע שמפעילים את זה על נתונים אמיתיים בפרויקט שלך, המספרים מפסיקים להיות &quot;מושגים
+                    מתמטיים&quot;, והופכים לכלים אמיתיים שעוזרים:
+                 </p>
+                <ul className="list-disc pr-6 space-y-1">
+                    <li>לנקות דאטה ולזהות בעיות.</li>
+                    <li>להבין דפוסים ולשפר מודלים.</li>
+                    <li>לשפר מודלים על ידי טיפול נכון בפיזור ובערכים קיצוניים.</li>
+                </ul>
+                <p className="font-bold text-white">
+                    זוהי אנליזה בסיסית, אבל כזו שכל מפתח AI משתמש בה כמעט בכל פרויקט.
+                </p>
              </div>
           </section>
 
@@ -341,9 +563,10 @@ export default function ChapterTwo() {
           <section id="quiz" className="mt-16 pt-8 border-t border-slate-800">
              <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-white mb-2">בדיקת הבנה: סיכום פרק 2</h2>
-                <p className="text-slate-400 text-sm">האם הבנת את ההבדל בין ממוצע לחציון?</p>
+                <p className="text-slate-400 text-sm">האם הבנת את ההבדל בין ממוצע, חציון וסטיית תקן?</p>
              </div>
-             <ChapterTwoQuiz />
+             {/* Quiz component */}
+              <ChapterTwoQuiz />
           </section>
 
         </main>
@@ -353,7 +576,7 @@ export default function ChapterTwo() {
 }
 
 
-// --- קומפוננטות עזר ---
+// --- קומפוננטות עזר (ExampleCard ו-ChapterTwoQuiz) ---
 
 interface ExampleCardProps {
     title: string;
@@ -467,7 +690,7 @@ function ChapterTwoQuiz() {
                     >
                         <Link href="/chapter-3">
                             <Button size="lg" className="h-14 px-8 text-base bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-xl hover:scale-105 transition-transform">
-                                המשך לפרק 3: הסתברות <ChevronLeft className="mr-2 h-4 w-4" />
+                                המשך לפרק 3: הסתברות <ChevronLeft className="mr-2 h-4 w-4 rotate-180" />
                             </Button>
                         </Link>
                     </motion.div>
