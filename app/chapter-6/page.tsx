@@ -387,7 +387,7 @@ function NormDistanceQuiz() {
                             </p>
                         ) : (
                             <p className="text-xl font-bold text-red-400 mb-6 flex items-center justify-center gap-2">
-                                <X size={24} /> עבר על ההסברים, ואז המשך.
+                                <X size={24} /> עבור על ההסברים, ואז המשך.
                             </p>
                         )}
                         <Link href="/chapter-7">
