@@ -3,9 +3,6 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 
-
-
-
 // ייבוא גלובלי של כל האייקונים
 import { ChevronLeft, Scale, ArrowLeft, Target, Zap, HardHat, Layout, Divide, Ruler, Brain, CheckCircle, X, Check } from "lucide-react";
 
@@ -526,7 +523,7 @@ export default function ChapterSix() {
                     הנורמה (L2) היא הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית במרחב הרב-ממדי. במודלי AI, היא קובעת את ה&quot;משקל&quot; או ה&quot;עוצמה&quot; של הוקטור.
                 </p>
 
-                {/* **נוסחה כללית - שימוש ב-KaTeX** */}
+                
                 <FormulaDisplay 
                     title="נוסחת הנורמה (L2 - הכללת פיתגורס)"
                     content={normFormulaLatex} 
@@ -534,7 +531,8 @@ export default function ChapterSix() {
                     icon={<Zap className="text-fuchsia-400" />}
                 />
                 
-                {/* **הדוגמה הקונקרטית - שימוש ב-KaTeX** */}
+                
+                {/* הוספת mb-6 כדי להרחיק ממעבדת הנורמה */}
                 <div className="bg-slate-900/50 border border-slate-700 p-4 rounded-lg mt-4 text-center mb-6"> 
                     <h5 className="text-sm text-slate-400 mb-2">דוגמה קונקרטית לחישוב הנורמה של [3, 4]:</h5>
                     <MathRenderer latex={normExampleLatex} displayMode={true} />
@@ -544,19 +542,20 @@ export default function ChapterSix() {
             {/* LAB 1: NormLab */}
             <NormLab />
 
-            {/* **תיקון מיקום:** סידור מחדש של ה-NumPy והטבלה. הטבלה עברה לטור משלה. */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            
+            <div className="grid grid-cols-1 gap-8 mt-12">
                  
                  <SimpleCodeDisplay
                     title="דוגמה: חישוב נורמה ב-NumPy (LTR כפוי)"
                     code={`import numpy as np
 v = np.array([3, 4])
-norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
+norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)
+print(f'Norm: {norm_v:.2f}')`}
                     output="5.00"
                     description="כך המודל מחשב את 'עוצמת' המידע של הוקטור (גם באלפי ממדים). זהו היישום הפרקטי של נוסחת הנורמה."
                 />
-                {/* NumPy Table קיבלה טור משלה לסידור טוב יותר */}
-                <div className="pt-4">
+                {/* NumPy Table כעת מתחת לבלוק הקוד, עם ריווח למעלה */}
+                <div className="mt-8">
                      <NumPyNormTable norm="5.00" distance="5.00" />
                 </div>
             </div>
@@ -567,8 +566,8 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     נורמה מציגה למודל כמה חזק או קיצוני אובייקט מסוים. זה קריטי עבור:
                 </p>
                 <ul className="list-disc pr-6 space-y-2">
-                    <li><b>חריגות (Outliers)</b>: וקטור ארוך במיוחד יכול להיות אנומליה (פעילות קיצונית). </li>
-                    <li><b>נירמול (Normalization)</b>: תהליך בו אנו משנים את הוקטור כך שאורכו יהיה 1. זה מאפשר למודל להתעלם מהעוצמה (אורך הוקטור) ולהתמקד <b>רק בכיוון</b> (במשמעות הסמנטית). זהו הבסיס לדמיון קוסינוס. </li>
+                    <li><b>חריגות (Outliers)</b>: וקטור ארוך במיוחד יכול להיות אנומליה (פעילות קיצונית).</li>
+                    <li><b>נירמול (Normalization)</b>: תהליך בו אנו משנים את הוקטור כך שאורכו יהיה 1. זה מאפשר למודל להתעלם מהעוצמה (אורך הוקטור) ולהתמקד <b>רק בכיוון</b> (במשמעות הסמנטית). זהו הבסיס לדמיון קוסינוס.</li>
                 </ul>
                 <p className="font-bold text-white">
                     אינטואיציה: נורמה עוזרת למודל להבין את <span className="font-bold text-white">עוצמת המידע</span>; נירמול מסיר את העוצמה ומשאיר רק את <span className="font-bold text-white">הכיוון (המשמעות)</span>.
@@ -587,7 +586,7 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
             <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6">
                 <h3 className="text-xl font-bold text-white mb-4">הצעד הראשון: מרחק</h3>
                 <p>
-                    כדי להשוות בין שני וקטורים, הדרך האינטואיטיבית ביותר היא למדוד את המרחק ביניהם. אנו משתמשים ב**מרחק אוקלידי (L2 Distance)**, שהוא למעשה אורך הוקטור המחבר בין שתי הנקודות במרחב הרב-ממדי. 
+                    כדי להשוות בין שני וקטורים, הדרך האינטואיטיבית ביותר היא למדוד את המרחק ביניהם. אנו משתמשים ב<b>מרחק אוקלידי (L2 Distance)</b>, שהוא למעשה אורך הוקטור המחבר בין שתי הנקודות במרחב הרב-ממדי.
                 </p>
                 <p className="font-bold text-white border-r-4 border-emerald-500 pr-3 bg-emerald-500/5 py-1 rounded-r">
                     מרחק קטן $\leftarrow$ הוקטורים קרובים גיאומטרית. מרחק גדול $\leftarrow$ הוקטורים רחוקים גיאומטרית.
@@ -597,7 +596,8 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
             {/* LAB 2: DistanceProblemLab */}
             <DistanceProblemLab />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            {/* מעבר מ-grid ל-space-y לריווח נכון */}
+            <div className="space-y-8 mt-8">
                 <FormulaDisplay 
                     title="נוסחת המרחק בין 2 וקטורים (L2)"
                     content={distanceFormulaLatex} 
@@ -605,7 +605,7 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     icon={<HardHat className="text-emerald-400" />}
                 />
                 
-                {/* שימוש ב-SimpleCodeDisplay לתיקון כיווניות LTR */}
+                {/* שימוש ב-SimpleCodeDisplay לתיקון כיווניות LTR והחלפת גרשיים */}
                  <SimpleCodeDisplay
                     title="דוגמה: חישוב מרחק ב-NumPy (LTR כפוי)"
                     code={`import numpy as np
@@ -613,13 +613,13 @@ v1 = np.array([3, 4])
 v2 = np.array([7, 1])
 # המרחק הוא נורמת ההפרש
 distance = np.linalg.norm(v1 - v2)
-print(f"Distance: {distance:.2f}")`}
+print(f'Distance: {distance:.2f}')`}
                     output="5.00"
                     description="מרחק שימושי בקיבוץ (Clustering) ואיתור חריגים, שבהם המיקום הגיאומטרי המוחלט הוא העיקר."
                 />
             </div>
              <p className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none mt-6">
-                **הסבר מעמיק:** ביישומי AI מסוימים, כמו ניתוח תמונות או נתוני חיישנים, המרחק האוקלידי עשוי להיות מדד טוב. אבל ברגע שאנו נכנסים לתחום השפה (NLP), שם **המשמעות** חשובה יותר מהעוצמה המילולית, המרחק הופך לבעייתי, כפי שנראה בסעיף הבא.
+                <b>הסבר מעמיק:</b> ביישומי AI מסוימים, כמו ניתוח תמונות או נתוני חיישנים, המרחק האוקלידי עשוי להיות מדד טוב. אבל ברגע שאנו נכנסים לתחום השפה (NLP), שם <b>המשמעות</b> חשובה יותר מהעוצמה המילולית, המרחק הופך לבעייתי, כפי שנראה בסעיף הבא.
             </p>
           </section>
 
@@ -639,7 +639,7 @@ print(f"Distance: {distance:.2f}")`}
                     מרחק מודד שונות גיאומטרית בלבד, לא שונות רעיונית. בטקסט, וקטורים עם משמעות זהה (כגון &quot;כלב גדול&quot; ו&quot;כלב ענק&quot;) יכולים להיות מרוחקים מאוד אם האורך של אחד מהם (העוצמה) גבוה בהרבה מהשני.
                 </p>
                 <p>
-                    זהו הפער הגדול ביותר במעבר מגיאומטריה פשוטה לגיאומטריה של דאטה. אנו צריכים מדד ששואל: **האם הם מצביעים לאותו כיוון?**
+                    זהו הפער הגדול ביותר במעבר מגיאומטריה פשוטה לגיאומטריה של דאטה. אנו צריכים מדד ששואל: <b>האם הם מצביעים לאותו כיוון?</b>
                 </p>
             </div>
             
@@ -656,7 +656,7 @@ print(f"Distance: {distance:.2f}")`}
                     זו הסיבה שמערכות NLP כמעט תמיד משתמשות במדידת זווית בין וקטורים.
                 </p>
                 <p className="font-bold text-white">
-                    המדד הזה נקרא <b>דמיון קוסינוס</b>, והוא אחד הכלים החשובים ביותר להבנת משמעות בשפה. זהו הנושא המרכזי של פרק 7.
+                    המדד הזה נקרא <b>דמיון קוסינוס</b>, והוא אחד הכלים החשובים ביותר להבנת משמעות בשפה. נצלול אליו בפרק הבא.
                 </p>
             </div>
           </section>
