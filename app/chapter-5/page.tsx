@@ -527,10 +527,31 @@ const SemanticPlayground = () => {
 
 export default function ChapterFive() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // הנדלר לגלילה כדי לשנות את הסטטוס ב-Header
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-      setIsScrolled(e.currentTarget.scrollTop > 50);
+      const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+      
+      // 1. מניעת הבהוב (Hysteresis)
+      if (!isScrolled && scrollTop > 50) setIsScrolled(true);
+      else if (isScrolled && scrollTop < 30) setIsScrolled(false);
+
+      // 2. חישוב אחוזים בטוח
+      // סך כל הגלילה האפשרית
+      const totalScroll = scrollHeight - clientHeight;
+      
+      // אם אין לאן לגלול (או שיש שגיאה בחישוב), נקבע 0 כדי למנוע NaN
+      if (totalScroll <= 0) {
+          setScrollProgress(0);
+          return;
+      }
+
+      // חישוב האחוז (בין 0 ל-100)
+      const currentProgress = (scrollTop / totalScroll) * 100;
+      
+      // עדכון הסטייט עם הגנה
+      setScrollProgress(currentProgress);
   };
 
   return (
@@ -560,6 +581,7 @@ export default function ChapterFive() {
             description="AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן. בוא נבין איך זה קורה."
             readTime="10 דקות"
             isScrolled={isScrolled}
+            scrollProgress={scrollProgress}
             colorFrom="blue-400"
             colorTo="purple-400"
         />
