@@ -490,7 +490,7 @@ const SemanticPlayground = () => {
                         }}
                         className={`
                             px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg z-10 flex items-center gap-2 select-none transition-shadow
-                            ${key === 'dog' || key === 'cat' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-orange-600 hover:bg-orange-500'}
+                            ${key === 'dog' || key === 'cat' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-blue-600 hover:bg-blue-500'}
                             ${draggingId === key ? 'scale-110 shadow-2xl ring-2 ring-white cursor-grabbing z-50' : ''}
                         `}
                     >
@@ -536,7 +536,7 @@ export default function ChapterFive() {
       {/* Background Pattern Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none">
          <div 
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 opacity-10"
             style={{ 
                 backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', 
                 backgroundSize: '24px 24px' 
