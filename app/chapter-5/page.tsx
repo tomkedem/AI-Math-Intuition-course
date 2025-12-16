@@ -5,17 +5,16 @@ import { Button } from "@/components/ui/button";
 import { 
     ChevronLeft, Brain, ScanFace, FileText, UserCircle, MoveRight, 
     Layers, Sparkles, Code, Hash, Palette, Lightbulb, 
-    MousePointer2, Monitor, Cat, Sandwich, RefreshCw, Check, X, Clock,
-    Loader2
+    MousePointer2, Monitor, Cat, Sandwich, RefreshCw, Check, X
 } from "lucide-react";
-import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
-import { CourseHeader } from "@/components/CourseHeader";
 
+// שינוי: ייבוא המעטפת החדשה במקום הרכיבים הנפרדים
+import { ChapterLayout } from "@/components/ChapterLayout";
 
-
-// --- רכיבים פנימיים ---
+// --- רכיבים פנימיים (המעבדות) ---
+// (הקוד של המעבדות נשאר זהה לחלוטין לקוד המקורי שלך)
 
 // 1. המעבדה החדשה: איך אובייקט הופך לוקטור?
 const ObjectToVectorLab = () => {
@@ -523,252 +522,188 @@ const SemanticPlayground = () => {
     );
 };
 
-// --- העמוד הראשי ---
+// --- העמוד הראשי (Refactored) ---
 
 export default function ChapterFive() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  // הנדלר לגלילה כדי לשנות את הסטטוס ב-Header
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-      const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-      
-      // 1. מניעת הבהוב (Hysteresis)
-      if (!isScrolled && scrollTop > 50) setIsScrolled(true);
-      else if (isScrolled && scrollTop < 30) setIsScrolled(false);
-
-      // 2. חישוב אחוזים בטוח
-      // סך כל הגלילה האפשרית
-      const totalScroll = scrollHeight - clientHeight;
-      
-      // אם אין לאן לגלול (או שיש שגיאה בחישוב), נקבע 0 כדי למנוע NaN
-      if (totalScroll <= 0) {
-          setScrollProgress(0);
-          return;
-      }
-
-      // חישוב האחוז (בין 0 ל-100)
-      const currentProgress = (scrollTop / totalScroll) * 100;
-      
-      // עדכון הסטייט עם הגנה
-      setScrollProgress(currentProgress);
-  };
-
   return (
-    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-blue-500/30 overflow-hidden relative" dir="rtl">
-      
-      {/* Background Pattern Layer */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-         <div 
-            className="absolute inset-0 opacity-10"
-            style={{ 
-                backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', 
-                backgroundSize: '24px 24px' 
-            }}
-         ></div>
-         <div className="absolute top-0 left-0 right-0 h-96 bg-blue-600/5 blur-[100px]"></div>
-      </div>
-
-      <CourseSidebar />
-
-      <div 
-        className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth relative z-10"
-        onScroll={handleScroll}
-      >
-        <CourseHeader 
-            chapterNum="פרק 5"
-            title="וקטורים – השפה היחידה שהמודל מבין"           
-            description="AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן. בוא נבין איך זה קורה."
-            readTime="10 דקות"
-            isScrolled={isScrolled}
-            scrollProgress={scrollProgress}
-            colorFrom="blue-400"
-            colorTo="purple-400"
-        />
-        
-
-        <main className="max-w-4xl mx-auto px-8 md:px-12 py-12 space-y-24 pb-48">
+   
           
-          {/* סעיף 1: איך אובייקט הופך לוקטור */}
-          <section id="part-1" className="scroll-mt-24">
-            <div className="flex flex-col gap-4 mb-8">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Hash size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">1. איך מציגים אובייקט כסדרה של מספרים?</h2>
-                </div>
-                
-                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-6">
-                    <p>
-                        אם יש משהו אחד שבאמת משנה את הדרך שבה מפתח מבין AI, זה הרעיון שכל אובייקט בעולם – טקסט, תמונה, משתמש, מוצר, אירוע – יכול להפוך לוקטור.
-                        זאת אומרת: <strong>רשימה מסודרת של מספרים.</strong>
-                    </p>
-                    <p>
-                        כדי להבין מודלים מודרניים, צריך להבין את המשפט הבא:
-                        <strong>AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן.</strong>
-                        וזה בדיוק מה שנותן לוקטורים את הכוח שלהם.
-                    </p>
+            <ChapterLayout currentChapterId={5}>
+        
+            {/* סעיף 1: איך אובייקט הופך לוקטור */}
+            <section id="part-1" className="scroll-mt-24">
+                <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Hash size={20} /></div>
+                        <h2 className="text-2xl font-bold text-white">1. איך מציגים אובייקט כסדרה של מספרים?</h2>
+                    </div>
                     
-                    <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 my-4">
-                        <h4 className="text-white font-bold mb-2 flex items-center gap-2">
-                            <Lightbulb size={18} className="text-yellow-400"/> מה זה בכלל וקטור?
-                        </h4>
-                        <p className="text-slate-400 text-sm">
-                            זה פשוט מאוד. וקטור הוא רשימה של מספרים. לא מטריצה, לא אובייקט מסובך. רשימה.
-                            <br/>
-                            <code className="bg-slate-800 px-1 rounded text-purple-300">[0.2, 1.7, 3.4]</code>
+                    <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-6">
+                        <p>
+                            אם יש משהו אחד שבאמת משנה את הדרך שבה מפתח מבין AI, זה הרעיון שכל אובייקט בעולם – טקסט, תמונה, משתמש, מוצר, אירוע – יכול להפוך לוקטור.
+                            זאת אומרת: <strong>רשימה מסודרת של מספרים.</strong>
+                        </p>
+                        <p>
+                            כדי להבין מודלים מודרניים, צריך להבין את המשפט הבא:
+                            <strong>AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן.</strong>
+                            וזה בדיוק מה שנותן לוקטורים את הכוח שלהם.
+                        </p>
+                        
+                        <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 my-4">
+                            <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                                <Lightbulb size={18} className="text-yellow-400"/> מה זה בכלל וקטור?
+                            </h4>
+                            <p className="text-slate-400 text-sm">
+                                זה פשוט מאוד. וקטור הוא רשימה של מספרים. לא מטריצה, לא אובייקט מסובך. רשימה.
+                                <br/>
+                                <code className="bg-slate-800 px-1 rounded text-purple-300">[0.2, 1.7, 3.4]</code>
+                            </p>
+                        </div>
+
+                        <p>
+                            <strong>איך זה קורה בפועל?</strong> אפשר לחשוב על זה כעל תרגום.
+                            אובייקט מגיע מבחוץ – תמונה, מילה, משתמש – והמודל ממיר את התכונות החשובות שלו למספרים.
+                        </p>
+                    </div>
+                </div>
+
+                {/* מעבדת הוקטורים החדשה */}
+                <ObjectToVectorLab />
+
+                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none mt-8 space-y-4">
+                    <h4 className="text-xl font-bold text-white">סיכום הדוגמאות:</h4>
+                    <ul className="list-disc pr-6 space-y-2">
+                        <li><strong>פיקסל:</strong> למודל אין מושג מה זה &quot;אדום&quot;. הוא מקבל מספרים מ-0 עד 255 שמייצגים עוצמה של צבע.</li>
+                        <li><strong>מילה:</strong> &quot;המבורגר&quot; הופך לרשימת מספרים שלא מייצגת אותיות, אלא משמעות (אוכל, שומן, טעם).</li>
+                        <li><strong>משתמש:</strong> המודל לא מכיר את &quot;יוסי&quot;. הוא מכיר וקטור שמייצג דפוסי התנהגות (שעות כניסה, סוגי קליקים).</li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* סעיף 2: גיאומטריה ודמיון */}
+            <section id="part-2" className="scroll-mt-24">
+                <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Layers size={20} /></div>
+                        <h2 className="text-2xl font-bold text-white">2. למה כמעט כל AI עובד על וקטורים?</h2>
+                    </div>
+                    
+                    <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mb-8">
+                        <p>
+                            אחרי שהבנו שוקטור הוא רשימת מספרים, עולה השאלה: למה דווקא וקטורים?
+                            יש לזה סיבות עמוקות שמחברות בין מתמטיקה, יעילות, והדרך שבה מודלים לומדים דפוסים.
+                        </p>
+                        <p>
+                            הסיבה החשובה ביותר היא <strong>מדידת דמיון</strong>.
+                            כדי שמודל יבין ש&quot;חתול&quot; ו&quot;גור&quot; קרובים, הוא צריך למדוד מרחק. וקטור מאפשר לעשות בדיוק את זה.
                         </p>
                     </div>
 
-                    <p>
-                        <strong>איך זה קורה בפועל?</strong> אפשר לחשוב על זה כעל תרגום.
-                        אובייקט מגיע מבחוץ – תמונה, מילה, משתמש – והמודל ממיר את התכונות החשובות שלו למספרים.
-                    </p>
+                    {/* מעבדת החץ הגיאומטרי */}
+                    <VectorPlayground />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                            <h4 className="font-bold text-white mb-2 flex items-center gap-2">
+                                <Sparkles size={16} className="text-yellow-400"/> מתמטיקה מהירה
+                            </h4>
+                            <p className="text-sm text-slate-400 leading-relaxed">
+                                מעבדים מודרניים (GPU) בנויים לטחון וקטורים. הם יכולים לבצע מיליארדי פעולות כפל וחיבור בשנייה על רשימות כאלה.
+                            </p>
+                        </div>
+                        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                            <h4 className="font-bold text-white mb-2 flex items-center gap-2">
+                                <Brain size={16} className="text-purple-400"/> למידת תכונות
+                            </h4>
+                            <p className="text-sm text-slate-400 leading-relaxed">
+                                המודל &quot;לומד&quot; לבד את המספרים בוקטור. המספרים האלה מייצגים תכונות עמוקות שהמודל זיהה בדאטה.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {/* מעבדת הוקטורים החדשה - עם הטאבים והעיצוב החדש */}
-            <ObjectToVectorLab />
-
-            <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none mt-8 space-y-4">
-                <h4 className="text-xl font-bold text-white">סיכום הדוגמאות:</h4>
-                <ul className="list-disc pr-6 space-y-2">
-                    <li><strong>פיקסל:</strong> למודל אין מושג מה זה &quot;אדום&quot;. הוא מקבל מספרים מ-0 עד 255 שמייצגים עוצמה של צבע.</li>
-                    <li><strong>מילה:</strong> &quot;המבורגר&quot; הופך לרשימת מספרים שלא מייצגת אותיות, אלא משמעות (אוכל, שומן, טעם).</li>
-                    <li><strong>משתמש:</strong> המודל לא מכיר את &quot;יוסי&quot;. הוא מכיר וקטור שמייצג דפוסי התנהגות (שעות כניסה, סוגי קליקים).</li>
-                </ul>
-            </div>
-
-          </section>
-
-
-          {/* סעיף 2: גיאומטריה ודמיון */}
-          <section id="part-2" className="scroll-mt-24">
-            <div className="flex flex-col gap-4 mb-8">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Layers size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">2. למה כמעט כל AI עובד על וקטורים?</h2>
+            {/* סעיף 3: המרחב הסמנטי */}
+            <section id="part-3" className="scroll-mt-24">
+                <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Brain size={20} /></div>
+                        <h2 className="text-2xl font-bold text-white">3. הוקטור כמשמעות (Semantic Space)</h2>
+                    </div>
+                    <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none">
+                        <p>
+                            הקסם האמיתי קורה כשהמודל לומד לסדר את הוקטורים במרחב לפי המשמעות שלהם.
+                            מילים בעלות משמעות דומה יקבלו וקטורים קרובים מתמטית.
+                        </p>
+                        <p>
+                            במרחב הזה, המרחק בין &quot;מלך&quot; ל&quot;מלכה&quot; הוא קטן מאוד, והמרחק בינם לבין &quot;המבורגר&quot; הוא עצום.
+                            המודל לא מבין עברית – הוא מבין גיאומטריה.
+                        </p>
+                    </div>
                 </div>
+
+                {/* מעבדת גרירת מילים */}
+                <SemanticPlayground />
                 
-                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mb-8">
-                    <p>
-                        אחרי שהבנו שוקטור הוא רשימת מספרים, עולה השאלה: למה דווקא וקטורים?
-                        יש לזה סיבות עמוקות שמחברות בין מתמטיקה, יעילות, והדרך שבה מודלים לומדים דפוסים.
-                    </p>
-                    <p>
-                        הסיבה החשובה ביותר היא <strong>מדידת דמיון</strong>.
-                        כדי שמודל יבין ש&quot;חתול&quot; ו&quot;גור&quot; קרובים, הוא צריך למדוד מרחק. וקטור מאפשר לעשות בדיוק את זה.
-                    </p>
+                <div className="mt-6 bg-slate-950 p-4 rounded-lg border border-slate-800 text-sm text-slate-400">
+                    <strong>למה זה חשוב?</strong> ככה בדיוק עובדים מודלי שפה (כמו GPT). הם לא &quot;קוראים&quot;. הם מחשבים איזה וקטור הכי קרוב לוקטור הנוכחי במרחב הסמנטי כדי לנחש את המילה הבאה.
                 </div>
+            </section>
 
-                {/* המעבדה החדשה - החץ הגיאומטרי */}
-                <VectorPlayground />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                        <h4 className="font-bold text-white mb-2 flex items-center gap-2">
-                            <Sparkles size={16} className="text-yellow-400"/> מתמטיקה מהירה
-                        </h4>
-                        <p className="text-sm text-slate-400 leading-relaxed">
-                            מעבדים מודרניים (GPU) בנויים לטחון וקטורים. הם יכולים לבצע מיליארדי פעולות כפל וחיבור בשנייה על רשימות כאלה.
+            {/* סעיף 4: תהליך ההמרה בפועל */}
+            <section id="part-4" className="scroll-mt-24 bg-slate-900/40 border border-slate-800 rounded-2xl p-8 relative overflow-hidden">
+                <div className="flex flex-col gap-6">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-slate-950 rounded-lg border border-slate-800"><ScanFace className="text-yellow-400" size={20} /></div>
+                        <h2 className="text-2xl font-bold text-white">4. סיכום: הכל זה מספרים</h2>
+                    </div>
+                    
+                    <div className="prose prose-invert text-slate-400 text-sm leading-relaxed max-w-none mb-4">
+                        <p>
+                            זה היופי. כיוון שהכול מתורגם לוקטורים, מודלים יכולים לעבוד על סוגים שונים של מידע באותה לוגיקה בדיוק.
                         </p>
                     </div>
-                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                        <h4 className="font-bold text-white mb-2 flex items-center gap-2">
-                            <Brain size={16} className="text-purple-400"/> למידת תכונות
-                        </h4>
-                        <p className="text-sm text-slate-400 leading-relaxed">
-                            המודל &quot;לומד&quot; לבד את המספרים בוקטור. המספרים האלה מייצגים תכונות עמוקות שהמודל זיהה בדאטה.
-                        </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <ProcessCard 
+                            title="טקסט (NLP)" 
+                            desc="כל מילה מקבלת וקטור. מילים בהקשר דומה (כמו 'לקוח' ו'משתמש') יקבלו מספרים דומים." 
+                            icon={<FileText size={18}/>}
+                            color="blue" 
+                        />
+                        <ProcessCard 
+                            title="תמונה (CV)" 
+                            desc="המודל סורק צבעים וצורות, וממיר אותם לרשימת מאפיינים שמייצגת 'מה יש בתמונה'." 
+                            icon={<Palette size={18}/>}
+                            color="purple" 
+                        />
+                        <ProcessCard 
+                            title="משתמש (User)" 
+                            desc="היסטוריית הפעולות הופכת לוקטור התנהגות. זה מה שמאפשר לנטפליקס להמליץ לך על סרטים." 
+                            icon={<UserCircle size={18}/>}
+                            color="emerald" 
+                        />
                     </div>
                 </div>
-            </div>
-          </section>
+            </section>
 
-
-          {/* סעיף 3: המרחב הסמנטי */}
-          <section id="part-3" className="scroll-mt-24">
-             <div className="flex flex-col gap-4 mb-8">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Brain size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">3. הוקטור כמשמעות (Semantic Space)</h2>
+            {/* Quiz */}
+            <section id="quiz" className="mt-16 pt-8 border-t border-slate-800">
+                <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-white mb-2">בדיקת הבנה: סיכום פרק 5</h2>
+                    <p className="text-slate-400 text-sm">האם הבנת איך העולם הופך למספרים?</p>
                 </div>
-                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none">
-                    <p>
-                        הקסם האמיתי קורה כשהמודל לומד לסדר את הוקטורים במרחב לפי המשמעות שלהם.
-                        מילים בעלות משמעות דומה יקבלו וקטורים קרובים מתמטית.
-                    </p>
-                    <p>
-                        במרחב הזה, המרחק בין &quot;מלך&quot; ל&quot;מלכה&quot; הוא קטן מאוד, והמרחק בינם לבין &quot;המבורגר&quot; הוא עצום.
-                        המודל לא מבין עברית – הוא מבין גיאומטריה.
-                    </p>
-                </div>
-            </div>
-
-            {/* המעבדה החדשה - גרירת מילים */}
-            <SemanticPlayground />
-            
-            <div className="mt-6 bg-slate-950 p-4 rounded-lg border border-slate-800 text-sm text-slate-400">
-                <strong>למה זה חשוב?</strong> ככה בדיוק עובדים מודלי שפה (כמו GPT). הם לא &quot;קוראים&quot;. הם מחשבים איזה וקטור הכי קרוב לוקטור הנוכחי במרחב הסמנטי כדי לנחש את המילה הבאה.
-            </div>
-
-          </section>
-
-
-          {/* סעיף 4: תהליך ההמרה בפועל */}
-          <section id="part-4" className="scroll-mt-24 bg-slate-900/40 border border-slate-800 rounded-2xl p-8 relative overflow-hidden">
-             <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-slate-950 rounded-lg border border-slate-800"><ScanFace className="text-yellow-400" size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">4. סיכום: הכל זה מספרים</h2>
-                </div>
-                
-                <div className="prose prose-invert text-slate-400 text-sm leading-relaxed max-w-none mb-4">
-                    <p>
-                        זה היופי. כיוון שהכול מתורגם לוקטורים, מודלים יכולים לעבוד על סוגים שונים של מידע באותה לוגיקה בדיוק.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <ProcessCard 
-                        title="טקסט (NLP)" 
-                        desc="כל מילה מקבלת וקטור. מילים בהקשר דומה (כמו 'לקוח' ו'משתמש') יקבלו מספרים דומים." 
-                        icon={<FileText size={18}/>}
-                        color="blue" 
-                    />
-                    <ProcessCard 
-                        title="תמונה (CV)" 
-                        desc="המודל סורק צבעים וצורות, וממיר אותם לרשימת מאפיינים שמייצגת 'מה יש בתמונה'." 
-                        icon={<Palette size={18}/>}
-                        color="purple" 
-                    />
-                    <ProcessCard 
-                        title="משתמש (User)" 
-                        desc="היסטוריית הפעולות הופכת לוקטור התנהגות. זה מה שמאפשר לנטפליקס להמליץ לך על סרטים." 
-                        icon={<UserCircle size={18}/>}
-                        color="emerald" 
-                    />
-                </div>
-             </div>
-          </section>
-
-
-          {/* Quiz */}
-          <section id="quiz" className="mt-16 pt-8 border-t border-slate-800">
-             <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-white mb-2">בדיקת הבנה: סיכום פרק 5</h2>
-                <p className="text-slate-400 text-sm">האם הבנת איך העולם הופך למספרים?</p>
-             </div>
-             <ChapterFiveQuiz />
-          </section>
-
-        </main>
-      </div>
-    </div>
+                <ChapterFiveQuiz />
+            </section>
+        
+       
+    </ChapterLayout>
+    
   );
 }
 
 
-// --- קומפוננטות עזר ---
+// --- קומפוננטות עזר (לכרטיסים ולחידון) ---
 
 interface ProcessCardProps {
     title: string;

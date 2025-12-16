@@ -40,7 +40,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                 }
             `}
         >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-[#0F172A] to-[#02040a]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#0F172A] to-[#02040a]"></div>
 
             {/* --- שינוי 1: הגדלת המשבצות --- */}
             <div className="absolute inset-0 pointer-events-none opacity-60"> 
@@ -67,10 +67,10 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
             </div>
 
             {/* --- שינוי 2: הסרת "ראש הלייזר" הלבן --- */}
-            <div className={`absolute bottom-0 left-0 w-full h-[3px] bg-slate-900/80 transition-opacity duration-300 ${safeProgress > 0 ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`absolute bottom-0 left-0 w-full h-0.75 bg-slate-900/80 transition-opacity duration-300 ${safeProgress > 0 ? 'opacity-100' : 'opacity-0'}`}>
                 <div 
                     // הקו עצמו נשאר, אבל הוא נקי עכשיו
-                    className={`relative h-full bg-gradient-to-r from-${colorFrom} via-cyan-400 to-${colorTo} shadow-[0_0_20px_${colorFrom}] transition-all duration-100 ease-out`}
+                    className={`relative h-full bg-linear-to-r from-${colorFrom} via-cyan-400 to-${colorTo} shadow-[0_0_20px_${colorFrom}] transition-all duration-100 ease-out`}
                     style={{ width: `${safeProgress}%` }} 
                 >
                     {/* האלמנטים הלבנים שהיו כאן נמחקו */}
@@ -128,7 +128,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                             </div>
                         </div>
 
-                        <div className={`w-[1px] h-10 mx-2 hidden sm:block transition-colors ${isScrolled ? 'bg-emerald-900' : 'bg-slate-600'}`}></div>
+                        <div className={`w-px h-10 mx-2 hidden sm:block transition-colors ${isScrolled ? 'bg-emerald-900' : 'bg-slate-600'}`}></div>
 
                         {isScrolled ? (
                              <Activity size={20} className="text-emerald-500" />

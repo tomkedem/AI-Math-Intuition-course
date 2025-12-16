@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, TrendingDown, TrendingUp, ArrowDownRight, MoveRight, Terminal, Play, RotateCcw, Mountain, AlertCircle, RefreshCcw, Check, BookOpen, Footprints, X } from "lucide-react";
-import { CourseSidebar } from "@/components/CourseSidebar";
+
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
+import { ChapterLayout } from '@/components/ChapterLayout';
 
 // --- רכיבים ויזואליים פנימיים ---
 
@@ -243,32 +244,9 @@ const LearningStepsLab = () => {
 
 export default function ChapterNine() {
   return (
-    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-orange-500/30" dir="rtl">
-      
-      <CourseSidebar />
-
-      <div className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth">
-        
-        {/* HEADER */}
-        <header className="py-8 px-8 md:px-12 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm sticky top-0 z-50">
-             <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-2 text-xs text-orange-400 font-bold mb-1 tracking-wider">
-                        <span className="bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">פרק 9</span>
-                        <ChevronLeft size={10} />
-                        <span>שיפועים (Gradients)</span>
-                    </div>
-                    <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-                        שיפוע – המנוע של הלמידה
-                    </h1>
-                </div>
-                <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">
-                    איך המודל יודע לאן לזוז וכמה מהר? התשובה נמצאת בשיפוע.
-                </p>
-             </div>
-        </header>
-
-        <main className="max-w-4xl mx-auto px-8 md:px-12 py-12 space-y-20 pb-48">
+   
+         
+           <ChapterLayout currentChapterId={9}>
           
           {/* סעיף 1: מה זה שיפוע */}
           <section id="part-1" className="scroll-mt-24">
@@ -504,10 +482,8 @@ Step 5: x = 1.6893`}
              </div>
              <ChapterNineQuiz />
           </section>
-
-        </main>
-      </div>
-    </div>
+         </ChapterLayout>           
+   
   );
 }
 

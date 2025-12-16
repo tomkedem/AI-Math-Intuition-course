@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
     ChevronLeft, Activity, BarChart3, Calculator, Brain, Users, TrendingUp, Check, X,
-    Play, RefreshCcw, RotateCcw, Lightbulb, Info, AlertTriangle, Scale, ArrowRight, BookOpen
+    Play, RefreshCcw, RotateCcw, Lightbulb, AlertTriangle, Scale, ArrowRight, BookOpen
 } from "lucide-react";
-import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
-
+import { ChapterLayout } from "@/components/ChapterLayout";
 // --- הגדרות טיפוסים (Interfaces) - הכל מרוכז כאן למעלה ---
 
 interface InteractiveCodeBlockProps {
@@ -381,35 +380,9 @@ const StdDevSimulator = () => {
 
 export default function ChapterTwo() {
   return (
-    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-emerald-500/30" dir="rtl">
+    
       
-      <CourseSidebar />
-
-      <div className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth">
-        
-        {/* --- HEADER --- */}
-        <header className="py-8 px-8 md:px-12 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm sticky top-0 z-50">
-             <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-2 text-xs text-emerald-400 font-bold mb-1">
-                        <span className="bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">פרק 2</span>
-                        <ChevronLeft size={10} />
-                        <span>סטטיסטיקה למפתחים</span>
-                    </div>
-                    <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-                        ממוצע, חציון וסטיית תקן – <br/>
-                        <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-teal-400">
-                            להבין את הלב של הדאטה
-                        </span>
-                    </h1>
-                </div>
-                <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">
-                    נלמד לזהות מתי דאטה משקר לנו, איך מודדים &quot;כאוס&quot; ואיך מכינים מספרים למודל AI.
-                </p>
-             </div>
-        </header>
-
-        <main className="max-w-4xl mx-auto px-8 md:px-12 py-12 space-y-24 pb-48">
+      <ChapterLayout currentChapterId={2}>
           
           {/* סעיף 1: המרכז */}
           <section id="part-1" className="scroll-mt-24">
@@ -465,7 +438,6 @@ export default function ChapterTwo() {
             <MeanMedianLab />
           </section>
 
-
           {/* סעיף 2: פיזור */}
           <section id="part-2" className="scroll-mt-24">
             <div className="flex flex-col gap-4 mb-8">
@@ -509,7 +481,6 @@ export default function ChapterTwo() {
             <StdDevSimulator />
           </section>
 
-
           {/* סעיף 3: דוגמאות מהעולם האמיתי */}
           <section id="part-3" className="scroll-mt-24">
              <div className="flex items-center gap-3 mb-8">
@@ -541,7 +512,6 @@ export default function ChapterTwo() {
                 />
             </div>
           </section>
-
 
           {/* סעיף 4: NumPy Demo - התיקון הגדול! */}
           <section id="part-4" className="scroll-mt-24">
@@ -641,9 +611,8 @@ plt.show()`}
              <ChapterTwoQuiz />
           </section>
 
-        </main>
-      </div>
-    </div>
+        </ChapterLayout>
+
   );
 }
 
