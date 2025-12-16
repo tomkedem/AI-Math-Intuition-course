@@ -1,139 +1,485 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Brain, ScanFace, FileText, UserCircle, MoveRight, Layers, Sparkles, Check, X, Code, Hash, Palette } from "lucide-react";
+import { 
+    ChevronLeft, Brain, ScanFace, FileText, UserCircle, MoveRight, 
+    Layers, Sparkles, Code, Hash, Palette, Lightbulb, 
+    MousePointer2, Monitor, Cat, Sandwich, RefreshCw, Check, X
+} from "lucide-react";
 import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
 
-// --- רכיבים ויזואליים פנימיים ---
+// --- רכיבים פנימיים ---
 
-// 1. מעבדת וקטורים: תרגום אובייקטים למספרים
-const VectorizationLab = () => {
-  const [activeTab, setActiveTab] = useState<'text' | 'image' | 'user'>('text');
+// 1. המעבדה החדשה: איך אובייקט הופך לוקטור?
+const ObjectToVectorLab = () => {
+    const [activeTab, setActiveTab] = useState<'image' | 'text' | 'user'>('text');
 
-  // דוגמאות לנתונים
-  const data = {
-    text: {
-        input: "המבורגר",
-        vector: [0.12, 0.83, 1.44, -0.5, 0.21],
-        desc: "משמעות: אוכל, שומן, מסעדה, טעם"
-    },
-    image: {
-        input: "Pixel (RGB)",
-        vector: [255, 0, 0, 128, 64],
-        desc: "צבעים: אדום חזק, ירוק אפס, כחול אפס"
-    },
-    user: {
-        input: "User Profile",
-        vector: [3.1, 0.8, 12.4, 0.02, 5.0],
-        desc: "התנהגות: ביקורים, זמן שהייה, קליקים"
-    }
-  };
+    return (
+        <div className="bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl my-10">
+            {/* Header / Tabs */}
+            <div className="flex border-b border-slate-800 bg-slate-950/50">
+                <button 
+                    onClick={() => setActiveTab('image')}
+                    className={`flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'image' ? 'bg-blue-600/10 text-blue-400 border-b-2 border-blue-500' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                    <Palette size={16} /> תמונה (פיקסלים)
+                </button>
+                <button 
+                    onClick={() => setActiveTab('text')}
+                    className={`flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'text' ? 'bg-purple-600/10 text-purple-400 border-b-2 border-purple-500' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                    <FileText size={16} /> טקסט (משמעות)
+                </button>
+                <button 
+                    onClick={() => setActiveTab('user')}
+                    className={`flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'user' ? 'bg-emerald-600/10 text-emerald-400 border-b-2 border-emerald-500' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                    <UserCircle size={16} /> משתמש (התנהגות)
+                </button>
+            </div>
 
-  const current = data[activeTab];
+            {/* Content Area */}
+            <div className="p-6 min-h-112.5">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'image' && <ImageVectorDemo key="image" />}
+                    {activeTab === 'text' && <TextVectorDemo key="text" />}
+                    {activeTab === 'user' && <UserVectorDemo key="user" />}
+                </AnimatePresence>
+            </div>
+        </div>
+    );
+};
 
-  return (
-    <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col gap-8 relative overflow-hidden group">
-      <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors duration-500"></div>
-      
-      <div className="flex gap-4 border-b border-slate-800 pb-4 z-10 relative">
-          <button onClick={() => setActiveTab('text')} className={`flex items-center gap-2 px-3 py-1 rounded text-sm transition-all ${activeTab === 'text' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}>
-              <FileText size={16} /> מילה
-          </button>
-          <button onClick={() => setActiveTab('image')} className={`flex items-center gap-2 px-3 py-1 rounded text-sm transition-all ${activeTab === 'image' ? 'bg-purple-600 text-white' : 'text-slate-400 hover:text-white'}`}>
-              <Palette size={16} /> פיקסל
-          </button>
-          <button onClick={() => setActiveTab('user')} className={`flex items-center gap-2 px-3 py-1 rounded text-sm transition-all ${activeTab === 'user' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>
-              <UserCircle size={16} /> משתמש
-          </button>
-      </div>
+// --- תת-רכיב 1: הדגמת תמונה (Pixel Grid) ---
+const ImageVectorDemo = () => {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-8 z-10 relative">
-          
-          {/* Input Side */}
-          <div className="flex flex-col items-center gap-4 w-1/3">
-              <div className="w-24 h-24 bg-slate-950 rounded-2xl border border-slate-700 flex items-center justify-center text-3xl shadow-xl">
-                  {activeTab === 'text' ? '🍔' : activeTab === 'image' ? <div className="w-16 h-16 bg-red-500 rounded-lg shadow-[0_0_20px_rgba(239,68,68,0.6)]"></div> : '👤'}
-              </div>
-              <div className="text-sm font-bold text-slate-300">{current.input}</div>
-          </div>
-
-          {/* Arrow */}
-          <div className="flex flex-col items-center text-slate-500 gap-2">
-              <span className="text-[10px] uppercase tracking-wider">Embedding</span>
-              <MoveRight size={32} className="animate-pulse text-blue-500" />
-          </div>
-
-          {/* Vector Side */}
-          <div className="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-6 relative font-mono w-full">
-              <div className="absolute top-0 right-0 px-3 py-1 bg-slate-900 text-[10px] text-slate-500 rounded-bl-xl border-l border-b border-slate-800">
-                  Vector Representation
-              </div>
-              <div className="text-blue-400 text-lg mb-2 tracking-widest">
-                  [ {current.vector.join(', ')}, ... ]
-              </div>
-              <p className="text-xs text-slate-500 mt-2 border-t border-slate-800 pt-2">
-                  {current.desc}
-              </p>
-          </div>
-      </div>
-    </div>
-  )
-}
-
-// 2. המרחב הסמנטי (Semantic Space Visualization)
-const SemanticSpace = () => {
-    // מילים ומיקומן במרחב (דמיוני)
-    const words = [
-        { text: "מלך", x: 20, y: 20, type: "royal" },
-        { text: "מלכה", x: 25, y: 25, type: "royal" },
-        { text: "נסיך", x: 15, y: 30, type: "royal" },
-        
-        { text: "המבורגר", x: 80, y: 80, type: "food" },
-        { text: "פיצה", x: 85, y: 75, type: "food" },
-        { text: "צ'יפס", x: 75, y: 85, type: "food" },
-
-        { text: "מחשב", x: 20, y: 80, type: "tech" },
-        { text: "מקלדת", x: 25, y: 85, type: "tech" },
+    // יצירת צורת לב פשוטה (1 = לבן, 0 = שחור)
+    const grid = [
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 1, 1, 0, 1, 1, 0,
+        0, 1, 1, 1, 1, 1, 1, 1,
+        0, 1, 1, 1, 1, 1, 1, 1,
+        0, 0, 1, 1, 1, 1, 1, 0,
+        0, 0, 0, 1, 1, 1, 0, 0,
+        0, 0, 0, 0, 1, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
     ];
 
     return (
-        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 h-75 relative overflow-hidden mt-8">
-            <div className="absolute top-4 right-4 text-xs text-slate-500 flex items-center gap-2">
-                <Brain size={14} /> המרחב הסמנטי (Semantic Space)
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col md:flex-row gap-8 items-start h-full">
+            <div className="flex-1 space-y-4 w-full">
+                <h3 className="text-xl font-bold text-white">1. המקור: תמונה</h3>
+                <p className="text-slate-400 text-sm">
+                    למודל אין מושג מה זה &quot;אדום&quot; או &quot;לב&quot;. כל פיקסל הופך למספר מ-0 (שחור) ל-255 (לבן/צבע מלא).
+                    <br/><span className="text-blue-400 font-bold block mt-2">👇 נסה לרחף עם העכבר על הפיקסלים בציור:</span>
+                </p>
+                
+                {/* Pixel Grid */}
+                <div className="grid grid-cols-8 gap-1 w-64 h-64 bg-black p-1 border border-slate-700 mx-auto md:mx-0 shadow-2xl">
+                    {grid.map((val, i) => (
+                        <div 
+                            key={i}
+                            onMouseEnter={() => setHoveredIndex(i)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            className={`
+                                rounded-sm cursor-crosshair transition-all duration-200
+                                ${val === 1 ? 'bg-slate-200' : 'bg-slate-800'}
+                                ${hoveredIndex === i ? 'ring-2 ring-blue-500 scale-125 z-10 shadow-lg' : ''}
+                            `}
+                        />
+                    ))}
+                </div>
             </div>
+
+            <div className="flex-1 space-y-4 w-full h-full flex flex-col">
+                <h3 className="text-xl font-bold text-white">2. התרגום: הוקטור</h3>
+                <div className="bg-slate-950 border border-slate-800 p-6 rounded-xl relative overflow-hidden flex-1 flex flex-col justify-center">
+                    
+                    <div className="flex justify-between text-xs text-slate-500 font-mono mb-4 uppercase tracking-wider">
+                        <span>Value (0-255)</span>
+                        <span>Pixel Index</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-8">
+                        <div className="text-6xl font-mono font-bold text-blue-500 drop-shadow-lg">
+                            {hoveredIndex !== null ? (grid[hoveredIndex] * 255) : "-"}
+                        </div>
+                        <div className="text-6xl font-mono font-bold text-slate-700">
+                            {hoveredIndex !== null ? hoveredIndex : "-"}
+                        </div>
+                    </div>
+
+                    <div className="pt-6 border-t border-slate-900">
+                        <p className="text-xs text-slate-500 mb-2">כך המחשב &quot;רואה&quot; את התמונה (רשימה שטוחה):</p>
+                        <div className="font-mono text-xs text-slate-400 break-all bg-black/40 p-3 rounded border border-slate-900 leading-relaxed">
+                            vector = [<br/> 
+                            {grid.map((v, i) => (
+                                <span key={i} className={`inline-block mx-0.5 transition-colors duration-200 ${hoveredIndex === i ? "text-blue-400 font-bold bg-blue-900/30 px-1 rounded transform scale-110" : "opacity-50"}`}>
+                                    {v * 255}, 
+                                </span>
+                            ))} ... ]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+// --- תת-רכיב 2: הדגמת טקסט (Semantic Sliders) ---
+const TextVectorDemo = () => {
+    const [selectedWord, setSelectedWord] = useState('cat');
+
+    const words = {
+        cat: { label: "חתול", icon: <Cat/>, scores: { animal: 0.99, tech: 0.05, food: 0.01, fluffy: 0.95 } },
+        laptop: { label: "לפטופ", icon: <Monitor/>, scores: { animal: 0.01, tech: 0.99, food: 0.01, fluffy: 0.05 } },
+        burger: { label: "המבורגר", icon: <Sandwich/>, scores: { animal: 0.1, tech: 0.01, food: 0.99, fluffy: 0.2 } },
+    };
+
+    const current = words[selectedWord as keyof typeof words];
+
+    return (
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col gap-8 h-full">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-800 pb-6">
+                <div>
+                    <h3 className="text-xl font-bold text-white mb-2">1. המקור: מילים</h3>
+                    <p className="text-slate-400 text-sm max-w-lg">
+                        מילים הופכות למספרים שמייצגים <strong>משמעות</strong>. שימו לב: המספרים כאן הם לא אקראיים, הם מייצגים &quot;תכונות&quot; סמויות (כמו: האם זה אוכל? האם זה טכנולוגי?).
+                    </p>
+                </div>
+                <div className="flex gap-3">
+                    {Object.entries(words).map(([key, data]) => (
+                        <button 
+                            key={key}
+                            onClick={() => setSelectedWord(key)}
+                            className={`flex flex-col items-center gap-2 px-4 py-3 rounded-xl border transition-all ${selectedWord === key ? 'bg-purple-600/20 border-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.2)]' : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800 hover:border-slate-600'}`}
+                        >
+                            <span className="text-xl">{data.icon}</span>
+                            <span className="text-xs font-bold">{data.label}</span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-slate-950 border border-slate-800 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-12 items-center flex-1">
+                <div className="flex-1 w-full space-y-5">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest text-right">ניתוח וקטור סמנטי</h4>
+                    
+                    {Object.entries(current.scores).map(([trait, value]) => (
+                        <div key={trait}>
+                            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-medium">
+                                <span>{trait === 'animal' ? 'חיה' : trait === 'tech' ? 'טכנולוגיה' : trait === 'food' ? 'אוכל' : 'שומני/רך'}</span>
+                                <span>{value}</span>
+                            </div>
+                            <div className="h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                                <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${value * 100}%` }}
+                                    transition={{ duration: 0.5, type: "spring" }}
+                                    className={`h-full ${value > 0.8 ? 'bg-emerald-500' : value > 0.4 ? 'bg-yellow-500' : 'bg-slate-600'}`}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="hidden md:block w-px h-40 bg-slate-800"></div>
+
+                <div className="bg-black/60 p-6 rounded-xl border border-slate-800 font-mono text-sm text-center min-w-75 shadow-2xl">
+                    <div className="text-[10px] text-slate-500 mb-4 uppercase tracking-widest">הוקטור הסופי (Embedding)</div>
+                    <div className="text-purple-400 tracking-wider text-lg">
+                        [ {Object.values(current.scores).join(', ')} ]
+                    </div>
+                    <p className="text-xs text-slate-600 mt-4">
+                        המודל משתמש בוקטור הזה כדי לחשב מרחק לוקטורים של מילים אחרות.
+                    </p>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+// --- תת-רכיב 3: הדגמת משתמש (User Profile) ---
+const UserVectorDemo = () => {
+    const [stats, setStats] = useState({ visits: 12, time: 4.5, purchases: 1 });
+
+    const randomize = () => {
+        setStats({
+            visits: Math.floor(Math.random() * 50),
+            time: Number((Math.random() * 10).toFixed(1)),
+            purchases: Math.floor(Math.random() * 5)
+        });
+    };
+
+    // נרמול דמי
+    const vector = [
+        (stats.visits / 50).toFixed(2),
+        (stats.time / 10).toFixed(2),
+        (stats.purchases / 5).toFixed(2),
+        "0.85", // נתון קבוע לדוגמה
+        "0.02"  // נתון קבוע לדוגמה
+    ];
+
+    return (
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col md:flex-row gap-12 items-center h-full pt-4">
             
-            {/* Grid Lines */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[40px_40px]"></div>
+            <div className="flex-1 space-y-6 w-full">
+                <div className="flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-white">1. המקור: פרופיל משתמש</h3>
+                    <Button onClick={randomize} size="sm" variant="outline" className="gap-2 border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-300">
+                        <RefreshCw size={14} /> שנה נתונים אקראית
+                    </Button>
+                </div>
+                
+                <div className="bg-slate-950 border border-slate-800 rounded-xl p-6 space-y-4 shadow-lg">
+                    <div className="flex justify-between items-center border-b border-slate-900 pb-3">
+                        <span className="text-slate-400">כניסות לאפליקציה (שבועי)</span>
+                        <span className="text-emerald-400 font-mono font-bold text-xl">{stats.visits}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-slate-900 pb-3">
+                        <span className="text-slate-400">זמן ממוצע (דקות)</span>
+                        <span className="text-emerald-400 font-mono font-bold text-xl">{stats.time}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-slate-900 pb-3">
+                        <span className="text-slate-400">רכישות בחודש</span>
+                        <span className="text-emerald-400 font-mono font-bold text-xl">{stats.purchases}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="text-slate-400">אחוז צפייה בוידאו</span>
+                        <span className="text-emerald-400 font-mono font-bold text-xl">85%</span>
+                    </div>
+                </div>
+                <p className="text-xs text-slate-500">
+                    המודל לא יודע מי אתה. הוא יודע איך אתה מתנהג. דפוסי ההתנהגות הופכים לוקטור מספרי שמאפשר למערכת להשוות אותך למשתמשים אחרים.
+                </p>
+            </div>
 
-            {words.map((w, i) => {
-                let color = "bg-slate-500";
-                if (w.type === "royal") color = "bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)]";
-                if (w.type === "food") color = "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]";
-                if (w.type === "tech") color = "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]";
+            <div className="flex flex-col items-center justify-center text-slate-700">
+                <MoveRight size={48} className="hidden md:block" />
+                <div className="md:hidden">⬇</div>
+            </div>
 
-                return (
-                    <motion.div
-                        key={i}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1, x: 0, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="absolute flex flex-col items-center gap-1 cursor-pointer hover:scale-110 transition-transform z-10"
-                        style={{ left: `${w.x}%`, top: `${w.y}%` }}
-                    >
-                        <div className={`w-3 h-3 rounded-full ${color}`}></div>
-                        <span className="text-[10px] text-slate-300 bg-slate-900/80 px-1 rounded">{w.text}</span>
-                    </motion.div>
-                )
-            })}
+            <div className="flex-1 w-full">
+                <div className="bg-[#0f172a] border border-slate-800 rounded-xl p-6 font-mono text-sm relative shadow-2xl group">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-emerald-500 to-teal-400"></div>
+                    <div className="text-slate-500 mb-4 flex justify-between">
+                        <span># Python Vector Representation</span>
+                        <Code size={14}/>
+                    </div>
+                    
+                    <div className="space-y-2 bg-slate-900/50 p-4 rounded-lg border border-slate-800/50">
+                        <div className="flex justify-between text-emerald-400">
+                            <span>user_vec = [</span>
+                        </div>
+                        <div className="pl-4 space-y-1 text-slate-300">
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[0]},</span> <span className="text-slate-600">{"// visits (normalized)"}</span></div>
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[1]},</span> <span className="text-slate-600">{"// avg_time"}</span></div>
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[2]},</span> <span className="text-slate-600">{"// purchases"}</span></div>
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[3]},</span> <span className="text-slate-600">{"// engagement"}</span></div>
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[4]}</span> <span className="text-slate-600">{"// churn_risk"}</span></div>
+                        </div>
+                        <div className="text-emerald-400">]</div>
+                    </div>
 
-            {/* Connecting Line Example */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-                <line x1="20%" y1="20%" x2="25%" y2="25%" stroke="white" strokeWidth="1" strokeDasharray="4 4" />
-            </svg>
+                    <div className="mt-4 pt-4 border-t border-slate-900 text-[10px] text-slate-500 text-center">
+                        ככה נטפליקס וספוטיפיי &quot;רואות&quot; אותך. 
+                    </div>
+                </div>
+            </div>
+
+        </motion.div>
+    );
+};
+
+// --- מעבדה 2: החץ הגיאומטרי (וקטור במרחב) ---
+const VectorPlayground = () => {
+    const [vector, setVector] = useState({ x: 3, y: 2 });
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const updateVector = (clientX: number, clientY: number) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const scale = 30;
+        
+        let newX = (clientX - rect.left - centerX) / scale;
+        let newY = -(clientY - rect.top - centerY) / scale;
+
+        newX = Math.round(newX * 10) / 10;
+        newY = Math.round(newY * 10) / 10;
+
+        newX = Math.max(-5, Math.min(5, newX));
+        newY = Math.max(-3, Math.min(3, newY));
+
+        setVector({ x: newX, y: newY });
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
+        updateVector(e.clientX, e.clientY);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (isDragging) updateVector(e.clientX, e.clientY);
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+    return (
+        <div className="flex flex-col md:flex-row gap-6 my-12 items-stretch select-none" onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+            
+            {/* Graph */}
+            <div 
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-4 relative min-h-87.5 flex items-center justify-center cursor-crosshair overflow-hidden group shadow-inner"
+                ref={containerRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+            >
+                <div className="absolute inset-0 opacity-20 pointer-events-none" 
+                     style={{ 
+                         backgroundImage: 'linear-gradient(#475569 1px, transparent 1px), linear-gradient(90deg, #475569 1px, transparent 1px)', 
+                         backgroundSize: '30px 30px',
+                         backgroundPosition: 'center center'
+                     }}>
+                </div>
+
+                <div className="absolute w-full h-0.5 bg-slate-700 top-1/2 left-0"></div>
+                <div className="absolute h-full w-0.5 bg-slate-700 left-1/2 top-0"></div>
+
+                <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
+                        </marker>
+                    </defs>
+                    <line 
+                        x1="50%" y1="50%" 
+                        x2={`calc(50% + ${vector.x * 30}px)`} 
+                        y2={`calc(50% - ${vector.y * 30}px)`} 
+                        stroke="#3b82f6" strokeWidth="4" markerEnd="url(#arrowhead)" 
+                        className="drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                    />
+                </svg>
+
+                <div 
+                    className="absolute w-6 h-6 bg-white rounded-full shadow-[0_0_20px_rgba(59,130,246,1)] border-4 border-blue-500 z-10 transform -translate-x-1/2 -translate-y-1/2 transition-transform active:scale-125"
+                    style={{ left: `calc(50% + ${vector.x * 30}px)`, top: `calc(50% - ${vector.y * 30}px)` }}
+                />
+
+                <div className="absolute top-4 right-4 text-xs text-slate-400 bg-slate-900/90 px-3 py-1.5 rounded-full border border-slate-700 flex items-center gap-2 pointer-events-none">
+                    <MousePointer2 size={12} className="text-blue-400"/> לחץ וגרור לשליטה
+                </div>
+            </div>
+
+            {/* Code */}
+            <div className="w-full md:w-80 bg-[#0d1117] border border-slate-800 rounded-xl p-6 flex flex-col justify-center relative shadow-2xl">
+                <div className="absolute top-0 left-0 px-3 py-1 bg-slate-800 text-[10px] text-slate-400 rounded-br-lg font-mono flex items-center gap-2" dir="ltr">
+                    <Code size={12}/> Python Representation
+                </div>
+                
+                <div className="font-mono text-sm leading-loose mt-4" dir="ltr">
+                    <span className="text-slate-500"># 1. ייבוא NumPy</span><br/>
+                    <span className="text-purple-400">import</span> numpy <span className="text-purple-400">as</span> np<br/><br/>
+                    
+                    <span className="text-slate-500"># 2. יצירת הוקטור</span><br/>
+                    <span className="text-blue-300">my_vector</span> = np.array([<br/>
+                    &nbsp;&nbsp;<span className="text-yellow-400 font-bold">{vector.x.toFixed(1)}</span>, <span className="text-slate-500"># X coordinate</span><br/>
+                    &nbsp;&nbsp;<span className="text-yellow-400 font-bold">{vector.y.toFixed(1)}</span> &nbsp;<span className="text-slate-500"># Y coordinate</span><br/>
+                    ])
+                </div>
+
+                <div className="mt-auto pt-6 border-t border-slate-800">
+                    <p className="text-xs text-slate-400 text-center">
+                        המספרים משתנים בזמן אמת.<br/>כך המחשב &quot;רואה&quot; כיוון ועוצמה.
+                    </p>
+                </div>
+            </div>
         </div>
+    );
+};
+
+// --- מעבדה 3: סמנטיקה (גרירת מילים) ---
+const SemanticPlayground = () => {
+    const [positions, setPositions] = useState<Record<string, {x: number, y: number}>>({
+        dog: { x: 100, y: 100 },
+        cat: { x: 180, y: 120 },
+        car: { x: 400, y: 250 },
+        bike: { x: 480, y: 220 }
+    });
+
+    const getDistance = (p1: {x:number, y:number}, p2: {x:number, y:number}) => {
+        const dist = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        return (dist / 50).toFixed(2); 
+    };
+
+    return (
+        <div className="my-12">
+            <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                <Brain className="text-purple-400" /> המשימה שלך: סדר את המילים
+            </h3>
+            <p className="text-slate-400 text-sm mb-6">
+                גרור את המילים בגרף. נסה לקרב את החיות אחת לשנייה, ואת כלי הרכב אחד לשני.
+                שים לב איך ה&quot;מרחק הסמנטי&quot; למטה משתנה.
+            </p>
+
+            <div className="relative w-full h-100 bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-inner">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-slate-900/50 to-slate-950"></div>
+                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#64748b 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    <line x1={positions.dog.x + 40} y1={positions.dog.y + 20} x2={positions.cat.x + 40} y2={positions.cat.y + 20} stroke="#10b981" strokeWidth="2" strokeDasharray="5,5" opacity="0.5" />
+                    <line x1={positions.car.x + 40} y1={positions.car.y + 20} x2={positions.bike.x + 40} y2={positions.bike.y + 20} stroke="#f59e0b" strokeWidth="2" strokeDasharray="5,5" opacity="0.5" />
+                </svg>
+
+                <DraggableWord id="dog" label="🐶 כלב" color="bg-emerald-600" pos={positions} setPos={setPositions} />
+                <DraggableWord id="cat" label="🐱 חתול" color="bg-emerald-600" pos={positions} setPos={setPositions} />
+                <DraggableWord id="car" label="🚗 מכונית" color="bg-orange-600" pos={positions} setPos={setPositions} />
+                <DraggableWord id="bike" label="🚲 אופניים" color="bg-orange-600" pos={positions} setPos={setPositions} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center">
+                    <div className="text-xs text-slate-500 mb-1">מרחק חיות (Semantic Distance)</div>
+                    <div className="text-2xl font-mono font-bold text-emerald-400">
+                        {getDistance(positions.dog, positions.cat)}
+                    </div>
+                </div>
+                <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center">
+                    <div className="text-xs text-slate-500 mb-1">מרחק רכבים (Semantic Distance)</div>
+                    <div className="text-2xl font-mono font-bold text-orange-400">
+                        {getDistance(positions.car, positions.bike)}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DraggableWord = ({ id, label, color, pos, setPos }: any) => {
+    return (
+        <motion.div
+            drag
+            dragMomentum={false}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onDrag={(event, info: any) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                setPos((prev: any) => ({
+                    ...prev,
+                    [id]: { x: prev[id].x + info.delta.x, y: prev[id].y + info.delta.y }
+                }));
+            }}
+            style={{ x: pos[id].x, y: pos[id].y }}
+            className={`absolute px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg cursor-grab active:cursor-grabbing ${color} hover:brightness-110 z-10 flex items-center gap-2`}
+        >
+            {label}
+        </motion.div>
     )
 }
 
@@ -161,7 +507,7 @@ export default function ChapterFive() {
                     </h1>
                 </div>
                 <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">
-                    AI לא עובד על תוכן. הוא עובד על רשימות של מספרים שמייצגות תוכן.
+                    AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן. בוא נבין איך זה קורה.
                 </p>
              </div>
         </header>
@@ -176,25 +522,51 @@ export default function ChapterFive() {
                     <h2 className="text-2xl font-bold text-white">1. איך מציגים אובייקט כסדרה של מספרים?</h2>
                 </div>
                 
-                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4">
+                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-6">
                     <p>
-                        אם יש משהו אחד שמשנה את הדרך שבה מפתח מבין AI, זה הרעיון שכל אובייקט בעולם – טקסט, תמונה, משתמש – יכול להפוך לוקטור.
-                        <strong>וקטור הוא פשוט רשימה של מספרים.</strong>
+                        אם יש משהו אחד שבאמת משנה את הדרך שבה מפתח מבין AI, זה הרעיון שכל אובייקט בעולם – טקסט, תמונה, משתמש, מוצר, אירוע – יכול להפוך לוקטור.
+                        זאת אומרת: <strong>רשימה מסודרת של מספרים.</strong>
                     </p>
                     <p>
-                        למשל: <code>[0.2, 1.7, 3.4]</code>.
-                        למה זה מעניין? כי זה הדרך היחידה שבה המודל יכול &quot;לראות&quot; דברים.
-                        אי אפשר לתת למודל תמונה ישירות. צריך לתרגם אותה למספרים.
+                        כדי להבין מודלים מודרניים, צריך להבין את המשפט הבא:
+                        <strong>AI לא עובד על תוכן. הוא עובד על מספרים שמייצגים תוכן.</strong>
+                        וזה בדיוק מה שנותן לוקטורים את הכוח שלהם.
+                    </p>
+                    
+                    <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 my-4">
+                        <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                            <Lightbulb size={18} className="text-yellow-400"/> מה זה בכלל וקטור?
+                        </h4>
+                        <p className="text-slate-400 text-sm">
+                            זה פשוט מאוד. וקטור הוא רשימה של מספרים. לא מטריצה, לא אובייקט מסובך. רשימה.
+                            <br/>
+                            <code className="bg-slate-800 px-1 rounded text-purple-300">[0.2, 1.7, 3.4]</code>
+                        </p>
+                    </div>
+
+                    <p>
+                        <strong>איך זה קורה בפועל?</strong> אפשר לחשוב על זה כעל תרגום.
+                        אובייקט מגיע מבחוץ – תמונה, מילה, משתמש – והמודל ממיר את התכונות החשובות שלו למספרים.
                     </p>
                 </div>
             </div>
 
-            <VectorizationLab />
+            {/* מעבדת הוקטורים החדשה - עם הטאבים והעיצוב החדש */}
+            <ObjectToVectorLab />
+
+            <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none mt-8 space-y-4">
+                <h4 className="text-xl font-bold text-white">סיכום הדוגמאות:</h4>
+                <ul className="list-disc pr-6 space-y-2">
+                    <li><strong>פיקסל:</strong> למודל אין מושג מה זה &quot;אדום&quot;. הוא מקבל מספרים מ-0 עד 255 שמייצגים עוצמה של צבע.</li>
+                    <li><strong>מילה:</strong> &quot;המבורגר&quot; הופך לרשימת מספרים שלא מייצגת אותיות, אלא משמעות (אוכל, שומן, טעם).</li>
+                    <li><strong>משתמש:</strong> המודל לא מכיר את &quot;יוסי&quot;. הוא מכיר וקטור שמייצג דפוסי התנהגות (שעות כניסה, סוגי קליקים).</li>
+                </ul>
+            </div>
 
           </section>
 
 
-          {/* סעיף 2: למה דווקא וקטורים? */}
+          {/* סעיף 2: גיאומטריה ודמיון */}
           <section id="part-2" className="scroll-mt-24">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
@@ -202,22 +574,35 @@ export default function ChapterFive() {
                     <h2 className="text-2xl font-bold text-white">2. למה כמעט כל AI עובד על וקטורים?</h2>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4 mb-8">
+                    <p>
+                        אחרי שהבנו שוקטור הוא רשימת מספרים, עולה השאלה: למה דווקא וקטורים?
+                        יש לזה סיבות עמוקות שמחברות בין מתמטיקה, יעילות, והדרך שבה מודלים לומדים דפוסים.
+                    </p>
+                    <p>
+                        הסיבה החשובה ביותר היא <strong>מדידת דמיון</strong>.
+                        כדי שמודל יבין ש&quot;חתול&quot; ו&quot;גור&quot; קרובים, הוא צריך למדוד מרחק. וקטור מאפשר לעשות בדיוק את זה.
+                    </p>
+                </div>
+
+                {/* המעבדה החדשה - החץ הגיאומטרי */}
+                <VectorPlayground />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                     <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
                         <h4 className="font-bold text-white mb-2 flex items-center gap-2">
-                            <Sparkles size={16} className="text-yellow-400"/> מדידת דמיון
+                            <Sparkles size={16} className="text-yellow-400"/> מתמטיקה מהירה
                         </h4>
-                        <p className="text-sm text-slate-400">
-                            כדי להבין ש&quot;חתול&quot; ו&quot;גור&quot; קרובים, המודל צריך למדוד מרחק. 
-                            על וקטורים אפשר לעשות מתמטיקה: לחשב מרחק, זווית ודמיון.
+                        <p className="text-sm text-slate-400 leading-relaxed">
+                            מעבדים מודרניים (GPU) בנויים לטחון וקטורים. הם יכולים לבצע מיליארדי פעולות כפל וחיבור בשנייה על רשימות כאלה.
                         </p>
                     </div>
                     <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
                         <h4 className="font-bold text-white mb-2 flex items-center gap-2">
-                            <Code size={16} className="text-green-400"/> יעילות חישובית
+                            <Brain size={16} className="text-purple-400"/> למידת תכונות
                         </h4>
-                        <p className="text-sm text-slate-400">
-                            מעבדים מודרניים (GPU) בנויים לטחון וקטורים. הם יכולים לבצע מיליארדי פעולות כפל וחיבור בשנייה.
+                        <p className="text-sm text-slate-400 leading-relaxed">
+                            המודל &quot;לומד&quot; לבד את המספרים בוקטור. המספרים האלה מייצגים תכונות עמוקות שהמודל זיהה בדאטה.
                         </p>
                     </div>
                 </div>
@@ -230,7 +615,7 @@ export default function ChapterFive() {
              <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Brain size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">3. הוקטור כמשמעות (Embeddings)</h2>
+                    <h2 className="text-2xl font-bold text-white">3. הוקטור כמשמעות (Semantic Space)</h2>
                 </div>
                 <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none">
                     <p>
@@ -244,7 +629,12 @@ export default function ChapterFive() {
                 </div>
             </div>
 
-            <SemanticSpace />
+            {/* המעבדה החדשה - גרירת מילים */}
+            <SemanticPlayground />
+            
+            <div className="mt-6 bg-slate-950 p-4 rounded-lg border border-slate-800 text-sm text-slate-400">
+                <strong>למה זה חשוב?</strong> ככה בדיוק עובדים מודלי שפה (כמו GPT). הם לא &quot;קוראים&quot;. הם מחשבים איזה וקטור הכי קרוב לוקטור הנוכחי במרחב הסמנטי כדי לנחש את המילה הבאה.
+            </div>
 
           </section>
 
@@ -254,13 +644,34 @@ export default function ChapterFive() {
              <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-slate-950 rounded-lg border border-slate-800"><ScanFace className="text-yellow-400" size={20} /></div>
-                    <h2 className="text-2xl font-bold text-white">4. איך הופכים מידע לוקטור?</h2>
+                    <h2 className="text-2xl font-bold text-white">4. סיכום: הכל זה מספרים</h2>
                 </div>
                 
+                <div className="prose prose-invert text-slate-400 text-sm leading-relaxed max-w-none mb-4">
+                    <p>
+                        זה היופי. כיוון שהכול מתורגם לוקטורים, מודלים יכולים לעבוד על סוגים שונים של מידע באותה לוגיקה בדיוק.
+                    </p>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <ProcessCard title="טקסט" desc="לכל מילה יש וקטור משמעות. מילים בהקשר דומה מקבלות מספרים דומים." color="blue" />
-                    <ProcessCard title="תמונה" desc="המודל סורק קווים, צבעים וצורות, וממיר אותם לרשימת מאפיינים." color="red" />
-                    <ProcessCard title="משתמש" desc="היסטוריית הפעולות הופכת לוקטור התנהגות שמאפשר המלצות." color="green" />
+                    <ProcessCard 
+                        title="טקסט (NLP)" 
+                        desc="כל מילה מקבלת וקטור. מילים בהקשר דומה (כמו 'לקוח' ו'משתמש') יקבלו מספרים דומים." 
+                        icon={<FileText size={18}/>}
+                        color="blue" 
+                    />
+                    <ProcessCard 
+                        title="תמונה (CV)" 
+                        desc="המודל סורק צבעים וצורות, וממיר אותם לרשימת מאפיינים שמייצגת 'מה יש בתמונה'." 
+                        icon={<Palette size={18}/>}
+                        color="purple" 
+                    />
+                    <ProcessCard 
+                        title="משתמש (User)" 
+                        desc="היסטוריית הפעולות הופכת לוקטור התנהגות. זה מה שמאפשר לנטפליקס להמליץ לך על סרטים." 
+                        icon={<UserCircle size={18}/>}
+                        color="emerald" 
+                    />
                 </div>
              </div>
           </section>
@@ -270,7 +681,7 @@ export default function ChapterFive() {
           <section id="quiz" className="mt-16 pt-8 border-t border-slate-800">
              <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-white mb-2">בדיקת הבנה: סיכום פרק 5</h2>
-                <p className="text-slate-400 text-sm">האם תפסת את כוחם של הוקטורים?</p>
+                <p className="text-slate-400 text-sm">האם הבנת איך העולם הופך למספרים?</p>
              </div>
              <ChapterFiveQuiz />
           </section>
@@ -288,18 +699,22 @@ interface ProcessCardProps {
     title: string;
     desc: string;
     color: string;
+    icon: React.ReactNode;
 }
 
-function ProcessCard({ title, desc, color }: ProcessCardProps) {
+function ProcessCard({ title, desc, color, icon }: ProcessCardProps) {
     const colors: Record<string, string> = {
         blue: "border-blue-500/30 bg-blue-500/10 text-blue-400",
-        red: "border-red-500/30 bg-red-500/10 text-red-400",
-        green: "border-green-500/30 bg-green-500/10 text-green-400",
+        purple: "border-purple-500/30 bg-purple-500/10 text-purple-400",
+        emerald: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
     };
 
     return (
-        <div className={`p-5 rounded-xl border ${colors[color]} relative`}>
-            <h3 className="text-lg font-bold mb-2 text-white">{title}</h3>
+        <div className={`p-5 rounded-xl border ${colors[color]} relative group hover:scale-[1.02] transition-transform`}>
+            <div className="flex items-center gap-2 mb-3">
+                {icon}
+                <h3 className="text-lg font-bold text-white">{title}</h3>
+            </div>
             <p className="text-xs text-slate-300 leading-relaxed">{desc}</p>
         </div>
     )
@@ -332,7 +747,7 @@ function ChapterFiveQuiz() {
             text: "מה קורה לוקטורים של מילים דומות (כמו 'כלב' ו'חתול')?",
             options: [
                 { id: 1, text: "הם יהיו רחוקים מאוד זה מזה" },
-                { id: 2, text: "הם יהיו קרובים במרחב הוקטורי", correct: true },
+                { id: 2, text: "הם יהיו קרובים במרחב הוקטורי (דמיון מתמטי)", correct: true },
                 { id: 3, text: "הם יהיו זהים לחלוטין" }
             ]
         }
