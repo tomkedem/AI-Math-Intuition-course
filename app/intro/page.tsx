@@ -25,7 +25,7 @@ export default function IntroPage() {
                         <span>ברוכים הבאים</span>
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-                        מתמטיקה אינטואיטיבית למתכנתים בעידן ה-AI
+                   מתמטיקה אינטואיטיבית ל-AI
                     </h1>
                 </div>
                 <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">

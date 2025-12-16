@@ -42,8 +42,10 @@ export function CourseSidebar() {
                     <BookOpen size={20} />
                 </div>
                 <div>
-                    <h2 className="font-bold text-white text-sm">AI Developer Series</h2>
-                    <span className="text-xs text-slate-500">Interactive Course</span>
+                    <h1 className="font-bold text-sky-600 text-lg">AI Math</h1>
+                    
+                    <span className="text-gray-500 text-xs">מסע אל הלב המתמטי של הבינה המלאכותית</span>
+
                 </div>
                 {/* כפתור סגירה למובייל בלבד */}
                 {isOpen && (
