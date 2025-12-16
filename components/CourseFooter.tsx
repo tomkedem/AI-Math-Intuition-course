@@ -26,7 +26,7 @@ export function CourseFooter() {
                     priority={false} 
                 />
                 {/* כיסוי כהה למטה למעבר חלק יותר */}
-                 <div className="absolute bottom-0 w-full h-10 bg-gradient-to-t from-slate-950 to-transparent"></div>
+                 <div className="absolute bottom-0 w-full h-10 bg-linear-to-t from-slate-950 to-transparent"></div>
             </div>
 
             {/* תוכן הפוטר (חלק תחתון) */}

@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
 // ייבוא גלובלי של כל האייקונים
 import { ChevronLeft, Scale, ArrowLeft, Target, Zap, HardHat, Layout, Divide, Ruler, Brain, CheckCircle, X, Check } from "lucide-react";
 
@@ -13,7 +14,7 @@ import { CourseSidebar } from "@/components/CourseSidebar";
 import { FormulaDisplay } from "@/components/FormulaDisplay"; 
 import { motion, AnimatePresence } from "framer-motion"; 
 
-// ייבוא הרכיב החדש (שעכשיו נקי מייבוא CSS פנימי)
+// ייבוא MathRenderer
 import MathRenderer from "@/components/MathRenderer";
 
 // --- רכיבים ויזואליים אינטראקטיביים ---
@@ -30,7 +31,6 @@ const SCALE = 10;
 const ORIGIN_X = 150;
 const ORIGIN_Y = 96;
 
-// קומפוננטת תצוגה פשוטה של וקטור
 const VectorVisual: React.FC<VectorVisualProps> = ({ x, y, color, label, isNormalized }) => {
     
     const norm = Math.sqrt(x * x + y * y);
@@ -41,20 +41,16 @@ const VectorVisual: React.FC<VectorVisualProps> = ({ x, y, color, label, isNorma
 
     return (
         <div className="relative w-full h-48 border border-slate-700/50 rounded-lg bg-slate-950/30 overflow-hidden">
-            {/* רקע רשת (Grid) */}
             <div className="absolute inset-0 bg-repeat bg-center opacity-10" style={{ backgroundImage: `linear-gradient(to right, #1f2937 1px, transparent 1px), linear-gradient(to bottom, #1f2937 1px, transparent 1px)`, backgroundSize: `${SCALE * 2}px ${SCALE * 2}px` }}></div>
             
             <svg width="100%" height="100%" viewBox="0 0 300 192" className="absolute">
                 
-                {/* מעגל יחידה (רק אם לא מנורמל) */}
                 {!isNormalized && (
                     <circle cx={ORIGIN_X} cy={ORIGIN_Y} r={SCALE * 5} fill="none" stroke="#64748b" strokeDasharray="2 2" strokeWidth="1" />
                 )}
 
-                {/* Center dot (Origin 0,0) */}
                 <circle cx={ORIGIN_X} cy={ORIGIN_Y} r="2" fill="#64748b" />
                 
-                {/* Vector Line */}
                 <motion.line 
                     x1={ORIGIN_X} 
                     y1={ORIGIN_Y} 
@@ -67,19 +63,16 @@ const VectorVisual: React.FC<VectorVisualProps> = ({ x, y, color, label, isNorma
                     transition={{ type: "spring", stiffness: 100 }}
                 />
                 
-                {/* Arrowhead definition (outside motion div) */}
                  <defs>
                     <marker id={`arrowhead-${color.replace('#', '')}`} markerWidth="5" markerHeight="5" refX="2" refY="2" orient="auto">
                         <path d="M0,0 L4,2 L0,4 z" fill={color} />
                     </marker>
                 </defs>
 
-                {/* Vector Label */}
                 <text x={ORIGIN_X + targetX + 5} y={ORIGIN_Y - targetY - 5} fill={color} fontSize="12" className="font-bold">
                     {label}
                 </text>
             </svg>
-             {/* תצוגת הנורמה */}
              <div className="absolute bottom-2 left-2 text-xs text-slate-400 font-mono" dir="ltr">
                 ||{label}|| = {displayNorm.toFixed(2)}
             </div>
@@ -87,7 +80,6 @@ const VectorVisual: React.FC<VectorVisualProps> = ({ x, y, color, label, isNorma
     );
 };
 
-// מעבדת הנורמה (LAB 1) - כולל נירמול
 const NormLab = () => {
     // Ruler מגיע מהייבוא הגלובלי
     const [x, setX] = useState(3);
@@ -161,7 +153,6 @@ const NormLab = () => {
     );
 };
 
-// מעבדת המרחק (LAB 2)
 const DistanceProblemLab = () => {
     // Target מגיע מהייבוא הגלובלי
     const [x1] = useState(3); 
@@ -262,7 +253,6 @@ const DistanceProblemLab = () => {
     );
 };
 
-// הדגמה של בעיית מרחק מול משמעות
 const DistanceProblemDemo = () => {
     // Divide מגיע מהייבוא הגלובלי
     return (
@@ -298,11 +288,9 @@ const DistanceProblemDemo = () => {
             </p>
         </div>
     );
-}
+};
 
-// רכיב החידון
 function NormDistanceQuiz() {
-    // Brain, CheckCircle, X, Check מגיעים מהייבוא הגלובלי
     const [answers, setAnswers] = useState<Record<number, number>>({});
 
     const questions = [
@@ -379,7 +367,6 @@ function NormDistanceQuiz() {
                                     className={btnClass}
                                     disabled={isComplete}
                                 >
-                                    {/* שימוש ב-dangerouslySetInnerHTML כדי לרנדר את תגית <b> בתוך המחרוזת של ה-options */}
                                     <span dangerouslySetInnerHTML={{ __html: opt.text }} />
                                     {isComplete && (isCorrect ? <Check size={18} className="text-green-400" /> : <X size={18} className="text-red-400" />)}
                                     {!isComplete && <div className={`w-4 h-4 rounded-full border border-slate-600 ${isSelected ? 'bg-blue-500 border-blue-500' : 'group-hover:border-blue-400'}`} />}
@@ -419,7 +406,6 @@ function NormDistanceQuiz() {
     );
 }
 
-// קומפוננטת עזר להצגת טבלה של NumPy (מחוץ לרכיב הראשי)
 interface NumPyNormTableProps {
     norm: string;
     distance: string;
@@ -457,7 +443,6 @@ const NumPyNormTable: React.FC<NumPyNormTableProps> = ({ norm, distance }) => (
     </div>
 );
 
-// רכיב לטיפול בתצוגת קוד פשוטה עם LTR כפוי
 const SimpleCodeDisplay: React.FC<{title: string, code: string, output: string, description: string}> = ({ title, code, output, description }) => (
     <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 h-full flex flex-col">
         <h4 className="text-sm font-bold text-white mb-3 border-r-4 border-blue-500 pr-3">{title}</h4>
@@ -537,20 +522,21 @@ export default function ChapterSix() {
                 <p>
                     אם תצייר וקטור על לוח כקווים, הנורמה היא האורך של הקו. לדוגמה, <span className="font-bold">וקטור V = [3, 4]</span> הנורמה שלו היא 5 (על בסיס פיתגורס).
                 </p>
+                <p>
+                    הנורמה (L2) היא הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית במרחב הרב-ממדי. במודלי AI, היא קובעת את ה&quot;משקל&quot; או ה&quot;עוצמה&quot; של הוקטור.
+                </p>
 
                 {/* **נוסחה כללית - שימוש ב-KaTeX** */}
                 <FormulaDisplay 
                     title="נוסחת הנורמה (L2 - הכללת פיתגורס)"
-                    // FormulaDisplay יעביר את ה-content לרכיב KaTeX/MathJax אם מוגדר
                     content={normFormulaLatex} 
                     explanation="השורש של סכום הריבועים של כל הרכיבים בוקטור. זו הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית."
                     icon={<Zap className="text-fuchsia-400" />}
                 />
                 
                 {/* **הדוגמה הקונקרטית - שימוש ב-KaTeX** */}
-                <div className="bg-slate-900/50 border border-slate-700 p-4 rounded-lg mt-4 text-center">
+                <div className="bg-slate-900/50 border border-slate-700 p-4 rounded-lg mt-4 text-center mb-6"> 
                     <h5 className="text-sm text-slate-400 mb-2">דוגמה קונקרטית לחישוב הנורמה של [3, 4]:</h5>
-                    {/* כאן אנו משתמשים ברכיב החדש MathRenderer */}
                     <MathRenderer latex={normExampleLatex} displayMode={true} />
                 </div>
             </div>
@@ -558,6 +544,7 @@ export default function ChapterSix() {
             {/* LAB 1: NormLab */}
             <NormLab />
 
+            {/* **תיקון מיקום:** סידור מחדש של ה-NumPy והטבלה. הטבלה עברה לטור משלה. */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
                  
                  <SimpleCodeDisplay
@@ -566,9 +553,10 @@ export default function ChapterSix() {
 v = np.array([3, 4])
 norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     output="5.00"
-                    description="כך המודל מחשב את 'עוצמת' המידע של הוקטור (גם באלפי ממדים)."
+                    description="כך המודל מחשב את 'עוצמת' המידע של הוקטור (גם באלפי ממדים). זהו היישום הפרקטי של נוסחת הנורמה."
                 />
-                <div className="p-4">
+                {/* NumPy Table קיבלה טור משלה לסידור טוב יותר */}
+                <div className="pt-4">
                      <NumPyNormTable norm="5.00" distance="5.00" />
                 </div>
             </div>
@@ -579,11 +567,11 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     נורמה מציגה למודל כמה חזק או קיצוני אובייקט מסוים. זה קריטי עבור:
                 </p>
                 <ul className="list-disc pr-6 space-y-2">
-                    <li><b>חריגות (Outliers)</b>: וקטור ארוך במיוחד יכול להיות אנומליה (פעילות קיצונית).</li>
-                    <li><b>נרמול (Normalization)</b>: ע&quot;י הפיכת הנורמה ל-1, המודל מתעלם מהעוצמה ומתמקד <b>רק בכיוון</b> (במשמעות). זה הבסיס לדמיון קוסינוס.</li>
+                    <li><b>חריגות (Outliers)</b>: וקטור ארוך במיוחד יכול להיות אנומליה (פעילות קיצונית). </li>
+                    <li><b>נירמול (Normalization)</b>: תהליך בו אנו משנים את הוקטור כך שאורכו יהיה 1. זה מאפשר למודל להתעלם מהעוצמה (אורך הוקטור) ולהתמקד <b>רק בכיוון</b> (במשמעות הסמנטית). זהו הבסיס לדמיון קוסינוס. </li>
                 </ul>
                 <p className="font-bold text-white">
-                    אינטואיציה: נורמה עוזרת למודל להבין את <span className="font-bold text-white">עוצמת המידע</span>.
+                    אינטואיציה: נורמה עוזרת למודל להבין את <span className="font-bold text-white">עוצמת המידע</span>; נירמול מסיר את העוצמה ומשאיר רק את <span className="font-bold text-white">הכיוון (המשמעות)</span>.
                 </p>
             </div>
           </section>
@@ -599,10 +587,10 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
             <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6">
                 <h3 className="text-xl font-bold text-white mb-4">הצעד הראשון: מרחק</h3>
                 <p>
-                    איך יודעים אם שני אובייקטים דומים או שונים? המדד הכי פשוט לדמיון הוא <b>מרחק בין וקטורים</b>.
+                    כדי להשוות בין שני וקטורים, הדרך האינטואיטיבית ביותר היא למדוד את המרחק ביניהם. אנו משתמשים ב**מרחק אוקלידי (L2 Distance)**, שהוא למעשה אורך הוקטור המחבר בין שתי הנקודות במרחב הרב-ממדי. 
                 </p>
                 <p className="font-bold text-white border-r-4 border-emerald-500 pr-3 bg-emerald-500/5 py-1 rounded-r">
-                    מרחק קטן $\leftarrow$ הוקטורים דומים (קרבה גיאומטרית).
+                    מרחק קטן $\leftarrow$ הוקטורים קרובים גיאומטרית. מרחק גדול $\leftarrow$ הוקטורים רחוקים גיאומטרית.
                 </p>
             </div>
             
@@ -612,9 +600,8 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                 <FormulaDisplay 
                     title="נוסחת המרחק בין 2 וקטורים (L2)"
-                    // שימוש בנוסחת ה-LaTeX הכללית
                     content={distanceFormulaLatex} 
-                    explanation="מחברים את ריבועי ההפרשים בין הרכיבים המתאימים (v1_1-v2_1), ולוקחים שורש."
+                    explanation="השורש של סכום ריבועי ההפרשים. זו הכללה של נוסחת המרחק הדו-ממדית לכל מספר של ממדים."
                     icon={<HardHat className="text-emerald-400" />}
                 />
                 
@@ -624,11 +611,16 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     code={`import numpy as np
 v1 = np.array([3, 4])
 v2 = np.array([7, 1])
-distance = np.linalg.norm(v1 - v2) # מחשב את הנורמה (אורך) של וקטור ההפרש`}
+# המרחק הוא נורמת ההפרש
+distance = np.linalg.norm(v1 - v2)
+print(f"Distance: {distance:.2f}")`}
                     output="5.00"
-                    description="מרחק שימושי בקיבוץ (Clustering) ואיתור חריגים, שבהם המיקום הגיאומטרי הוא העיקר."
+                    description="מרחק שימושי בקיבוץ (Clustering) ואיתור חריגים, שבהם המיקום הגיאומטרי המוחלט הוא העיקר."
                 />
             </div>
+             <p className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none mt-6">
+                **הסבר מעמיק:** ביישומי AI מסוימים, כמו ניתוח תמונות או נתוני חיישנים, המרחק האוקלידי עשוי להיות מדד טוב. אבל ברגע שאנו נכנסים לתחום השפה (NLP), שם **המשמעות** חשובה יותר מהעוצמה המילולית, המרחק הופך לבעייתי, כפי שנראה בסעיף הבא.
+            </p>
           </section>
 
 
@@ -641,10 +633,13 @@ distance = np.linalg.norm(v1 - v2) # מחשב את הנורמה (אורך) של 
             
             <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6">
                 <p>
-                    כאן מגיעה הנקודה הקריטית: <b>מרחק לא יודע להבין משמעות</b>.
+                    כאן מגיעה הנקודה הקריטית: <b>מרחק (L2) לא יודע להבין משמעות</b>. מדוע? כי המרחק מתחשב באורך הוקטור (הנורמה), וזו לא תמיד אינדיקציה טובה לדמיון רעיוני.
                 </p>
                 <p className="font-bold text-red-300">
-                    מרחק מודד שונות גיאומטרית בלבד, לא שונות רעיונית. בטקסט, משמעות זה הדבר החשוב.
+                    מרחק מודד שונות גיאומטרית בלבד, לא שונות רעיונית. בטקסט, וקטורים עם משמעות זהה (כגון &quot;כלב גדול&quot; ו&quot;כלב ענק&quot;) יכולים להיות מרוחקים מאוד אם האורך של אחד מהם (העוצמה) גבוה בהרבה מהשני.
+                </p>
+                <p>
+                    זהו הפער הגדול ביותר במעבר מגיאומטריה פשוטה לגיאומטריה של דאטה. אנו צריכים מדד ששואל: **האם הם מצביעים לאותו כיוון?**
                 </p>
             </div>
             
@@ -661,7 +656,7 @@ distance = np.linalg.norm(v1 - v2) # מחשב את הנורמה (אורך) של 
                     זו הסיבה שמערכות NLP כמעט תמיד משתמשות במדידת זווית בין וקטורים.
                 </p>
                 <p className="font-bold text-white">
-                    המדד הזה נקרא <b>דמיון קוסינוס</b>, והוא אחד הכלים החשובים ביותר להבנת משמעות בשפה. נצלול אליו בפרק הבא.
+                    המדד הזה נקרא <b>דמיון קוסינוס</b>, והוא אחד הכלים החשובים ביותר להבנת משמעות בשפה. זהו הנושא המרכזי של פרק 7.
                 </p>
             </div>
           </section>
@@ -670,24 +665,6 @@ distance = np.linalg.norm(v1 - v2) # מחשב את הנורמה (אורך) של 
           <section id="quiz" className="scroll-mt-24">
              <NormDistanceQuiz />
           </section>
-
-
-          {/* Footer & Navigation - כפתורי ניווט מתוקנים */}
-          <div className="flex justify-between pt-12 border-t border-slate-800">
-             <Link href="/chapter-5">
-                <Button variant="outline" className="border-slate-700 hover:bg-slate-800 text-slate-300 px-6 py-3">
-                    <ArrowLeft size={18} className="mr-2" /> 
-                    פרק קודם: וקטורים
-                </Button>
-             </Link>
-             <Link href="/chapter-7">
-                <Button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3">
-                    המשך לפרק 7: דמיון קוסינוס
-                    <ArrowLeft size={18} className="ml-2 rotate-180" /> 
-                </Button>
-             </Link>
-          </div>
-
         </main>
       </div>
     </div>
