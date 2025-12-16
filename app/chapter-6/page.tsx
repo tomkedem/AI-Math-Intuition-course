@@ -3,16 +3,18 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// ייבוא גלובלי של כל האייקונים - משתיקים את שגיאת 'לא בשימוש' כדי לאפשר שימוש פנימי
+// ייבוא גלובלי של כל האייקונים
 import { ChevronLeft, Scale, ArrowLeft, Target, Zap, HardHat, Layout, Divide, Ruler, Brain, CheckCircle, X, Check } from "lucide-react";
 
 import Link from 'next/link';
 import { CourseSidebar } from "@/components/CourseSidebar";
 import { FormulaDisplay } from "@/components/FormulaDisplay"; 
-// InteractiveCodeBlock הוסר
 import { motion, AnimatePresence } from "framer-motion"; 
 
+// ייבוא הרכיב החדש (שעכשיו נקי מייבוא CSS פנימי)
+import MathRenderer from "@/components/MathRenderer";
 
 // --- רכיבים ויזואליים אינטראקטיביים ---
 
@@ -30,7 +32,7 @@ const ORIGIN_Y = 96;
 
 // קומפוננטת תצוגה פשוטה של וקטור
 const VectorVisual: React.FC<VectorVisualProps> = ({ x, y, color, label, isNormalized }) => {
-    // ... (הקוד נשאר כפי שהיה)
+    
     const norm = Math.sqrt(x * x + y * y);
     const targetX = isNormalized ? (x / norm) * SCALE * 5 : x * SCALE;
     const targetY = isNormalized ? (y / norm) * SCALE * 5 : y * SCALE;
@@ -480,11 +482,16 @@ const SimpleCodeDisplay: React.FC<{title: string, code: string, output: string, 
 
 export default function ChapterSix() {
   
-  const normFormulaContent = 
-    "||v|| = SQRT( v1^2 + v2^2 + ... + vn^2 )";
+  // הגדרת תוכן הנוסחה כקוד LaTeX מלא
+  const normFormulaLatex = 
+    "\\mathbf{||v||} = \\sqrt{v_1^2 + v_2^2 + \\dots + v_n^2}";
 
-  const distanceFormulaContent =
-    "Distance(v1, v2) = SQRT( (v1_1 - v2_1)^2 + ... + (v1_n - v2_n)^2 )";
+  const distanceFormulaLatex =
+    "\\text{Distance}(v_1, v_2) = \\sqrt{(v_{1,1} - v_{2,1})^2 + \\dots + (v_{1,n} - v_{2,n})^2}";
+
+  // הנוסחה הקונקרטית של הדוגמה (זו שבתמונה)
+  const normExampleLatex = 
+    "\\mathbf{||v||} = \\sqrt{\\mathbf{3^2} + \\mathbf{4^2}} = \\sqrt{\\mathbf{25}} = \\mathbf{5}";
 
 
   return (
@@ -528,21 +535,31 @@ export default function ChapterSix() {
                     <span className="font-bold">נורמה</span> היא מספר אחד שמסכם את <span className="font-bold text-white">&quot;הגודל&quot;</span> של הוקטור. אפשר לחשוב עליה פשוט כעל <span className="font-bold">אורך</span>.
                 </p>
                 <p>
-                    אם תצייר וקטור על לוח כקווים, הנורמה היא האורך של הקו. לדוגמה, <span className="font-bold">וקטור V = [3, 4]</span> הנורמה שלו היא 5 (על בסיס פיתגורס), כי זהו האורך של הקו מהנקודה (0,0) לנקודה (3,4). אצל מודלי AI הרעיון זהה, רק שהוקטורים ארוכים בהרבה ולכן האורך שלהם מספר משהו חשוב.
+                    אם תצייר וקטור על לוח כקווים, הנורמה היא האורך של הקו. לדוגמה, <span className="font-bold">וקטור V = [3, 4]</span> הנורמה שלו היא 5 (על בסיס פיתגורס).
                 </p>
+
+                {/* **נוסחה כללית - שימוש ב-KaTeX** */}
+                <FormulaDisplay 
+                    title="נוסחת הנורמה (L2 - הכללת פיתגורס)"
+                    // FormulaDisplay יעביר את ה-content לרכיב KaTeX/MathJax אם מוגדר
+                    content={normFormulaLatex} 
+                    explanation="השורש של סכום הריבועים של כל הרכיבים בוקטור. זו הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית."
+                    icon={<Zap className="text-fuchsia-400" />}
+                />
+                
+                {/* **הדוגמה הקונקרטית - שימוש ב-KaTeX** */}
+                <div className="bg-slate-900/50 border border-slate-700 p-4 rounded-lg mt-4 text-center">
+                    <h5 className="text-sm text-slate-400 mb-2">דוגמה קונקרטית לחישוב הנורמה של [3, 4]:</h5>
+                    {/* כאן אנו משתמשים ברכיב החדש MathRenderer */}
+                    <MathRenderer latex={normExampleLatex} displayMode={true} />
+                </div>
             </div>
             
             {/* LAB 1: NormLab */}
             <NormLab />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-                <FormulaDisplay 
-                    title="נוסחת הנורמה (L2 - הכללת פיתגורס)"
-                    content={normFormulaContent}
-                    explanation="השורש של סכום הריבועים של כל הרכיבים בוקטור. זו הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית."
-                    icon={<Zap className="text-fuchsia-400" />}
-                />
-                 {/* שימוש ב-SimpleCodeDisplay לתיקון כיווניות LTR */}
+                 
                  <SimpleCodeDisplay
                     title="דוגמה: חישוב נורמה ב-NumPy (LTR כפוי)"
                     code={`import numpy as np
@@ -551,10 +568,11 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
                     output="5.00"
                     description="כך המודל מחשב את 'עוצמת' המידע של הוקטור (גם באלפי ממדים)."
                 />
+                <div className="p-4">
+                     <NumPyNormTable norm="5.00" distance="5.00" />
+                </div>
             </div>
             
-            <NumPyNormTable norm="5.00" distance="5.00" /> 
-
             <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6 mt-12">
                 <h3 className="text-xl font-bold text-white mb-4 border-r-4 border-fuchsia-500 pr-3">למה נורמה קריטית ב-AI? (עוצמה מול כיוון)</h3>
                 <p>
@@ -594,7 +612,8 @@ norm_v = np.linalg.norm(v) # מחשב את הנורמה (אורך)`}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                 <FormulaDisplay 
                     title="נוסחת המרחק בין 2 וקטורים (L2)"
-                    content={distanceFormulaContent}
+                    // שימוש בנוסחת ה-LaTeX הכללית
+                    content={distanceFormulaLatex} 
                     explanation="מחברים את ריבועי ההפרשים בין הרכיבים המתאימים (v1_1-v2_1), ולוקחים שורש."
                     icon={<HardHat className="text-emerald-400" />}
                 />
@@ -650,7 +669,25 @@ distance = np.linalg.norm(v1 - v2) # מחשב את הנורמה (אורך) של 
           {/* סעיף 4: החידון */}
           <section id="quiz" className="scroll-mt-24">
              <NormDistanceQuiz />
-          </section> 
+          </section>
+
+
+          {/* Footer & Navigation - כפתורי ניווט מתוקנים */}
+          <div className="flex justify-between pt-12 border-t border-slate-800">
+             <Link href="/chapter-5">
+                <Button variant="outline" className="border-slate-700 hover:bg-slate-800 text-slate-300 px-6 py-3">
+                    <ArrowLeft size={18} className="mr-2" /> 
+                    פרק קודם: וקטורים
+                </Button>
+             </Link>
+             <Link href="/chapter-7">
+                <Button className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3">
+                    המשך לפרק 7: דמיון קוסינוס
+                    <ArrowLeft size={18} className="ml-2 rotate-180" /> 
+                </Button>
+             </Link>
+          </div>
+
         </main>
       </div>
     </div>
