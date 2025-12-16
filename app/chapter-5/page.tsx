@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { 
     ChevronLeft, Brain, ScanFace, FileText, UserCircle, MoveRight, 
     Layers, Sparkles, Code, Hash, Palette, Lightbulb, 
-    MousePointer2, Monitor, Cat, Sandwich, RefreshCw, Check, X
+    MousePointer2, Monitor, Cat, Sandwich, RefreshCw, Check, X, Clock,
+    Loader2
 } from "lucide-react";
 import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,7 +19,7 @@ const ObjectToVectorLab = () => {
     const [activeTab, setActiveTab] = useState<'image' | 'text' | 'user'>('text');
 
     return (
-        <div className="bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl my-10">
+        <div className="bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl my-10 relative z-10">
             {/* Header / Tabs */}
             <div className="flex border-b border-slate-800 bg-slate-950/50">
                 <button 
@@ -57,7 +58,6 @@ const ObjectToVectorLab = () => {
 const ImageVectorDemo = () => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-    // יצירת צורת לב פשוטה (1 = לבן, 0 = שחור)
     const grid = [
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 1, 0, 1, 1, 0,
@@ -78,7 +78,6 @@ const ImageVectorDemo = () => {
                     <br/><span className="text-blue-400 font-bold block mt-2">👇 נסה לרחף עם העכבר על הפיקסלים בציור:</span>
                 </p>
                 
-                {/* Pixel Grid */}
                 <div className="grid grid-cols-8 gap-1 w-64 h-64 bg-black p-1 border border-slate-700 mx-auto md:mx-0 shadow-2xl">
                     {grid.map((val, i) => (
                         <div 
@@ -98,7 +97,6 @@ const ImageVectorDemo = () => {
             <div className="flex-1 space-y-4 w-full h-full flex flex-col">
                 <h3 className="text-xl font-bold text-white">2. התרגום: הוקטור</h3>
                 <div className="bg-slate-950 border border-slate-800 p-6 rounded-xl relative overflow-hidden flex-1 flex flex-col justify-center">
-                    
                     <div className="flex justify-between text-xs text-slate-500 font-mono mb-4 uppercase tracking-wider">
                         <span>Value (0-255)</span>
                         <span>Pixel Index</span>
@@ -130,7 +128,7 @@ const ImageVectorDemo = () => {
     );
 };
 
-// --- תת-רכיב 2: הדגמת טקסט (Semantic Sliders) ---
+// --- תת-רכיב 2: הדגמת טקסט ---
 const TextVectorDemo = () => {
     const [selectedWord, setSelectedWord] = useState('cat');
 
@@ -148,7 +146,7 @@ const TextVectorDemo = () => {
                 <div>
                     <h3 className="text-xl font-bold text-white mb-2">1. המקור: מילים</h3>
                     <p className="text-slate-400 text-sm max-w-lg">
-                        מילים הופכות למספרים שמייצגים <strong>משמעות</strong>. שימו לב: המספרים כאן הם לא אקראיים, הם מייצגים &quot;תכונות&quot; סמויות (כמו: האם זה אוכל? האם זה טכנולוגי?).
+                        מילים הופכות למספרים שמייצגים <strong>משמעות</strong>. שימו לב: המספרים כאן הם לא אקראיים, הם מייצגים &quot;תכונות&quot; סמויות.
                     </p>
                 </div>
                 <div className="flex gap-3">
@@ -203,7 +201,7 @@ const TextVectorDemo = () => {
     );
 };
 
-// --- תת-רכיב 3: הדגמת משתמש (User Profile) ---
+// --- תת-רכיב 3: הדגמת משתמש ---
 const UserVectorDemo = () => {
     const [stats, setStats] = useState({ visits: 12, time: 4.5, purchases: 1 });
 
@@ -215,13 +213,12 @@ const UserVectorDemo = () => {
         });
     };
 
-    // נרמול דמי
     const vector = [
         (stats.visits / 50).toFixed(2),
         (stats.time / 10).toFixed(2),
         (stats.purchases / 5).toFixed(2),
-        "0.85", // נתון קבוע לדוגמה
-        "0.02"  // נתון קבוע לדוגמה
+        "0.85", 
+        "0.02"
     ];
 
     return (
@@ -253,9 +250,6 @@ const UserVectorDemo = () => {
                         <span className="text-emerald-400 font-mono font-bold text-xl">85%</span>
                     </div>
                 </div>
-                <p className="text-xs text-slate-500">
-                    המודל לא יודע מי אתה. הוא יודע איך אתה מתנהג. דפוסי ההתנהגות הופכים לוקטור מספרי שמאפשר למערכת להשוות אותך למשתמשים אחרים.
-                </p>
             </div>
 
             <div className="flex flex-col items-center justify-center text-slate-700">
@@ -276,7 +270,7 @@ const UserVectorDemo = () => {
                             <span>user_vec = [</span>
                         </div>
                         <div className="pl-4 space-y-1 text-slate-300">
-                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[0]},</span> <span className="text-slate-600">{"// visits (normalized)"}</span></div>
+                            <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[0]},</span> <span className="text-slate-600">{"// visits"}</span></div>
                             <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[1]},</span> <span className="text-slate-600">{"// avg_time"}</span></div>
                             <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[2]},</span> <span className="text-slate-600">{"// purchases"}</span></div>
                             <div className="flex justify-between group-hover:bg-slate-800/50 rounded px-1"><span>{vector[3]},</span> <span className="text-slate-600">{"// engagement"}</span></div>
@@ -332,7 +326,7 @@ const VectorPlayground = () => {
     const handleMouseUp = () => setIsDragging(false);
 
     return (
-        <div className="flex flex-col md:flex-row gap-6 my-12 items-stretch select-none" onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+        <div className="flex flex-col md:flex-row gap-6 my-12 items-stretch select-none relative z-10" onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
             
             {/* Graph */}
             <div 
@@ -404,14 +398,47 @@ const VectorPlayground = () => {
     );
 };
 
-// --- מעבדה 3: סמנטיקה (גרירת מילים) ---
+// --- מעבדה 3: סמנטיקה (גרירת מילים מתוקנת) ---
 const SemanticPlayground = () => {
+    // אנו נשתמש במצב (State) כדי לשמור את המיקום
+    // ונשתמש ב-event handlers רגילים של React במקום ב-motion drag כדי להבטיח סנכרון מושלם
     const [positions, setPositions] = useState<Record<string, {x: number, y: number}>>({
-        dog: { x: 100, y: 100 },
-        cat: { x: 180, y: 120 },
-        car: { x: 400, y: 250 },
-        bike: { x: 480, y: 220 }
+        dog: { x: 50, y: 50 },
+        cat: { x: 150, y: 80 },
+        car: { x: 300, y: 200 },
+        bike: { x: 400, y: 150 }
     });
+
+    const [draggingId, setDraggingId] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const handlePointerDown = (id: string, e: React.PointerEvent) => {
+        e.preventDefault();
+        setDraggingId(id);
+    };
+
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (!draggingId || !containerRef.current) return;
+        
+        const rect = containerRef.current.getBoundingClientRect();
+        
+        // חישוב מיקום יחסי בתוך הקונטיינר
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+
+        // גבולות (כדי שלא יצא מהקופסה)
+        x = Math.max(0, Math.min(rect.width - 80, x));
+        y = Math.max(0, Math.min(rect.height - 40, y));
+
+        setPositions(prev => ({
+            ...prev,
+            [draggingId]: { x, y }
+        }));
+    };
+
+    const handlePointerUp = () => {
+        setDraggingId(null);
+    };
 
     const getDistance = (p1: {x:number, y:number}, p2: {x:number, y:number}) => {
         const dist = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
@@ -419,7 +446,7 @@ const SemanticPlayground = () => {
     };
 
     return (
-        <div className="my-12">
+        <div className="my-12 relative z-10" onPointerUp={handlePointerUp} onPointerLeave={handlePointerUp}>
             <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
                 <Brain className="text-purple-400" /> המשימה שלך: סדר את המילים
             </h3>
@@ -428,19 +455,51 @@ const SemanticPlayground = () => {
                 שים לב איך ה&quot;מרחק הסמנטי&quot; למטה משתנה.
             </p>
 
-            <div className="relative w-full h-100 bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-inner">
+            <div 
+                ref={containerRef}
+                onPointerMove={handlePointerMove}
+                className="relative w-full h-100 bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-inner touch-none cursor-crosshair"
+            >
+                {/* רקע נקודות מובלט */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-slate-900/50 to-slate-950"></div>
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#64748b 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                <div 
+                    className="absolute inset-0 opacity-40 pointer-events-none" 
+                    style={{ 
+                        backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', 
+                        backgroundSize: '24px 24px' 
+                    }}
+                ></div>
 
-                <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                    <line x1={positions.dog.x + 40} y1={positions.dog.y + 20} x2={positions.cat.x + 40} y2={positions.cat.y + 20} stroke="#10b981" strokeWidth="2" strokeDasharray="5,5" opacity="0.5" />
-                    <line x1={positions.car.x + 40} y1={positions.car.y + 20} x2={positions.bike.x + 40} y2={positions.bike.y + 20} stroke="#f59e0b" strokeWidth="2" strokeDasharray="5,5" opacity="0.5" />
+                {/* קווים מחברים (מתעדכנים בזמן אמת כי הם מבוססים על אותו State) */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                    <line x1={positions.dog.x + 40} y1={positions.dog.y + 20} x2={positions.cat.x + 40} y2={positions.cat.y + 20} stroke="#10b981" strokeWidth="2" strokeDasharray="5,5" opacity="0.6" />
+                    <line x1={positions.car.x + 40} y1={positions.car.y + 20} x2={positions.bike.x + 40} y2={positions.bike.y + 20} stroke="#f59e0b" strokeWidth="2" strokeDasharray="5,5" opacity="0.6" />
                 </svg>
 
-                <DraggableWord id="dog" label="🐶 כלב" color="bg-emerald-600" pos={positions} setPos={setPositions} />
-                <DraggableWord id="cat" label="🐱 חתול" color="bg-emerald-600" pos={positions} setPos={setPositions} />
-                <DraggableWord id="car" label="🚗 מכונית" color="bg-orange-600" pos={positions} setPos={setPositions} />
-                <DraggableWord id="bike" label="🚲 אופניים" color="bg-orange-600" pos={positions} setPos={setPositions} />
+                {/* מילים נגררות */}
+                {Object.entries(positions).map(([key, pos]) => (
+                    <div
+                        key={key}
+                        onPointerDown={(e) => handlePointerDown(key, e)}
+                        style={{ 
+                            left: pos.x, 
+                            top: pos.y,
+                            position: 'absolute',
+                            cursor: 'grab',
+                            touchAction: 'none'
+                        }}
+                        className={`
+                            px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg z-10 flex items-center gap-2 select-none transition-shadow
+                            ${key === 'dog' || key === 'cat' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-orange-600 hover:bg-orange-500'}
+                            ${draggingId === key ? 'scale-110 shadow-2xl ring-2 ring-white cursor-grabbing z-50' : ''}
+                        `}
+                    >
+                        {key === 'dog' && '🐶 כלב'}
+                        {key === 'cat' && '🐱 חתול'}
+                        {key === 'car' && '🚗 מכונית'}
+                        {key === 'bike' && '🚲 אופניים'}
+                    </div>
+                ))}
             </div>
 
             <div className="grid grid-cols-2 gap-4 mt-4">
@@ -461,41 +520,58 @@ const SemanticPlayground = () => {
     );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const DraggableWord = ({ id, label, color, pos, setPos }: any) => {
-    return (
-        <motion.div
-            drag
-            dragMomentum={false}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            onDrag={(event, info: any) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                setPos((prev: any) => ({
-                    ...prev,
-                    [id]: { x: prev[id].x + info.delta.x, y: prev[id].y + info.delta.y }
-                }));
-            }}
-            style={{ x: pos[id].x, y: pos[id].y }}
-            className={`absolute px-4 py-2 rounded-full text-white text-sm font-bold shadow-lg cursor-grab active:cursor-grabbing ${color} hover:brightness-110 z-10 flex items-center gap-2`}
-        >
-            {label}
-        </motion.div>
-    )
-}
-
 // --- העמוד הראשי ---
 
 export default function ChapterFive() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // הנדלר לגלילה כדי לשנות את הסטטוס ב-Header
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+      setIsScrolled(e.currentTarget.scrollTop > 50);
+  };
+
   return (
-    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-blue-500/30" dir="rtl">
+    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-blue-500/30 overflow-hidden relative" dir="rtl">
       
+      {/* Background Pattern Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+         <div 
+            className="absolute inset-0 opacity-20"
+            style={{ 
+                backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', 
+                backgroundSize: '24px 24px' 
+            }}
+         ></div>
+         <div className="absolute top-0 left-0 right-0 h-96 bg-blue-600/5 blur-[100px]"></div>
+      </div>
+
       <CourseSidebar />
 
-      <div className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth">
+      <div 
+        className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth relative z-10"
+        onScroll={handleScroll}
+      >
         
         {/* HEADER */}
         <header className="py-8 px-8 md:px-12 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm sticky top-0 z-50">
              <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+                
+                {/* Dynamic Status Badge */}
+                <div className="hidden md:flex items-center gap-2 bg-slate-900/80 border border-slate-800 rounded-full px-4 py-1.5 absolute top-8 left-12 transition-all duration-500">
+                    <div className={`w-2 h-2 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)] ${isScrolled ? 'bg-purple-500' : 'bg-blue-500'}`}></div>
+                    <span className="text-xs font-medium text-slate-300 flex items-center gap-2">
+                        {isScrolled ? (
+                            <>
+                                <Loader2 size={12} className="animate-spin" /> לומד כעת...
+                            </>
+                        ) : (
+                            <>
+                                <Clock size={12} /> 10 דקות קריאה
+                            </>
+                        )}
+                    </span>
+                </div>
+
                 <div>
                     <div className="flex items-center gap-2 text-xs text-blue-400 font-bold mb-1 tracking-wider">
                         <span className="bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">פרק 5</span>
@@ -747,7 +823,7 @@ function ChapterFiveQuiz() {
             text: "מה קורה לוקטורים של מילים דומות (כמו 'כלב' ו'חתול')?",
             options: [
                 { id: 1, text: "הם יהיו רחוקים מאוד זה מזה" },
-                { id: 2, text: "הם יהיו קרובים במרחב הוקטורי (דמיון מתמטי)", correct: true },
+                { id: 2, text: "הם יהיו קרובים במרחב הוקטורי", correct: true },
                 { id: 3, text: "הם יהיו זהים לחלוטין" }
             ]
         }
