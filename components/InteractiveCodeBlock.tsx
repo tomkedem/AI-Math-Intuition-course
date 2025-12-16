@@ -1,6 +1,6 @@
 import React from "react";
 
-interface InteractiveCodeBlockProps {
+export interface InteractiveCodeBlockProps {
   title?: string;
   code: string;
   language?: string;
@@ -10,8 +10,7 @@ interface InteractiveCodeBlockProps {
 
 export const InteractiveCodeBlock: React.FC<InteractiveCodeBlockProps> = ({
   title,
-  code,
-  language = "tsx",
+  code, 
   description,
   children,
 }) => (

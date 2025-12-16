@@ -2,20 +2,114 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, CloudRain, Sun, Filter, Table2, Search, GitCommit, Check, X, Umbrella, AlertOctagon, Terminal } from "lucide-react";
+import { 
+    ChevronLeft, CloudRain, Sun, Filter, Table2, Search, GitCommit, Check, X, Umbrella, 
+    AlertOctagon, Terminal, Lightbulb, Activity, RefreshCcw, RotateCcw, Play, ArrowRight
+} from "lucide-react";
 import { CourseSidebar } from "@/components/CourseSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from 'next/link';
 
-// --- רכיבים ויזואליים פנימיים ---
+// --- הגדרות Props ---
+interface InteractiveCodeBlockProps {
+    filename: string;
+    code: string;
+    output: string;
+    explanation: string;
+    description: string;
+}
 
-// 1. סימולטור הקשר (גשם ועננים)
+// --- 1. רכיב קוד אינטראקטיבי ---
+const InteractiveCodeBlock: React.FC<InteractiveCodeBlockProps> = ({ filename, code, output, explanation, description }) => {
+    const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
+
+    const run = () => {
+        setStatus('running');
+        setTimeout(() => setStatus('done'), 1000);
+    };
+
+    const reset = () => setStatus('idle');
+
+    return (
+        <div className="my-10 border border-slate-800 rounded-xl overflow-hidden bg-[#0d1117] shadow-2xl relative group">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-[#161b22]">
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                    <span className="text-xs text-slate-400 font-mono ml-3">{filename}</span>
+                </div>
+                <Button 
+                    onClick={status === 'done' ? reset : run}
+                    disabled={status === 'running'}
+                    size="sm"
+                    className={`h-7 text-xs font-bold gap-2 transition-all ${status === 'done' ? 'bg-slate-700 hover:bg-slate-600' : 'bg-purple-600 hover:bg-purple-500'}`}
+                >
+                    {status === 'running' ? <RefreshCcw size={12} className="animate-spin"/> : status === 'done' ? <RotateCcw size={12}/> : <Play size={12} fill="currentColor"/>}
+                    {status === 'done' ? 'אפס' : status === 'running' ? 'מריץ...' : 'הרץ קוד'}
+                </Button>
+            </div>
+            
+            <div className="p-4 bg-slate-900/80 border-b border-slate-800 text-sm text-slate-300 leading-relaxed flex items-start gap-2">
+                <Terminal size={16} className="text-purple-400 shrink-0 mt-0.5" />
+                <div>
+                    <span className="font-bold text-purple-400 ml-1">הסבר על הקוד:</span>
+                    {description}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="p-5 font-mono text-sm text-slate-300 border-b lg:border-b-0 lg:border-l border-slate-800 overflow-x-auto leading-relaxed" dir="ltr">
+                    <pre dangerouslySetInnerHTML={{ __html: code }} />
+                </div>
+                
+                <div className="bg-[#090c10] p-5 font-mono text-sm relative min-h-50 flex flex-col justify-between">
+                    <div className="absolute top-2 right-2 text-[10px] text-slate-600 uppercase tracking-widest font-bold select-none">Terminal Output</div>
+                    <AnimatePresence mode="wait">
+                        {status === 'idle' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col items-center justify-center text-slate-600 text-xs gap-2">
+                                <Activity size={32} className="opacity-20" />
+                                <span>המתנה להרצה...</span>
+                            </motion.div>
+                        )}
+                        {status === 'running' && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col items-center justify-center text-blue-400 gap-3">
+                                <RefreshCcw size={24} className="animate-spin opacity-50" />
+                                <span className="text-xs tracking-wider">CALCULATING PROBABILITIES...</span>
+                            </motion.div>
+                        )}
+                        {status === 'done' && (
+                            <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-purple-400 whitespace-pre-wrap leading-relaxed w-full pt-4" dir="ltr">
+                                <span className="text-slate-500 block mb-2 select-none">$ python3 {filename}</span>
+                                {output}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                    
+                    {status === 'done' && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 pt-4 border-t border-slate-800">
+                            <div className="flex gap-2 items-start">
+                                <Lightbulb size={16} className="text-yellow-400 mt-0.5 shrink-0" />
+                                <div className="text-xs text-slate-300">
+                                    <span className="text-yellow-400 font-bold block mb-1">ניתוח התוצאה:</span> 
+                                    {explanation}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- 2. סימולטור הקשר (גשם ועננים) ---
 const ContextSimulator = () => {
   const [context, setContext] = useState<'general' | 'cloudy'>('general');
 
   // נתונים (ימים בחודש)
-  // כללי: הרבה שמש, קצת גשם
-  // עננים: הרוב גשם, קצת סתם מעונן
   const totalDays = 20;
   
   // יצירת ימים לסימולציה
@@ -62,7 +156,7 @@ const ContextSimulator = () => {
   const probability = rainCount / totalDays;
 
   return (
-    <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col gap-6 relative overflow-hidden">
+    <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col gap-6 relative overflow-hidden my-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 z-10 relative">
           <div>
               <h3 className="text-white font-bold text-lg flex items-center gap-2">
@@ -113,7 +207,7 @@ const ContextSimulator = () => {
   );
 };
 
-// 2. חוקר בייס (טבלת הספאם האינטראקטיבית)
+// --- 3. חוקר בייס (טבלת הספאם האינטראקטיבית) ---
 const BayesTableExplorer = () => {
     const [focus, setFocus] = useState<'all' | 'free'>('all');
 
@@ -139,7 +233,7 @@ const BayesTableExplorer = () => {
                     בייס בטבלה: המילה &quot;Free&quot;
                 </h3>
                 <p className="text-sm text-slate-400">
-                    לחץ על השורה הראשונה כדי לראות מה קורה כשהמודל מזהה את המילה.
+                    לחץ על השורה הראשונה כדי לראות מה קורה להסתברות כשהמודל מזהה את המילה.
                 </p>
             </div>
 
@@ -246,10 +340,13 @@ export default function ChapterFour() {
                     <div className="flex items-center gap-2 text-xs text-purple-400 font-bold mb-1 tracking-wider">
                         <span className="bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">פרק 4</span>
                         <ChevronLeft size={10} />
-                        <span>הסתברות מותנית ובייס</span>
+                        <span>הסתברות למפתחים</span>
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-                        הגרסה האנושית לנוסחאות
+                        הסתברות מותנית ובייס  <br/>
+                        <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-400">
+                            הגרסה האנושית לנוסחאות
+                        </span>
                     </h1>
                 </div>
                 <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">
@@ -270,18 +367,44 @@ export default function ChapterFour() {
                 
                 <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4">
                     <p>
-                        בפרק הקודם שאלנו &quot;כמה פעמים משהו קורה?&quot;. זו שאלה חשובה, אבל היא כללית מדי.
-                        בחיים האמיתיים, ובוודאי ב-AI, השאלה האמיתית היא: <strong>&quot;כמה פעמים משהו קורה בתוך קבוצה מסוימת?&quot;</strong>
+                        בפרק הקודם דיברנו על שאלה פשוטה: <strong>&quot;כמה פעמים משהו קורה מתוך כל המקרים?&quot;</strong>.
+                        זו הסתברות בסיסית, והיא חשובה. אבל בחיים האמיתיים – ובטח בעולם ה-AI – זו לא השאלה שאנחנו באמת רוצים לשאול.
                     </p>
                     <p>
-                        אם אתה שואל &quot;מה הסיכוי לגשם?&quot;, התשובה היא אולי 20%. 
-                        אבל אם אתה שואל &quot;מה הסיכוי לגשם <strong>בהינתן שיש עננים שחורים</strong>?&quot;, המספר משתנה דרמטית.
-                        זהו הכוח של <strong>הקשר (Context)</strong>.
+                        השאלה האמיתית היא: <strong>&quot;כמה פעמים משהו קורה בתוך קבוצה מסוימת?&quot;</strong>.
+                    </p>
+                    
+                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl my-6">
+                        <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+                            <Umbrella size={18} className="text-blue-400"/> דוגמה יומיומית
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                            <div>
+                                <p className="text-slate-500 mb-1">שאלה כללית:</p>
+                                <p className="text-white">&quot;מה הסיכוי שירד היום גשם?&quot;</p>
+                                <div className="mt-2 text-xs bg-slate-800 p-2 rounded text-slate-400">בודקים את כל הימים בשנה. (נניח 20%)</div>
+                            </div>
+                            <div className="border-r border-slate-800 pr-6">
+                                <p className="text-slate-500 mb-1">שאלה מותנית:</p>
+                                <p className="text-white">&quot;מה הסיכוי שירד גשם <strong>בהינתן שיש עננים שחורים?</strong>&quot;</p>
+                                <div className="mt-2 text-xs bg-blue-900/30 text-blue-300 p-2 rounded border border-blue-500/30">אנחנו בודקים רק מצב חלקי. הסיכוי קופץ ל-80%.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        ברגע שיש הקשר (Context), הסיכוי משתנה. אנחנו כבר לא בודקים את הכול, אלא תת-קבוצה. וזה בדיוק מהות ההסתברות המותנית.
                     </p>
                 </div>
             </div>
 
-            <ContextSimulator />
+            {/* סימולטור ההקשר */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm text-blue-400 font-bold bg-blue-400/10 p-3 rounded border border-blue-400/20">
+                    <ArrowRight size={16} /> נסה בעצמך: החלף בין &quot;שאלה כללית&quot; ל-&quot;עננים שחורים&quot; וראה איך ההסתברות משתנה.
+                </div>
+                <ContextSimulator />
+            </div>
 
             <div className="mt-6 flex gap-4 text-sm text-slate-400 bg-slate-900 p-4 rounded-xl border border-slate-800">
                 <AlertOctagon className="text-yellow-500 shrink-0" size={20} />
@@ -307,13 +430,23 @@ export default function ChapterFour() {
                         בייס אומר דבר פשוט: <strong>כשמגיע מידע חדש (ראיות), צריך לעדכן את האמונות שלנו.</strong>
                     </p>
                     <p>
-                        בוא ניקח את הדוגמה הקלאסית: זיהוי ספאם. ספרנו כמה פעמים המילה <code>free</code> מופיעה במיילים רגילים ובמיילי ספאם.
-                        הנה הנתונים האמיתיים:
+                        המילה &quot;בייס&quot; היא לא מונח טכני, אלא שמו של תומס בייס, שהבין שצריך לשלב ידע קודם עם מידע חדש.
+                    </p>
+                    <p>
+                        בוא ניקח את הדוגמה הקלאסית: זיהוי ספאם. סרקנו אלפי מיילים וספרנו כמה פעמים המילה <code>free</code> מופיעה.
+                        הנה הנתונים האמיתיים בטבלה האינטראקטיבית למטה:
                     </p>
                 </div>
             </div>
 
             <BayesTableExplorer />
+            
+            <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none mt-8">
+                <p>
+                    הטבלה מציגה שני עולמות: העולם הכללי (כמה ספאם יש בכלל) והעולם שבקונטקסט (מה קורה כשרואים &quot;Free&quot;).
+                    בייס פשוט מחבר ביניהם ושואל: <strong>בהינתן שאני רואה Free, איזה תרחיש הופיע יותר פעמים?</strong>
+                </p>
+            </div>
 
           </section>
 
@@ -334,7 +467,7 @@ export default function ChapterFour() {
                 </p>
                 <p>
                     הבנה של <strong>Likelihood (סבירות)</strong> היא קריטית למפתח. אחוזים הם לא סתם מספרים, הם רמזים למבנה הדאטה.
-                    כשאתה מבין שהמודל בודק סבירות ולא אמת מוחלטת, אתה פתאום מבין למה הוא טועה לפעמים, ואיך אפשר לתקן אותו ע&quot;י שיפור הדאטה.
+                    כשאתה מבין שהמודל בודק סבירות ולא אמת מוחלטת, אתה פתאום מבין למה הוא טועה לפעמים.
                 </p>
             </div>
 
@@ -358,36 +491,42 @@ export default function ChapterFour() {
 
 
           {/* סעיף 4: Code Demo */}
-          <section id="part-4" className="scroll-mt-24 bg-slate-900/40 border border-slate-800 rounded-2xl p-8 relative overflow-hidden">
-             <div className="flex flex-col gap-6">
+          <section id="part-4" className="scroll-mt-24">
+             <div className="flex flex-col gap-6 mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-slate-950 rounded-lg border border-slate-800"><Terminal className="text-yellow-400" size={20} /></div>
+                    <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Terminal size={20} /></div>
                     <h2 className="text-2xl font-bold text-white">4. הדגמה בקוד: לתרגם טבלה לפייתון</h2>
                 </div>
-                
-                <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 font-mono text-sm shadow-xl" dir="ltr">
-                    <div className="flex justify-between text-xs text-slate-500 border-b border-slate-800 pb-2 mb-4">
-                        <span>bayes_demo.py</span>
-                        <span>Python</span>
-                    </div>
-                    <div className="space-y-1 text-slate-300 leading-relaxed">
-                        <span className="text-purple-400"># Frequency table data</span><br/>
-                        spam_with_free = <span className="text-yellow-300">42</span><br/>
-                        total_spam = <span className="text-yellow-300">1200</span><br/><br/>
-                        
-                        <span className="text-slate-500"># The conditional probability calculation</span><br/>
-                        <span className="text-slate-500"># P(Free | Spam)</span><br/>
-                        p_free_given_spam = spam_with_free / total_spam<br/><br/>
-                        
-                        <span className="text-blue-400">print</span>(f<span className="text-green-400">&quot;Probability to see &#39;free&#39; inside spam: &#123;p_free_given_spam:.3f&#125;&quot;</span>)<br/>
-                        <span className="text-slate-500"># Output: 0.035 (3.5%)</span>
-                    </div>
+                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none">
+                    <p>
+                        אחרי שעברנו דרך התיאוריה, הגיע הזמן לראות את זה בקוד.
+                        לא נוסחאות כבדות, אלא חישוב פשוט של יחסים מתוך הטבלה שראינו קודם.
+                    </p>
                 </div>
-                <p className="text-sm text-slate-400">
-                    זה נראה נמוך (3.5%), אבל כשמשווים את זה להסתברות של המילה &quot;Free&quot; בהודעות רגילות (שהיא כמעט 0), 
-                    היחס ביניהם הוא זה שגורם למודל לצעוק &quot;ספאם!&quot;.
-                </p>
              </div>
+                
+            <InteractiveCodeBlock 
+                filename="bayes_demo.py"
+                description="הקוד מחשב את ההסתברות המותנית: מה הסיכוי למצוא את המילה 'Free' בתוך קבוצת הספאם, לעומת הסיכוי למצוא אותה בהודעות רגילות."
+                code={`<span class="text-purple-400">import</span> numpy <span class="text-purple-400">as</span> np<br/><br/>
+<span class="text-slate-500"># נתונים מטבלת התדרים שלנו</span><br/>
+spam_with_free = <span class="text-blue-400">42</span><br/>
+ham_with_free = <span class="text-blue-400">3</span><br/>
+total_spam = <span class="text-blue-400">1200</span><br/>
+total_ham = <span class="text-blue-400">800</span><br/><br/>
+<span class="text-slate-500"># חישוב הסתברות בסיסית (Prior)</span><br/>
+p_spam = total_spam / (total_spam + total_ham)<br/><br/>
+<span class="text-slate-500"># חישוב הסתברות מותנית (Likelihood)</span><br/>
+<span class="text-slate-500"># P(Free | Spam)</span><br/>
+p_free_given_spam = spam_with_free / total_spam<br/>
+<span class="text-slate-500"># P(Free | Ham)</span><br/>
+p_free_given_ham = ham_with_free / total_ham<br/><br/>
+<span class="text-yellow-300">print</span>(f<span class="text-green-400">'Basic probability of spam: {p_spam:.2f}'</span>)<br/>
+<span class="text-yellow-300">print</span>(f<span class="text-green-400">'Prob. to see free in SPAM: {p_free_given_spam:.3f}'</span>)<br/>
+<span class="text-yellow-300">print</span>(f<span class="text-green-400">'Prob. to see free in HAM:  {p_free_given_ham:.3f}'</span>)`}
+                output={`Basic probability of spam: 0.60\nProb. to see free in SPAM: 0.035\nProb. to see free in HAM:  0.004`}
+                explanation="שים לב לפער: הסיכוי לראות 'Free' בספאם הוא 3.5%, בעוד שבהודעה רגילה הוא אפסי (0.4%). הפער העצום הזה (פי 9!) הוא מה שגורם למודל לסמן את ההודעה כחשודה."
+            />
           </section>
 
 
@@ -471,7 +610,7 @@ function ChapterQuiz() {
                                 if (isCorrect) btnClass += "bg-green-500/10 border-green-500/50 text-green-300";
                                 else btnClass += "bg-red-500/10 border-red-500/50 text-red-300";
                             } else {
-                                btnClass += "bg-slate-900 border-slate-800 hover:bg-slate-800 text-slate-400";
+                                btnClass += "bg-slate-950 border-slate-800 hover:bg-slate-800 text-slate-400";
                             }
 
                             return (
