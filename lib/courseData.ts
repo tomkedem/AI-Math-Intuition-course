@@ -9,7 +9,9 @@ export const chapters = [
         title: "מבוא: להסיר את הווילון מעל ה-AI",
         description: "המודלים לא עושים קסמים. הם עובדים עם מושגים פשוטים כמו ממוצע ומרחק. בוא נלמד את השפה שלהם.",
         readTime: "5 דקות",
-        color: "sky"
+        color: "sky",
+        colorFrom: "from-sky-400",
+        colorTo: "to-blue-500"
     },
     {
         id: 1,
@@ -19,7 +21,9 @@ export const chapters = [
         title: "למה מתמטיקה היא חלק מהעבודה?",
         description: "בתוך המודל – כל זה נעלם. לא נשארת שפה, לא נשארת תמונה... הכול מתורגם למספרים.",
         readTime: "8 דקות",
-        color: "blue"
+        color: "blue",
+        colorFrom: "from-blue-400",
+        colorTo: "to-indigo-500"
     },
     {
         id: 2,
@@ -29,7 +33,9 @@ export const chapters = [
         title: "ממוצע, חציון וסטיית תקן – בלי סיבוכים",
         description: "איך מבינים את ה'מרכז' וה'פיזור' של הדאטה כדי לזהות רעש ואנומליות.",
         readTime: "10 דקות",
-        color: "emerald"
+        color: "emerald",
+        colorFrom: "from-emerald-400",
+        colorTo: "to-green-500"
     },
     {
         id: 3,
@@ -39,7 +45,9 @@ export const chapters = [
         title: "הסתברות שמדברת בשפה של מתכנת",
         description: "הסתברות היא לא קסם, היא תדירות. איך מייצגים תרחישים וסיווגים בצורה פשוטה.",
         readTime: "12 דקות",
-        color: "purple"
+        color: "purple",
+        colorFrom: "from-purple-400",
+        colorTo: "to-fuchsia-500"
     },
     {
         id: 4,
@@ -49,7 +57,9 @@ export const chapters = [
         title: "הסתברות מותנית ובייס – הגרסה האנושית",
         description: "מה מסתתר מאחורי השאלה 'כמה סביר שזה נכון?' ואיך הקשר משנה את התמונה.",
         readTime: "10 דקות",
-        color: "amber"
+        color: "amber",
+        colorFrom: "from-amber-400",
+        colorTo: "to-yellow-500"
     },
     {
         id: 5,
@@ -59,7 +69,9 @@ export const chapters = [
         title: "וקטורים – הלב של כל מודל",
         description: "איך טקסט, תמונה או משתמש הופכים לרשימת מספרים שהמחשב יודע לעבד.",
         readTime: "10 דקות",
-        color: "indigo"
+        color: "indigo",
+        colorFrom: "from-indigo-400",
+        colorTo: "to-blue-700"
     },
     {
         id: 6,
@@ -69,7 +81,9 @@ export const chapters = [
         title: "נורמה ומרחק – מודדים את העולם",
         description: "מה זה 'אורך' של וקטור ואיך מודלים מודדים כמה דברים שונים זה מזה.",
         readTime: "12 דקות",
-        color: "pink"
+        color: "pink",
+        colorFrom: "from-pink-400",
+        colorTo: "to-rose-500"
     },
     {
         id: 7,
@@ -79,7 +93,9 @@ export const chapters = [
         title: "זווית ודמיון קוסינוס",
         description: "למה בטקסט הכיוון חשוב יותר מהמרחק? על דמיון סמנטי ו-Embeddings.",
         readTime: "10 דקות",
-        color: "rose"
+        color: "rose",
+        colorFrom: "from-rose-400",
+        colorTo: "to-pink-500"
     },
     {
         id: 8,
@@ -89,7 +105,9 @@ export const chapters = [
         title: "פונקציות – איך מודל חושב",
         description: "מה זו 'עקומה' ולמה כל מודל בעולם מנסה למצוא את המינימום שלה.",
         readTime: "8 דקות",
-        color: "cyan"
+        color: "cyan",
+        colorFrom: "from-cyan-400",
+        colorTo: "to-sky-500"
     },
     {
         id: 9,
@@ -99,7 +117,9 @@ export const chapters = [
         title: "שיפוע – המנוע של הלמידה",
         description: "מה זה שיפוע בלי להגיד 'נגזרת', ואיך הוא אומר למודל כמה טעות יש לו.",
         readTime: "10 דקות",
-        color: "teal"
+        color: "teal",
+        colorFrom: "from-teal-400",
+        colorTo: "to-emerald-500"
     },
     {
         id: 10,
@@ -109,7 +129,9 @@ export const chapters = [
         title: "Gradient Descent – הלמידה עצמה",
         description: "האלגוריתם שמניע את הכל: איך המודל גולש במורד העקומה כדי להקטין את הטעות.",
         readTime: "15 דקות",
-        color: "violet"
+        color: "fill-cyan-400",
+        colorFrom: "from-cyan-400",
+        colorTo: "to-blue-400"
     },
     {
         id: 11,
@@ -119,7 +141,9 @@ export const chapters = [
         title: "פרויקט סיום – mini_math_primer",
         description: "כותבים קוד! יישום מעשי בפייתון של כל מה שלמדנו: ממוצע, בייס, נורמה ו-Gradient Descent.",
         readTime: "20 דקות",
-        color: "orange"
+        color: "orange",
+        colorFrom: "from-orange-400",
+        colorTo: "to-amber-500"
     },
     {
         id: 12,
@@ -129,6 +153,8 @@ export const chapters = [
         title: "איך כל זה מתחבר ל-ML ול-NLP",
         description: "איך אבני הבניין שלמדנו (וקטורים, שיפועים, הסתברות) בונים את המודלים הגדולים ביותר.",
         readTime: "8 דקות",
-        color: "slate"
+        color: "slate",
+        colorFrom: "from-slate-400",
+        colorTo: "to-gray-500"
     }
 ];

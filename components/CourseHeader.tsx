@@ -11,6 +11,7 @@ interface CourseHeaderProps {
     readTime?: string;
     isScrolled: boolean;
     scrollProgress: number;
+    color?: string;
     colorFrom?: string;
     colorTo?: string;
 }
@@ -23,6 +24,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
     readTime = "10 דקות", 
     isScrolled,
     scrollProgress,
+    color = "indigo",
     colorFrom = "indigo-500",
     colorTo = "purple-600",
 }) => {
