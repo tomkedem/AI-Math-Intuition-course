@@ -2,246 +2,293 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Sparkles, Brain, Terminal, BookOpen, Quote, Check, X, ChevronLeft, Lightbulb } from "lucide-react";
-import { CourseSidebar } from "@/components/CourseSidebar";
+import { 
+    Sparkles, ChevronLeft, 
+    ScanEye, Fingerprint, Activity, Binary, ArrowDown 
+} from "lucide-react";
 import Link from 'next/link';
-import { motion, AnimatePresence } from "framer-motion";
+import Image from 'next/image'; // 1. הוספת ייבוא לתמונה
+import { motion } from "framer-motion";
+import { ChapterLayout } from '@/components/ChapterLayout';
+
+// --- רכיב ה-X-Ray ---
+const XRayCard = ({ icon, term, reality, color }: { icon: React.ReactNode, term: string, reality: string, color: string }) => {
+    const [isHovered, setIsHovered] = useState(false);
+
+    return (
+        <div 
+            className="relative h-40 w-full cursor-pointer group perspective-1000"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setIsHovered(!isHovered)}
+        >
+            <motion.div 
+                animate={{ rotateX: isHovered ? 180 : 0, opacity: isHovered ? 0 : 1 }}
+                transition={{ duration: 0.6, type: "spring" }}
+                className="absolute inset-0 bg-slate-900/80 border border-slate-700 rounded-2xl flex flex-col items-center justify-center p-4 shadow-xl z-20 backface-hidden"
+            >
+                <div className={`p-3 rounded-full bg-slate-800 text-slate-400 mb-3 group-hover:scale-110 transition-transform duration-500`}>
+                    {icon}
+                </div>
+                <h3 className="text-xl font-bold text-slate-200 tracking-wider">{term}</h3>
+                <span className="text-xs text-slate-500 mt-2">רחף כדי לגלות את האמת</span>
+            </motion.div>
+
+            <motion.div 
+                initial={{ rotateX: -180, opacity: 0 }}
+                animate={{ rotateX: isHovered ? 0 : -180, opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.6, type: "spring" }}
+                className={`absolute inset-0 bg-${color}-900/20 border border-${color}-500/50 rounded-2xl flex flex-col items-center justify-center p-4 shadow-[0_0_30px_rgba(0,0,0,0.3)] z-10 backdrop-blur-md`}
+            >
+                <h3 className={`text-lg font-bold text-${color}-400 mb-2`}>בסך הכל...</h3>
+                <p className="text-center text-slate-200 text-sm font-medium leading-relaxed">
+                    {reality}
+                </p>
+            </motion.div>
+        </div>
+    );
+};
+
+// --- הדגמת וקטור חיה ---
+const VectorDemo = () => {
+    const [word, setWord] = useState("חתול");
+    
+    const vectors: Record<string, number[]> = {
+        "חתול": [0.9, 0.1, 0.85, 0.05],
+        "כלב": [0.88, 0.12, 0.80, 0.15],
+        "פיצה": [0.02, 0.95, 0.10, 0.90]
+    };
+
+    const activeVector = vectors[word] || vectors["חתול"];
+
+    return (
+        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden flex flex-col gap-6 items-center w-full">
+            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+            
+            <div className="flex flex-col items-center gap-4 z-10 w-full">
+                <span className="text-xs text-slate-500 uppercase tracking-widest font-bold">הקלט האנושי</span>
+                <div className="flex flex-wrap justify-center gap-2">
+                    {Object.keys(vectors).map(w => (
+                        <button 
+                            key={w}
+                            onClick={() => setWord(w)}
+                            className={`px-4 py-2 rounded-lg text-sm transition-all ${word === w ? 'bg-white text-black font-bold shadow-[0_0_15px_white]' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                        >
+                            {w}
+                        </button>
+                    ))}
+                </div>
+                <div className="text-5xl mt-2 drop-shadow-md animate-bounce">
+                    {word === "חתול" ? "🐱" : word === "כלב" ? "🐶" : "🍕"}
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center text-slate-600 gap-1">
+                <div className="h-8 w-px bg-slate-700"></div>
+                <span className="text-[10px] bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Embedding</span>
+                <div className="h-8 w-px bg-slate-700"></div>
+                <ArrowDown size={16} />
+            </div>
+
+            <div className="w-full z-10 bg-slate-900/50 p-4 rounded-xl border border-slate-800/50">
+                <span className="text-xs text-slate-500 uppercase tracking-widest mb-4 block text-center">מה המודל רואה (וקטור)</span>
+                
+                <div className="grid grid-cols-4 gap-3 h-24 items-end px-2">
+                    {activeVector.map((val, i) => (
+                        <div key={i} className="flex flex-col items-center gap-2 w-full h-full justify-end group">
+                            <div className="relative w-full h-full flex items-end justify-center">
+                                <motion.div 
+                                    initial={{ height: 0 }}
+                                    animate={{ height: `${val * 100}%` }}
+                                    transition={{ type: "spring", stiffness: 120, damping: 15 }}
+                                    className={`w-full rounded-md ${i % 2 === 0 ? 'bg-blue-500' : 'bg-purple-500'} opacity-80 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_rgba(59,130,246,0.3)]`}
+                                ></motion.div>
+                            </div>
+                            <span className="text-[10px] font-mono text-slate-400">{val.toFixed(2)}</span>
+                        </div>
+                    ))}
+                </div>
+                <div className="text-[10px] text-slate-600 text-center mt-3 font-mono">
+                    [ {activeVector.join(", ")} ]
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default function IntroPage() {
   return (
-    <div className="flex min-h-screen bg-[#020617] font-sans text-slate-100 selection:bg-blue-500/30" dir="rtl">
-      
-      <CourseSidebar />
-
-      <div className="flex-1 h-screen overflow-y-auto relative custom-scrollbar scroll-smooth">
-        
-        {/* --- COMPACT HEADER (כמו בפרקים 1 ו-2) --- */}
-        <header className="py-8 px-8 md:px-12 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-sm sticky top-0 z-50">
-             <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-2 text-xs text-blue-400 font-bold mb-1 tracking-wider">
-                        <span className="bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">מבוא</span>
-                        <ChevronLeft size={10} />
-                        <span>ברוכים הבאים</span>
-                    </div>
-                    <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-                   מתמטיקה אינטואיטיבית ל-AI
-                    </h1>
-                </div>
-                <p className="text-sm text-slate-400 max-w-sm leading-relaxed md:text-right border-r-2 border-slate-800 pr-4 hidden md:block">
-                    הספר הזה לא מנסה להפוך אותך למתמטיקאי, אלא לתת לך שליטה במודלים שאתה בונה.
-                </p>
-             </div>
-        </header>
-
-        <main className="relative z-10 max-w-4xl mx-auto p-8 md:p-12 pb-32 space-y-24">
+   <ChapterLayout currentChapterId={0}>
           
-          {/* --- סעיף 1: הבעיה --- */}
-          <section className="scroll-mt-24">
-            <div className="relative bg-slate-900/40 border border-slate-800 rounded-3xl p-8 md:p-10 backdrop-blur-sm overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[60px] rounded-full group-hover:bg-blue-500/20 transition-all"></div>
+          {/* --- HERO SECTION משודרג עם תמונה --- */}
+         <section className="relative min-h-[80vh] flex flex-col justify-center items-center text-center space-y-8 py-12 overflow-hidden">
+  
+            <div className="absolute inset-0 z-0">
+                <Image 
+                    src="/0a0f6cf1-3f4f-4205-b7d2-888396fd8529.png"
+                    alt="AI Math Background"
+                    fill
+                    // שינוי 1: הסרתי את mix-blend-screen והגדלתי את ה-opacity
+                    // זה ישמור על הצבעים המקוריים אבל יכהה אותם מעט כדי לא להסתנוור
+                    className="object-cover opacity-80" 
+                    priority
+                />
                 
-                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <Quote className="text-blue-500 rotate-180" size={24} />
-                    מה באמת קורה מאחורי הוילון?
-                </h2>
+                {/* שינוי 2: חיזקתי את הגרדיאנט השחור מעל התמונה */}
+                {/* זה מה שמאפשר לטקסט הלבן "לקפוץ" החוצה גם מעל רקע צבעוני */}
+                <div className="absolute inset-0 bg-linear-to-b from-[#050B14]/90 via-[#050B14]/50 to-[#050B14]"></div>
                 
-                <div className="prose prose-invert text-slate-400 text-base leading-relaxed max-w-none space-y-4">
-                    <p>
-                        כשנכנסים לעולם של בינה מלאכותית, יש רגע מסוים שבו מרגישים שכל התהליך קורה מאחורי &quot;וילון סגור&quot;. 
-                        אנחנו מורידים מודל מ-Hugging Face, מחברים לו API, והוא מייצר תוצאות מרשימות. אבל הדרך שבה הוא הגיע לתוצאות האלו נראית מסתורית, כמעט כמו כישוף.
-                    </p>
-                    <p>
-                        התחושה הזו לא מגיעה בגלל שהחומר קשה מדי. היא מגיעה בגלל <strong>פער שפה</strong>.
-                        אנחנו רגילים לחשוב שמתמטיקה שייכת לאקדמיה, למחברות משובצות ולמבחנים. אנחנו לא רגילים לחשוב עליה כעל כלי עבודה יומיומי של מתכנת.
-                    </p>
-                    <div className="bg-slate-950/50 p-4 border-r-4 border-purple-500 rounded-r text-slate-300 mt-4">
-                        <strong className="text-white block mb-1">המציאות שונה לגמרי.</strong>
-                        מאחורי כל מודל AI, מתוחכם ככל שיהיה, עומדים רעיונות פשוטים ואינטואיטיביים: מרחק, כיוון, שינוי וסיכוי. ברגע שמבינים אותם, הוילון נפתח.
-                    </div>
+                {/* Vignette חזק יותר בצדדים */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#050B14_100%)]"></div>
+            </div>    
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="relative z-10"
+            >
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-6 backdrop-blur-sm">
+                    <Sparkles size={16} />
+                    <span>מתמטיקה אינטואיטיבית למתכנתים</span>
                 </div>
-            </div>
-          </section>
+                
+                <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-slate-200 to-slate-500 leading-tight mb-6 drop-shadow-lg">
+                    לפצח את <br/>
+                    <span className="bg-linear-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">הקופסה השחורה</span>
+                </h1>
 
-
-          {/* --- סעיף 2: הפתרון (השפה החדשה) --- */}
-          <section>
-            <div className="flex items-center gap-4 mb-8">
-                <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><Lightbulb size={20} /></div>
-                <div>
-                    <h2 className="text-2xl font-bold text-white">השפה החדשה שלך</h2>
-                    <p className="text-slate-400 text-sm">אנחנו הולכים לפרק את המושגים המפחידים לרכיבים שאתה כבר מכיר.</p>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ConceptCard 
-                    title="אבני הבניין"
-                    content="במקום נוסחאות אינסופיות, נתמקד במושגים: ממוצע (המרכז), שונות (הרעש), ווקטורים (המידע)."
-                    icon={<Brain className="text-fuchsia-400" />}
-                />
-                <ConceptCard 
-                    title="שינוי תפיסה"
-                    content="טקסט הוא כבר לא רצף של תווים, אלא נקודה במרחב. ברגע שהשינוי הזה קורה בראש, הכל נראה אחרת."
-                    icon={<Sparkles className="text-amber-400" />}
-                />
-                <ConceptCard 
-                    title="הקוד הוא המלך"
-                    content="אנחנו לא נפתור משוואות על דף. אנחנו נראה איך Python ו-NumPy עושים את העבודה השחורה בשבילנו."
-                    icon={<Terminal className="text-blue-400" />}
-                />
-                <ConceptCard 
-                    title="חיבור לפרקטיקה"
-                    content="כל מושג מתמטי ילווה מיד בדוגמה מהעולם האמיתי: זיהוי ספאם, המלצת מוצרים, או ניתוח תמונות."
-                    icon={<BookOpen className="text-emerald-400" />}
-                />
-            </div>
-          </section>
-
-
-          {/* --- סעיף 3: ההבטחה וחידון --- */}
-          <section id="quiz-section" className="mt-16 pt-8 border-t border-slate-800">
-             <div className="text-center mb-10">
-                <h2 className="text-2xl font-bold text-white mb-2">מוכן לצאת לדרך?</h2>
-                <p className="text-slate-400 text-sm max-w-xl mx-auto">
-                    לפני שצוללים לפרק הראשון, בוא נוודא שאנחנו מתחילים מאותה נקודת מוצא. ענה על 3 שאלות קצרות כדי לפתוח את הקורס.
+                <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+                    המודלים לא עושים קסמים. הם עושים מתמטיקה. <br/>
+                    והחדשות הטובות? אתה כבר מכיר את היסודות.
                 </p>
-             </div>
-             
-             <IntroQuiz />
+            </motion.div>
+
+            <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="absolute bottom-4 animate-bounce text-slate-600 z-10"
+            >
+                <ArrowDown size={24} />
+            </motion.div>
           </section>
 
-        </main>
-      </div>
-    </div>
-  );
-}
-
-// --- Helper Components ---
-
-function ConceptCard({ title, content, icon }: { title: string, content: string, icon: React.ReactNode }) {
-    return (
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:bg-slate-800/80 hover:border-slate-700 transition-all duration-300 group">
-            <div className="flex items-start gap-4">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 group-hover:scale-110 transition-transform duration-300 shrink-0 shadow-lg">
-                    {icon}
-                </div>
-                <div>
-                    <h4 className="text-lg font-bold text-slate-200 mb-2">{title}</h4>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                        {content}
+          {/* --- THE PROBLEM --- */}
+          <section className="max-w-3xl mx-auto space-y-8 mb-24 relative">
+            <div className="absolute -right-20 top-0 text-[200px] text-slate-800/10 font-black -z-10 select-none">?</div>
+            
+            <h2 className="text-3xl font-bold text-white border-r-4 border-blue-500 pr-6">
+                מה באמת קורה מאחורי הוילון?
+            </h2>
+            
+            <div className="prose prose-invert prose-lg text-slate-300 leading-8">
+                <p>
+                    כשנכנסים לעולם של בינה מלאכותית, יש רגע שבו מרגישים שכל התהליך קורה מאחורי וילון סגור.
+                    המודלים מייצרים תוצאות מרשימות, אבל הדרך שבה הם מגיעים אליהן נראית <span className="text-rose-400 font-bold">מסתורית או לא נגישה</span>.
+                </p>
+                <p>
+                    התחושה הזו לא מגיעה מקושי אמיתי, אלא מפער קטן בהבנה.
+                    אנחנו רגילים לחשוב שמתמטיקה שייכת לעולם אחר, משהו רחוק, משהו שלמדנו פעם ושאין לו מקום בעבודה היומיומית.
+                </p>
+                <div className="bg-slate-900/80 p-6 rounded-2xl border border-slate-700/50 shadow-inner my-8">
+                    <p className="font-bold text-xl text-white mb-2">המציאות שונה לגמרי.</p>
+                    <p className="text-slate-400">
+                        מאחורי כל מודל עומדים כמה רעיונות פשוטים, אינטואיטיביים ומאוד שימושיים. 
+                        לא צריך נוסחאות ארוכות ולא סימנים משונים. צריך רק להבין מהי השפה שהמודלים מדברים בה.
                     </p>
                 </div>
             </div>
-        </div>
-    );
-}
+          </section>
 
-// --- Quiz Component ---
-function IntroQuiz() {
-    const [answers, setAnswers] = useState<Record<number, number>>({});
+          {/* --- X-RAY SECTION --- */}
+          <section className="py-16 relative">
+             <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-white mb-4">תראה כמה זה פשוט</h2>
+                <p className="text-slate-400">רחף עם העכבר מעל המושגים המפחידים כדי לגלות את ההיגיון הפשוט שמתחת</p>
+             </div>
 
-    const questions = [
-        {
-            id: 1,
-            text: "מהי הסיבה העיקרית לתחושה ש-AI הוא \"קופסה שחורה\"?",
-            options: [
-                { id: 1, text: "האלגוריתמים סודיים ואף אחד לא מכיר אותם" },
-                { id: 2, text: "יש פער בהבנת השפה המתמטית הבסיסית", correct: true },
-                { id: 3, text: "המחשבים חושבים מהר מדי לבני אדם" }
-            ]
-        },
-        {
-            id: 2,
-            text: "מהי המטרה העיקרית של הספר הזה?",
-            options: [
-                { id: 1, text: "ללמד אותך לכתוב ספריות Python מאפס" },
-                { id: 2, text: "לתת אינטואיציה מתמטית מעשית למפתחים", correct: true },
-                { id: 3, text: "להכין אותך למבחן באוניברסיטה" }
-            ]
-        },
-        {
-            id: 3,
-            text: "איך המודל רואה את העולם בסופו של דבר?",
-            options: [
-                { id: 1, text: "כאוסף של מספרים (וקטורים)", correct: true },
-                { id: 2, text: "הוא קורא טקסט כמו בן אדם" },
-                { id: 3, text: "הוא משתמש במילון מוגדר מראש" }
-            ]
-        }
-    ];
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+                <XRayCard 
+                    icon={<Binary size={32} />}
+                    term="Embedding"
+                    reality="סך הכל רשימה של מספרים שמייצגת משמעות."
+                    color="blue"
+                />
+                <XRayCard 
+                    icon={<Activity size={32} />}
+                    term="Gradient Descent"
+                    reality="לרדת במורד הגבעה בצעדים קטנים עד שמגיעים למטה."
+                    color="purple"
+                />
+                <XRayCard 
+                    icon={<ScanEye size={32} />}
+                    term="Attention"
+                    reality="לדעת באיזו מילה במשפט כדאי להתמקד עכשיו."
+                    color="amber"
+                />
+                <XRayCard 
+                    icon={<Fingerprint size={32} />}
+                    term="Probability"
+                    reality="פשוט לספור כמה פעמים משהו קרה בעבר."
+                    color="emerald"
+                />
+             </div>
+          </section>
 
-    const handleSelect = (qId: number, oId: number) => {
-        setAnswers(prev => ({ ...prev, [qId]: oId }));
-    };
+          {/* --- THE SHIFT DEMO --- */}
+          <section className="max-w-4xl mx-auto py-16 space-y-8">
+             <div className="text-center">
+                 <h2 className="text-3xl font-bold text-white mb-2">השינוי בתפיסה</h2>
+                 <p className="text-slate-400">ברגע שהמושגים מתיישבים בראש, משהו משתנה.</p>
+             </div>
 
-    const allCorrect = questions.every(q => {
-        const selected = answers[q.id];
-        const correctOption = q.options.find(o => o.correct);
-        return selected === correctOption?.id;
-    });
+             <div className="grid md:grid-cols-2 gap-12 items-center">
+                 
+                 <VectorDemo />
 
-    return (
-        <div className="space-y-6 max-w-2xl mx-auto text-right">
-            {questions.map((q) => (
-                <div key={q.id} className="bg-slate-950/80 border border-slate-800 rounded-xl p-5 hover:border-slate-700 transition-colors">
-                    <h4 className="font-bold text-white mb-4 text-sm flex items-center gap-2">
-                        <span className="bg-slate-800 text-slate-400 w-6 h-6 rounded flex items-center justify-center text-xs">{q.id}</span>
-                        {q.text}
-                    </h4>
-                    <div className="grid grid-cols-1 gap-2">
-                        {q.options.map((opt) => {
-                            const isSelected = answers[q.id] === opt.id;
-                            const isCorrect = opt.correct;
-                            
-                            let btnClass = "w-full text-right px-4 py-3 rounded-lg border transition-all text-xs flex items-center justify-between group ";
-                            
-                            if (isSelected) {
-                                if (isCorrect) btnClass += "bg-green-500/10 border-green-500/50 text-green-300";
-                                else btnClass += "bg-red-500/10 border-red-500/50 text-red-300";
-                            } else {
-                                btnClass += "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-blue-500/30 text-slate-300";
-                            }
+                 <div className="space-y-6 text-right">
+                     <div className="flex gap-4">
+                         <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 shrink-0">✕</div>
+                         <div>
+                             <h4 className="font-bold text-slate-300">איך ראית את זה עד היום</h4>
+                             <p className="text-sm text-slate-500">טקסט הוא רצף של תווים ומילים.</p>
+                         </div>
+                     </div>
+                     <div className="flex gap-4">
+                         <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">✓</div>
+                         <div>
+                             <h4 className="font-bold text-white">איך תראה את זה מעכשיו</h4>
+                             <p className="text-sm text-slate-400">טקסט הוא <span className="text-emerald-400 font-bold">וקטור</span>. נקודה במרחב שיש לה כיוון ומשמעות.</p>
+                         </div>
+                     </div>
+                     <p className="text-sm text-slate-400 italic mt-4 border-r-2 border-slate-700 pr-4">
+                         &quot;אחת המטרות של הספר היא להראות שכל זה מתחבר לכלים שאתה כבר מכיר בפייתון.&quot;
+                     </p>
+                 </div>
 
-                            return (
-                                <button 
-                                    key={opt.id}
-                                    onClick={() => handleSelect(q.id, opt.id)}
-                                    className={btnClass}
-                                >
-                                    <span>{opt.text}</span>
-                                    {isSelected && (isCorrect ? <Check size={16} className="text-green-400" /> : <X size={16} className="text-red-400" />)}
-                                </button>
-                            )
-                        })}
-                    </div>
-                </div>
-            ))}
+             </div>
+          </section>
 
-            <AnimatePresence>
-                {allCorrect && Object.keys(answers).length === 3 && (
-                    <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        className="sticky bottom-8 z-50 flex justify-center pt-8"
-                    >
-                        <Link href="/chapter-1">
-                            <Button size="lg" className="h-16 px-12 text-lg bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-full shadow-[0_0_50px_rgba(37,99,235,0.5)] border-t border-blue-400/30 hover:scale-105 transition-transform group">
-                                <div className="text-center">
-                                    <div className="font-bold flex items-center gap-2 justify-center">
-                                        <Sparkles className="text-yellow-300" size={20} />
-                                        כל התשובות נכונות!
-                                    </div>
-                                    <div className="text-xs text-blue-100 opacity-90 mt-1 font-normal">
-                                        בוא נצלול לפרק הראשון
-                                    </div>
-                                </div>
-                                <ChevronLeft size={20} className="mr-4 group-hover:-translate-x-1 transition-transform" />
-                            </Button>
-                        </Link>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
+          {/* --- CTA --- */}
+          <section className="py-20 text-center">
+                <motion.div 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <Link href="/chapter-1">
+                        <Button size="lg" className="h-20 px-16 text-xl bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-full shadow-[0_0_60px_rgba(37,99,235,0.4)] border-t border-blue-400/30 group">
+                            <span className="font-black tracking-wide ml-3">אני מוכן להתחיל</span>
+                            <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
+                                <ChevronLeft size={24} className="text-white" />
+                            </div>
+                        </Button>
+                    </Link>
+                </motion.div>
+                <p className="mt-6 text-slate-500 text-sm">
+                    פרק 1: למה מתמטיקה היא חלק מהעבודה?
+                </p>
+          </section>
+
+    </ChapterLayout>
+  );
 }

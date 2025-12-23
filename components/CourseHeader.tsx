@@ -4,6 +4,7 @@ import React from 'react';
 import { Terminal, Clock, Activity, Zap, Percent } from "lucide-react";
 
 interface CourseHeaderProps {
+    chapterLable?: string;
     chapterNum: string;
     title: string;
     description: string;
@@ -15,6 +16,7 @@ interface CourseHeaderProps {
 }
 
 export const CourseHeader: React.FC<CourseHeaderProps> = ({ 
+    chapterLable, 
     chapterNum, 
     title, 
     description,
@@ -42,7 +44,6 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
         >
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#0F172A] to-[#02040a]"></div>
 
-            {/* --- שינוי 1: הגדלת המשבצות --- */}
             <div className="absolute inset-0 pointer-events-none opacity-60"> 
                 <div 
                     className="absolute inset-0" 
@@ -51,7 +52,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                             linear-gradient(to right, rgba(99, 102, 241, 0.15) 1px, transparent 1px),
                             linear-gradient(to bottom, rgba(99, 102, 241, 0.15) 1px, transparent 1px)
                         `,
-                        backgroundSize: '60px 60px' // הוגדל מ-30 ל-60
+                        backgroundSize: '60px 60px'
                     }}
                 ></div>
                 <div 
@@ -61,19 +62,16 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                             linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
                             linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
                         `,
-                        backgroundSize: '300px 300px' // הוגדל מ-150 ל-300
+                        backgroundSize: '300px 300px'
                     }}
                 ></div>
             </div>
 
-            {/* --- שינוי 2: הסרת "ראש הלייזר" הלבן --- */}
             <div className={`absolute bottom-0 left-0 w-full h-0.75 bg-slate-900/80 transition-opacity duration-300 ${safeProgress > 0 ? 'opacity-100' : 'opacity-0'}`}>
                 <div 
-                    // הקו עצמו נשאר, אבל הוא נקי עכשיו
                     className={`relative h-full bg-linear-to-r from-${colorFrom} via-cyan-400 to-${colorTo} shadow-[0_0_20px_${colorFrom}] transition-all duration-100 ease-out`}
                     style={{ width: `${safeProgress}%` }} 
                 >
-                    {/* האלמנטים הלבנים שהיו כאן נמחקו */}
                 </div>
             </div>
 
@@ -81,11 +79,21 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                 
                 {/* צד ימין: כותרת */}
                 <div className="flex flex-col items-start justify-center max-w-3xl">
-                    <div className={`flex items-center gap-3 text-[11px] font-mono font-bold tracking-widest text-${colorFrom} mb-2`}>
-                        <span className={`flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded border border-${colorFrom}/40 text-cyan-300 shadow-lg shadow-indigo-900/20`}>
+                    
+                    {/* שורת הפרק והתווית */}
+                    <div className="flex items-center gap-3 text-[11px] font-mono font-bold tracking-widest mb-2">
+                        {/* מסגרת מספר הפרק - צבע הפונט נלקח מ-colorFrom */}
+                        <span className={`flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded border border-${colorFrom}/40 shadow-lg shadow-indigo-900/20`}>
                             <Terminal size={12} />
-                            <span>פרק {chapterNum.replace(/\D/g, '')}</span>
+                            <span>{chapterNum}</span>
                         </span>
+
+                        {/* התווית מחוץ למסגרת, בצד שמאל של המספר */}
+                        {chapterLable && (
+                            <span className={`text-${colorFrom} uppercase opacity-80`}>
+                                {chapterLable}
+                            </span>
+                        )}
                     </div>
 
                     <h1 className={`font-black text-white leading-tight transition-all duration-300 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] ${isScrolled ? 'text-2xl' : 'text-3xl md:text-4xl'}`}>
