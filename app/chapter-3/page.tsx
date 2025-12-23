@@ -329,7 +329,7 @@ export default function ChapterThree() {
                         <br/>
                         <strong>&quot;זה קורה בערך 20 אחוז מהפעמים.&quot;</strong>
                     </p>
-                    <p>
+                    <div>
                         וזהו. אין פה קסם. הסתברות היא בעצם ספירה.
                         אם מתוך 100 בקשות לשרת:
                         <ul className="list-disc pr-6 mt-2 mb-2">
@@ -337,7 +337,7 @@ export default function ChapterThree() {
                             <li>80 מצליחות</li>
                         </ul>
                         אז ההסתברות לכישלון היא: 20 מתוך 100 (0.2).
-                    </p>
+                    </div>
                     <p>
                         השפה הזו טבעית הרבה יותר ממונחים כמו &quot;אירועים&quot; או &quot;מרחבי דגימה&quot;. מפתח לא צריך את כל זה. הוא צריך להבין מה קורה בדאטה.
                     </p>
