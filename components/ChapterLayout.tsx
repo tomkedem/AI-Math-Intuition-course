@@ -23,7 +23,8 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
         title: "פרק לא נמצא",
         description: "לא נמצא מידע עבור פרק זה.",
         readTime: "0 דקות",
-        color: "slate" 
+        color: "slate",
+        label: "" // ברירת מחדל למקרה שחסר
     };
 
     // בדיקה האם זה המבוא
@@ -39,6 +40,8 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+        
+        // לוגיקת גלילה יציבה
         if (!isScrolled && scrollTop > 50) setIsScrolled(true);
         else if (isScrolled && scrollTop < 30) setIsScrolled(false);
 
@@ -77,79 +80,86 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
 
             <CourseSidebar />
 
-            <div 
-                className="flex-1 h-screen overflow-y-auto custom-scrollbar scroll-smooth relative z-10"
-                onScroll={handleScroll}
-            >
-                <CourseHeader 
-                    chapterLable={activeChapter.label}
-                    chapterNum={activeChapter.num}
-                    title={activeChapter.title}
-                    description={activeChapter.description}
-                    readTime={activeChapter.readTime}
-                    isScrolled={isScrolled}
-                    scrollProgress={scrollProgress}
-                    colorFrom={`${themeColor}-400`} 
-                    colorTo={`${themeColor}-600`}
-                />
+            {/* --- איזור התוכן הראשי (התיקון לקפיצות) --- */}
+            <div className="flex-1 relative h-screen flex flex-col z-10">
 
-                {/* --- התיקון נמצא כאן --- */}
-                {/* אם זה המבוא, אנחנו נותנים פחות Padding למעלה (pt-4) */}
-                {/* אם זה פרק רגיל, אנחנו שומרים על המרווח הגדול (pt-32) כדי לא להסתיר טקסט */}
-                
-                <main className={`max-w-4xl mx-auto px-8 md:px-12 pb-32 space-y-24 
-                    ${isIntro ? 'pt-0' : 'pt-8 py-3'} 
-                `}>
-                    
-                    {/* תוכן הפרק */}
-                    <div className="min-h-[50vh]">
-                        {children}
+                {/* Header - ממוקם ב-Absolute מעל הגלילה */}
+                <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none">
+                    <div className="pointer-events-auto">
+                        <CourseHeader 
+                            // הנה השורה שהייתה חסרה:
+                            chapterLable={activeChapter.label} 
+                            chapterNum={activeChapter.num}
+                            title={activeChapter.title}
+                            description={activeChapter.description}
+                            readTime={activeChapter.readTime}
+                            isScrolled={isScrolled}
+                            scrollProgress={scrollProgress}
+                            colorFrom={`${themeColor}-400`} 
+                            colorTo={`${themeColor}-600`}
+                        />
                     </div>
+                </div>
 
-                    {/* --- אזור ניווט תחתון (Footer) --- */}
-                    <div className="border-t border-slate-800/60 pt-12 mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* אזור הגלילה - מכיל רק את התוכן */}
+                <div 
+                    className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth"
+                    onScroll={handleScroll}
+                >
+                    <main className={`max-w-4xl mx-auto px-8 md:px-12 pb-32 space-y-24 
+                        ${isIntro ? 'pt-12' : 'pt-52 py-12'} 
+                    `}>
                         
-                        {prevChapter ? (
-                            <Link href={prevChapter.href} className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 transition-all hover:bg-slate-800 hover:border-slate-700">
-                                <div className="flex flex-col items-start gap-2 relative z-10">
-                                    <span className="text-xs font-mono text-slate-500 group-hover:text-slate-400 transition-colors flex items-center gap-2">
-                                        <ChevronRight size={14} /> הקודם
-                                    </span>
-                                    <div className="font-bold text-lg text-slate-300 group-hover:text-white transition-colors">
-                                        {prevChapter.title}
+                        {/* תוכן הפרק */}
+                        <div className="min-h-[50vh]">
+                            {children}
+                        </div>
+
+                        {/* --- Footer ניווט --- */}
+                        <div className="border-t border-slate-800/60 pt-12 mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            {prevChapter ? (
+                                <Link href={prevChapter.href} className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-6 transition-all hover:bg-slate-800 hover:border-slate-700">
+                                    <div className="flex flex-col items-start gap-2 relative z-10">
+                                        <span className="text-xs font-mono text-slate-500 group-hover:text-slate-400 transition-colors flex items-center gap-2">
+                                            <ChevronRight size={14} /> הקודם
+                                        </span>
+                                        <div className="font-bold text-lg text-slate-300 group-hover:text-white transition-colors">
+                                            {prevChapter.title}
+                                        </div>
                                     </div>
+                                </Link>
+                            ) : (
+                                <div></div>
+                            )}
+
+                            {nextChapter ? (
+                                <Link href={nextChapter.href} className={`group relative overflow-hidden rounded-2xl border border-${themeColor}-500/30 bg-${themeColor}-900/10 p-6 transition-all hover:bg-${themeColor}-900/20 hover:border-${themeColor}-500/50 text-left`}>
+                                    <div className={`absolute inset-0 bg-linear-to-r from-transparent via-${themeColor}-500/5 to-${themeColor}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                                    
+                                    <div className="flex flex-col items-end gap-2 relative z-10">
+                                        <span className={`text-xs font-mono font-bold text-${themeColor}-400 group-hover:text-${themeColor}-300 transition-colors flex items-center gap-2`}>
+                                            הבא: פרק {nextChapter.id} <ChevronLeft size={14} />
+                                        </span>
+                                        <div className="font-bold text-xl text-white group-hover:scale-[1.02] transition-transform origin-right">
+                                            {nextChapter.title}
+                                        </div>
+                                        <div className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                                            <BookOpen size={12} />
+                                            {nextChapter.readTime}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ) : (
+                                <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center text-center text-slate-500">
+                                    <span className="text-sm">סיימת את כל הפרקים! 🚀</span>
                                 </div>
-                            </Link>
-                        ) : (
-                            <div></div>
-                        )}
+                            )}
 
-                        {nextChapter ? (
-                            <Link href={nextChapter.href} className={`group relative overflow-hidden rounded-2xl border border-${themeColor}-500/30 bg-${themeColor}-900/10 p-6 transition-all hover:bg-${themeColor}-900/20 hover:border-${themeColor}-500/50 text-left`}>
-                                <div className={`absolute inset-0 bg-linear-to-r from-transparent via-${themeColor}-500/5 to-${themeColor}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                                
-                                <div className="flex flex-col items-end gap-2 relative z-10">
-                                    <span className={`text-xs font-mono font-bold text-${themeColor}-400 group-hover:text-${themeColor}-300 transition-colors flex items-center gap-2`}>
-                                        הבא: פרק {nextChapter.id} <ChevronLeft size={14} />
-                                    </span>
-                                    <div className="font-bold text-xl text-white group-hover:scale-[1.02] transition-transform origin-right">
-                                        {nextChapter.title}
-                                    </div>
-                                    <div className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                                        <BookOpen size={12} />
-                                        {nextChapter.readTime}
-                                    </div>
-                                </div>
-                            </Link>
-                        ) : (
-                            <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center text-center text-slate-500">
-                                <span className="text-sm">סיימת את כל הפרקים! 🚀</span>
-                            </div>
-                        )}
+                        </div>
 
-                    </div>
-
-                </main>
+                    </main>
+                </div>
             </div>
         </div>
     );
