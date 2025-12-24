@@ -1,53 +1,68 @@
-// src/components/CourseSidebar.tsx - גרסה סופית, גלויה בדסקטופ, מודאל במובייל
-
 "use client";
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Circle, PlayCircle, Home, Menu, X } from 'lucide-react';
+import { Circle, PlayCircle, Menu, X, Terminal, Sigma, BrainCircuit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { courses } from "@/lib/courseData"; // ייבוא הנתונים האמיתיים
 
 export function CourseSidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false); // מצב המובייל
+  const [isOpen, setIsOpen] = useState(false);
 
-  // רשימת הפרקים המלאה לפי הסילבוס שלך
-  const chapters = [
-    { id: 'intro', title: 'מבוא', path: '/intro', icon: Home },
-    { id: 'chapter-1', title: 'פרק 1: למה מתמטיקה היא חלק מהעבודה', path: '/chapter-1' },
-    { id: 'chapter-2', title: 'פרק 2: ממוצע, חציון וסטיית תקן', path: '/chapter-2' },
-    { id: 'chapter-3', title: 'פרק 3: הסתברות שמדברת בשפה של מתכנת', path: '/chapter-3' },
-    { id: 'chapter-4', title: 'פרק 4: הסתברות מותנית ובייס', path: '/chapter-4' },
-    { id: 'chapter-5', title: 'פרק 5: וקטורים – הלב של כל מודל', path: '/chapter-5' },
-    { id: 'chapter-6', title: 'פרק 6: נורמה ומרחק', path: '/chapter-6' },
-    { id: 'chapter-7', title: 'פרק 7: זווית ודמיון קוסינוס', path: '/chapter-7' },
-    { id: 'chapter-8', title: 'פרק 8: פונקציות – איך מודל חושב', path: '/chapter-8' },
-    { id: 'chapter-9', title: 'פרק 9: שיפוע – המנוע של הלמידה', path: '/chapter-9' },
-    { id: 'chapter-10', title: 'פרק 10: Gradient Descent', path: '/chapter-10' },
-    { id: 'chapter-11', title: 'פרק 11: פרויקט סיום', path: '/chapter-11' },
-    { id: 'chapter-12', title: 'פרק 12: איך זה מתחבר ל-NLP', path: '/chapter-12' },
-  ];
-
-  const currentIndex = chapters.findIndex(c => c.path === pathname);
-  const progress = Math.round(((currentIndex + 1) / chapters.length) * 100);
+  // 1. זיהוי הקורס הנוכחי מתוך ה-URL
+  const segments = pathname?.split('/').filter(Boolean) || [];
+  const currentCourseId = segments[0]; // "math", "python", "probability"
   
-  // תוכן ה-Sidebar המלא (כדי שנוכל להשתמש בו ב-Modal וב-Desktop)
+  // שליפת הנתונים מהקובץ המרכזי
+  const course = courses[currentCourseId];
+
+  // אם אנחנו לא בתוך קורס מוכר, לא נציג סרגל (או שנציג ריק)
+  if (!course) return null;
+
+  // חישוב התקדמות
+  const currentChapterIndex = course.chapters.findIndex(c => c.href === pathname);
+  // אם לא מצאנו פרק (למשל במבוא), נניח שאנחנו ב-0% או לפי ההיגיון
+  const safeIndex = currentChapterIndex === -1 ? 0 : currentChapterIndex;
+  const progress = Math.round(((safeIndex + 1) / course.chapters.length) * 100);
+
+  // בחירת אייקון ראשי לפי הקורס
+  const getCourseIcon = () => {
+      switch(currentCourseId) {
+          case 'python': return <Terminal size={20} />;
+          case 'probability': return <BrainCircuit size={20} />;
+          default: return <Sigma size={20} />; // math
+      }
+  };
+
+  const getCourseColor = () => {
+      switch(currentCourseId) {
+          case 'python': return 'text-yellow-400';
+          case 'probability': return 'text-pink-400';
+          default: return 'text-sky-400'; // math
+      }
+  };
+
+  // תוכן הסרגל
   const sidebarContent = (
-      <div className="flex flex-col h-full">
-          {/* Header - User Profile */}
+      <div className="flex flex-col h-full bg-[#0f172a]">
+          {/* Header - שם הקורס */}
           <div className="p-6 border-b border-slate-800">
             <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-900/20">
-                    <BookOpen size={20} />
+                <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold shadow-lg shadow-black/20 border border-slate-700">
+                    <span className={getCourseColor()}>{getCourseIcon()}</span>
                 </div>
-                <div>
-                    <h1 className="font-bold text-sky-600 text-lg">AI Math</h1>
-                    
-                    <span className="text-gray-500 text-xs">מסע אל הלב המתמטי של הבינה המלאכותית</span>
-
+                <div className="flex flex-col min-w-0">
+                    <h1 className="font-bold text-white text-base truncate leading-tight">
+                        {course.title.he}
+                    </h1>
+                    <span className="text-gray-500 text-[12px] mt-0.5 truncate">
+                        {course.description.he}
+                    </span>
                 </div>
-                {/* כפתור סגירה למובייל בלבד */}
+                
+                {/* כפתור סגירה למובייל */}
                 {isOpen && (
                     <button 
                         onClick={() => setIsOpen(false)}
@@ -58,66 +73,87 @@ export function CourseSidebar() {
                 )}
             </div>
 
-            {/* User Card */}
-            <div className="flex items-center bg-slate-900 rounded-2xl px-6 py-3 gap-4 w-fit shadow-lg">
-  <div className="flex flex-col text-right">
-    <span className="text-white font-bold text-base leading-tight">תומר קדם</span>
-    <span className="text-slate-400 text-xs">מתכנן ומפתח הלומדה</span>
-    
-    <span className="text-slate-500 text-xs mt-1">
-  הופך את המתמטיקה של ה-AI לשפה פשוטה ונגישה לכל אחד
-</span>
-  </div>
-<div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-    <div className="w-14 h-14 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-blue-400 m-2">
-        תק
-    </div>
-</div>
-</div>
+            {/* User Card - העיצוב המקורי שלך */}
+            <div className="flex items-center bg-[#1E293B] rounded-2xl p-3 gap-3 w-full shadow-lg border border-slate-700/50 relative overflow-hidden group">
+                {/* אפקט ברק עדין ברקע */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                
+                <div className="relative shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-blue-400">
+                        תק
+                    </div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#1E293B] rounded-full"></div>
+                </div>
+
+                <div className="flex flex-col text-right min-w-0 relative z-10">
+                    <span className="text-white font-bold text-sm leading-tight">תומר קדם</span>
+                    <span className="text-slate-400 text-[12px]">מחבר הלומדה</span>
+                    <span className="text-indigo-400 text-[16px] mt-0.5 font-medium">AI Developer Series</span>
+                </div>
+            </div>
 
             {/* Progress Bar */}
-            <div className="mt-4">
-                <div className="flex justify-between text-[10px] text-slate-400 mb-1">
-                    <span>התקדמות</span>
-                    <span>{Math.max(0, progress)}%</span>
+            <div className="mt-5">
+                <div className="flex justify-between text-[10px] text-slate-400 mb-1.5 font-mono">
+                    <span>התקדמות בקורס</span>
+                    <span className={progress === 100 ? 'text-emerald-400' : ''}>{progress}%</span>
                 </div>
-                <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700/50">
                     <div 
-                        className="h-full bg-blue-500 transition-all duration-500" 
-                        style={{ width: `${Math.max(5, progress)}%` }}
+                        className={`h-full transition-all duration-700 ease-out ${progress === 100 ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                        style={{ width: `${Math.max(2, progress)}%` }}
                     />
                 </div>
             </div>
           </div>
 
           {/* Navigation List */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-1">
-              <div className="text-xs font-bold text-slate-500 mb-3 px-2 uppercase tracking-wider">תוכן העניינים</div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-0.5">
+              <div className="text-[10px] font-bold text-slate-500 mb-2 px-2 uppercase tracking-widest opacity-70 mt-2">
+                  תוכן העניינים
+              </div>
               
-              {chapters.map((chapter) => {
-                  const isActive = pathname === chapter.path;
-                  const Icon = chapter.icon || (isActive ? PlayCircle : Circle);
+              {course.chapters.map((chapter) => {
+                  // נשתמש ב-href מה-data
+                  const isActive = pathname === chapter.href;
+                  
+                  // גזירת צבע ייחודי לפרק הפעיל (למשל מכחול לטקסט כחול)
+                  const activeTextColor = chapter.labelColor || "text-blue-400";
+                  
+                  // בחירת אייקון
+                  const Icon = isActive ? PlayCircle : Circle;
 
                   return (
                     <Link 
                         key={chapter.id} 
-                        href={chapter.path}
-                        onClick={() => setIsOpen(false)} // סגור את התפריט אחרי ניווט במובייל
+                        href={chapter.href || "#"}
+                        onClick={() => setIsOpen(false)}
                     >
                         <div className={`
-                            flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all duration-200 group
+                            relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 group mb-1
                             ${isActive 
-                                ? 'bg-blue-600/10 text-blue-400 border border-blue-600/20' 
-                                : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 hover:translate-x-1'
+                                ? 'bg-slate-800 text-white shadow-md shadow-black/10 border border-slate-700' 
+                                : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 border border-transparent'
                             }
                         `}>
-                            <Icon size={16} className={isActive ? "text-blue-400" : "text-slate-600 group-hover:text-slate-400"} />
-                            <span className="truncate">{chapter.title}</span>
-                            
-                            {/* Active Indicator */}
+                            {/* פס צבע צדדי לפרק פעיל */}
                             {isActive && (
-                                <div className="mr-auto w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_currentColor]"></div>
+                                <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full bg-current ${activeTextColor} opacity-80`}></div>
                             )}
+
+                            <Icon 
+                                size={isActive ? 18 : 14} 
+                                className={`shrink-0 transition-colors ${isActive ? activeTextColor : "text-slate-600 group-hover:text-slate-400"}`} 
+                            />
+                            
+                            <div className="flex flex-col min-w-0">
+                                <span className={`text-[10px] font-mono leading-none mb-0.5 opacity-80 ${isActive ? activeTextColor : ''}`}>
+                                    {chapter.id === 0 ? "מבוא" : `פרק ${chapter.id}`}
+                                </span>
+                                <span className={`truncate leading-tight font-medium ${isActive ? 'text-white' : ''}`}>
+                                    {chapter.label.he}
+                                </span>
+                            </div>
                         </div>
                     </Link>
                   );
@@ -125,55 +161,57 @@ export function CourseSidebar() {
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-slate-800 text-[10px] text-slate-600 text-center shrink-0">
-              v1.0.0 • AI Math Primer
+          <div className="p-4 border-t border-slate-800/80 bg-[#0B1121] text-[10px] text-slate-600 text-center shrink-0">
+              <div className="flex justify-center items-center gap-2">
+                  <span>v4.6</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-700"></span>
+                  <span>AI Math Primer</span>
+              </div>
           </div>
       </div>
   );
 
   return (
       <>
-          {/* כפתור פתיחה למובייל בלבד (מוצג בראש הדף) */}
+          {/* כפתור תפריט מובייל (צף) */}
           <button
               onClick={() => setIsOpen(true)}
-              className="fixed top-4 left-4 z-99 p-3 rounded-full bg-blue-600 text-white shadow-lg md:hidden"
+              className="fixed top-4 left-4 z-50 p-2.5 rounded-xl bg-[#0F172A]/90 text-white shadow-lg backdrop-blur-md border border-slate-700 md:hidden hover:scale-105 transition-transform"
           >
-              <Menu size={24} />
+              <Menu size={20} />
           </button>
           
-          {/* Side Bar ל-Desktop (רוחב קבוע, גלוי תמיד) */}
-          {/* הסייד-בר צריך להיות 'as is' כדי להישאר גלוי ב-Desktop. הוא מופיע ב-Desktop כ-w-80 */}
-          <aside className="hidden md:flex w-80 bg-[#0f172a] border-l border-slate-800 flex-col h-screen shrink-0 sticky top-0" dir="rtl">
+          {/* Desktop Sidebar */}
+          <aside className="hidden md:flex w-80 bg-[#0f172a] border-l border-slate-800/60 flex-col h-screen shrink-0 sticky top-0 shadow-2xl z-30" dir="rtl">
               {sidebarContent}
           </aside>
 
-          {/* Side Bar Modal (מובייל) */}
+          {/* Mobile Sidebar Modal */}
           <AnimatePresence>
               {isOpen && (
-                  <motion.div
-                      initial={{ x: '100%' }}
-                      animate={{ x: 0 }}
-                      exit={{ x: '100%' }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="fixed top-0 right-0 h-full w-full max-w-xs z-100 bg-[#0f172a] border-l border-slate-700 shadow-2xl md:hidden"
-                      dir="rtl"
-                  >
-                      {sidebarContent}
-                  </motion.div>
-              )}
-          </AnimatePresence>
-          
-          {/* כיסוי רקע למובייל */}
-          <AnimatePresence>
-              {isOpen && (
-                  <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.5 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      onClick={() => setIsOpen(false)}
-                      className="fixed inset-0 bg-black z-99 md:hidden"
-                  />
+                  <>
+                      {/* רקע כהה */}
+                      <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 0.6 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          onClick={() => setIsOpen(false)}
+                          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-90 md:hidden"
+                      />
+                      
+                      {/* הסרגל עצמו */}
+                      <motion.div
+                          initial={{ x: '100%' }}
+                          animate={{ x: 0 }}
+                          exit={{ x: '100%' }}
+                          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                          className="fixed top-0 right-0 h-full w-[85%] max-w-xs z-100 border-l border-slate-700 shadow-2xl md:hidden bg-[#0f172a]"
+                          dir="rtl"
+                      >
+                          {sidebarContent}
+                      </motion.div>
+                  </>
               )}
           </AnimatePresence>
       </>
