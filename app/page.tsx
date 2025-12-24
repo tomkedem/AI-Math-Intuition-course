@@ -35,12 +35,12 @@ export default function HomePage() {
     detectRetina: true,
   };
 
-  // --- הגדרות מעודכנות לאפקט ה"דחיפה" ---
+  // הגדרות לאפקט ה"דחיפה"
   const tiltOptions = {
-    reverse:        true,   // <--- זה השינוי! true גורם לכרטיס "להידחף" פנימה
-    max:            15,     // זווית הטיה (אפשר להקטין ל-10 אם זה חזק מדי)
+    reverse:        true,   
+    max:            15,     
     perspective:    1000,   
-    scale:          1.05,   // זום עדין פנימה
+    scale:          1.05,   
     speed:          1000,   
     transition:     true,   
     axis:           null,   
@@ -64,6 +64,25 @@ export default function HomePage() {
     }
   };
 
+  // --- הגדרת התוכן והסדר החדש (לפי הנחיות הארכיטקט) ---
+  const heroCards = [
+    {
+        id: 'python', // מזהה הקורס ב-courseData
+        title: "פייתון פרקטי למתכנתים לעידן ה-AI",
+        description: "מעבר מכתיבת סקריפטים להנדסת מערכות AI יציבות (Production-Ready). הספר מתמקד בשיטות עבודה מודרניות, Type Hints, ניהול תלויות, עיבוד מקבילי וארכיטקטורה נכונה לבסיס קוד סקיילבילי."
+    },
+    {
+        id: 'math',
+        title: "מתמטיקה אינטואיטיבית למתכנתים לעידן ה-AI",
+        description: 'בניית האינטואיציה הנדרשת כדי להבין ולדבג את מה שקורה בתוך "הקופסה השחורה". הספר עוסק בוקטורים, מרחבים, מטריצות וההיגיון הגיאומטרי שעומד בבסיס ה-Embeddings והמודלים הגדולים.'
+    },
+    {
+        id: 'probability',
+        title: "מתמטיקה והיגיון הסתברותי למתכנתים בעידן ה-AI",
+        description: "שליטה בלוגיקה שמניעה את קבלת ההחלטות ותהליכי האופטימיזציה של המודל. הספר מתמקד בניהול אי-ודאות, סטטיסטיקה, חוק בייס, פונקציות Loss והמכניקה של Gradient Descent."
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 relative overflow-hidden" dir="rtl">
         
@@ -77,7 +96,7 @@ export default function HomePage() {
                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0B1121] rounded-full animate-pulse"></div>
                 </div>
                 <div className="flex flex-col items-start gap-0.5">
-                    <span className="text-[10px] text-slate-400 font-medium group-hover:text-indigo-300 transition-colors uppercase tracking-wider">נבנה על ידי</span>
+                    <span className="text-[10px] text-slate-400 font-medium group-hover:text-indigo-300 transition-colors uppercase tracking-wider">נבנה ע&quot;י</span>
                     <span className="text-sm font-black text-white tracking-wide leading-none">תומר קדם</span>
                 </div>
             </div>
@@ -112,12 +131,15 @@ export default function HomePage() {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full relative z-20 pb-20">
-                {Object.values(courses).map((course) => {
-                    const firstChapterHref = course.chapters[0]?.href || '#';
+                {/* כאן אנחנו משתמשים במערך החדש heroCards כדי להבטיח את הסדר והטקסט */}
+                {heroCards.map((card) => {
+                    const originalCourseData = courses[card.id]; // שליפת הנתונים הטכניים (פרקים, לינקים)
+                    if (!originalCourseData) return null;
+
+                    const firstChapterHref = originalCourseData.chapters[0]?.href || '#';
 
                     return (
-                        // עטיפה ב-Tilt עם האפשרויות החדשות
-                        <Tilt key={course.id} options={tiltOptions} className="h-full">
+                        <Tilt key={card.id} options={tiltOptions} className="h-full">
                             <Link 
                                 href={firstChapterHref}
                                 className="group relative h-full block"
@@ -126,22 +148,22 @@ export default function HomePage() {
                                 <div className="absolute inset-0 rounded-3xl border border-slate-700/50 group-hover:border-indigo-500/50 transition-colors duration-300"></div>
 
                                 <div className="relative h-full p-8 flex flex-col items-start">
-                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-colors duration-300 ${getIconColor(course.id)} shadow-lg`}>
-                                        {getIcon(course.id)}
+                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-colors duration-300 ${getIconColor(card.id)} shadow-lg`}>
+                                        {getIcon(card.id)}
                                     </div>
 
                                     <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">
-                                        {course.title.he}
+                                        {card.title}
                                     </h2>
                                     
                                     <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-1">
-                                        {course.description.he}
+                                        {card.description}
                                     </p>
 
                                     <div className="w-full pt-6 border-t border-slate-700/50 flex items-center justify-between mt-auto">
                                         <span className="text-xs font-mono text-slate-500 flex items-center gap-2">
                                             <BookOpen size={14} />
-                                            {course.chapters.length} פרקים
+                                            {originalCourseData.chapters.length} פרקים
                                         </span>
                                         
                                         <span className="flex items-center gap-2 text-sm font-bold text-white group-hover:-translate-x-1 transition-transform">
