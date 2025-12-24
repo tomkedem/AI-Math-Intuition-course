@@ -118,7 +118,7 @@ const VectorDemo = () => {
 
 export default function IntroPage() {
   return (
-   <ChapterLayout currentChapterId={0}>
+   <ChapterLayout courseId="math"currentChapterId={0}>
           
           {/* --- HERO SECTION משודרג עם תמונה --- */}
          <section className="relative min-h-[80vh] flex flex-col justify-center items-center text-center space-y-8 py-12 overflow-hidden">

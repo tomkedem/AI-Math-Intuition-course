@@ -480,7 +480,7 @@ export default function ChapterSix() {
   return (
   
           
-            <ChapterLayout currentChapterId={6}>
+            <ChapterLayout courseId="math" currentChapterId={6}>
           
           {/* סעיף 1: מהי נורמה? (אורך) */}
           <section id="norma" className="scroll-mt-24 mb-8">

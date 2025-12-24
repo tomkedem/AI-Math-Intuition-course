@@ -246,7 +246,7 @@ export default function ChapterNine() {
   return (
    
          
-           <ChapterLayout currentChapterId={9}>
+           <ChapterLayout courseId="math" currentChapterId={9}>
           
           {/* סעיף 1: מה זה שיפוע */}
           <section id="part-1" className="scroll-mt-24">

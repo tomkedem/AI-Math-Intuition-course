@@ -371,7 +371,7 @@ export default function ChapterSeven() {
   return (
   
           
-            <ChapterLayout currentChapterId={7}>
+            <ChapterLayout courseId="math" currentChapterId={7}>
           
           {/* סעיף 1: דמיון ככיוון ולא כמרחק */}
           <section id="part-1" className="scroll-mt-24 mb-8">

@@ -330,7 +330,7 @@ export default function ChapterFour() {
   return (
    
       
-        <ChapterLayout currentChapterId={4}>
+        <ChapterLayout courseId="math" currentChapterId={4}>
           
           {/* סעיף 1: מהי הסתברות מותנית */}
           <section id="part-1" className="scroll-mt-24 mb-8">

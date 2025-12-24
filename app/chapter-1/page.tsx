@@ -157,7 +157,7 @@ const LossVisualizer = () => {
 export default function ChapterOne() {
   return (
           
-    <ChapterLayout currentChapterId={1}>
+    <ChapterLayout courseId="math" currentChapterId={1}>
           
           {/* --- סעיף 1 --- */}
           <section id="part-1" className="scroll-mt-24 mb-8">

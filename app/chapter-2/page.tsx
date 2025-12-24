@@ -382,7 +382,7 @@ export default function ChapterTwo() {
   return (
     
       
-      <ChapterLayout currentChapterId={2}>
+      <ChapterLayout courseId="math" currentChapterId={2}>
           
           {/* סעיף 1: המרכז */}
           <section id="part-1" className="scroll-mt-24 mb-8">

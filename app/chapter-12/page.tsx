@@ -270,7 +270,7 @@ export default function ChapterTwelve() {
   return (
    
           
-            <ChapterLayout currentChapterId={12}>
+            <ChapterLayout courseId="math" currentChapterId={12}>
           
           {/* סעיף 1: למה זה חוזר בכל מודל? */}
           <section id="part-1" className="scroll-mt-24 mt-8">

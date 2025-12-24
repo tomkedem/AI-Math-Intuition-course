@@ -237,7 +237,7 @@ export default function ChapterEight() {
   return (
   
           
-            <ChapterLayout currentChapterId={8}>
+            <ChapterLayout courseId="math" currentChapterId={8}>
           
           {/* סעיף 1: קלט ← פלט בצורה הכי פשוטה */}
           <section id="part-1" className="scroll-mt-24 mb-8">

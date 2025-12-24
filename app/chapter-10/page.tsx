@@ -391,7 +391,7 @@ const ChapterQuiz = () => {
 // --- Main Page ---
 export default function ChapterTen() {
   return (
-    <ChapterLayout currentChapterId={10}>
+    <ChapterLayout courseId="math" currentChapterId={10}>
       <section className="space-y-6 py-5 text-right" dir="rtl">
         
         <TextBlock>

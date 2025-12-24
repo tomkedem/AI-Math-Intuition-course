@@ -118,7 +118,7 @@ export default function ChapterEleven() {
   return (
  
           
-            <ChapterLayout currentChapterId={11}>
+            <ChapterLayout courseId="math" currentChapterId={11}>
           
           {/* תפריט ניווט מהיר לתרגילים */}
           <div className="flex flex-wrap gap-2 mb-12 justify-center">

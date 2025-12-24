@@ -11,9 +11,10 @@ interface CourseHeaderProps {
     readTime?: string;
     isScrolled: boolean;
     scrollProgress: number;
-    color?: string;
-    colorFrom?: string;
-    colorTo?: string;
+    // מחקנו את color - הוא מיותר
+    colorFrom?: string; // מצפה למחלקה מלאה: "from-indigo-500"
+    colorTo?: string;   // מצפה למחלקה מלאה: "to-purple-600"
+    labelColor?: string; // הצבע המדויק לטקסט (נלקח מ-courseData)
 }
 
 export const CourseHeader: React.FC<CourseHeaderProps> = ({ 
@@ -24,26 +25,37 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
     readTime = "10 דקות", 
     isScrolled,
     scrollProgress,
-    color = "indigo",
-    colorFrom = "indigo-500",
-    colorTo = "purple-600",
+    colorFrom = "from-indigo-500", // ברירת מחדל
+    colorTo = "to-purple-600",     // ברירת מחדל
+    labelColor
 }) => {
     
     const safeProgress = (typeof scrollProgress === 'number' && Number.isFinite(scrollProgress)) 
         ? Math.round(Math.max(0, Math.min(100, scrollProgress))) 
         : 0;
 
+    // --- לוגיקת צבעים חכמה ---
+    
+    // 1. צבע הטקסט: אם קיבלנו labelColor נשתמש בו, אחרת נגזור אותו מ-colorFrom
+    // (הופך את "from-indigo-500" ל-"text-indigo-500")
+    const textColorClass = labelColor || colorFrom.replace('from-', 'text-');
+    
+    // 2. צבע הגבול: גוזרים אותו מ-colorFrom
+    // (הופך את "from-indigo-500" ל-"border-indigo-500")
+    const borderColorClass = colorFrom.replace('from-', 'border-');
+
     return (
         <header 
             className={`
                 sticky top-0 z-40 w-full transition-all duration-500
-                border-b border-indigo-500/20
+                border-b ${borderColorClass}/20
                 ${isScrolled 
                     ? 'py-3 bg-[#0B1121]/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
                     : 'py-6 bg-[#0F172A]' 
                 }
             `}
         >
+            {/* רקע עם אפקטים */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#0F172A] to-[#02040a]"></div>
 
             <div className="absolute inset-0 pointer-events-none opacity-60"> 
@@ -57,21 +69,12 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                         backgroundSize: '60px 60px'
                     }}
                 ></div>
-                <div 
-                    className="absolute inset-0 opacity-30"
-                    style={{ 
-                        backgroundImage: `
-                            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                            linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-                        `,
-                        backgroundSize: '300px 300px'
-                    }}
-                ></div>
             </div>
 
+            {/* פס התקדמות תחתון */}
             <div className={`absolute bottom-0 left-0 w-full h-0.75 bg-slate-900/80 transition-opacity duration-300 ${safeProgress > 0 ? 'opacity-100' : 'opacity-0'}`}>
                 <div 
-                    className={`relative h-full bg-linear-to-r from-${colorFrom} via-cyan-400 to-${colorTo} shadow-[0_0_20px_${colorFrom}] transition-all duration-100 ease-out`}
+                    className={`relative h-full bg-linear-to-r ${colorFrom} via-cyan-400 ${colorTo} shadow-[0_0_20px_currentColor] transition-all duration-100 ease-out`}
                     style={{ width: `${safeProgress}%` }} 
                 >
                 </div>
@@ -84,15 +87,13 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                     
                     {/* שורת הפרק והתווית */}
                     <div className="flex items-center gap-3 text-[11px] font-mono font-bold tracking-widest mb-2">
-                        {/* מסגרת מספר הפרק - צבע הפונט נלקח מ-colorFrom */}
-                        <span className={`flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded border border-${colorFrom}/40 shadow-lg shadow-indigo-900/20`}>
-                            <Terminal size={12} />
-                            <span>{chapterNum}</span>
+                        <span className={`flex items-center gap-1.5 bg-[#0F172A] px-3 py-1.5 rounded border ${borderColorClass}/40 shadow-lg shadow-indigo-900/20`}>
+                            <Terminal size={12} className={textColorClass} />
+                            <span className={textColorClass}>{chapterNum}</span>
                         </span>
 
-                        {/* התווית מחוץ למסגרת, בצד שמאל של המספר */}
                         {chapterLable && (
-                            <span className={`text-${colorFrom} uppercase opacity-80`}>
+                            <span className={`${textColorClass} uppercase opacity-80`}>
                                 {chapterLable}
                             </span>
                         )}
@@ -122,7 +123,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                     `}>
                         <div className="flex flex-col items-end relative z-10">
                             <span className={`text-[10px] font-mono uppercase tracking-wider mb-0.5 whitespace-nowrap ${isScrolled ? 'text-emerald-400' : 'text-slate-400'}`}>
-                                {isScrolled ? "התקדמות בשיעור" : "זמן קריאה משוער"}
+                                {isScrolled ? "התקדמות" : "זמן קריאה"}
                             </span>
                             
                             <div className="flex items-center gap-2">
@@ -133,7 +134,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
                                 {isScrolled ? (
                                     <Percent size={16} className="text-emerald-500" />
                                 ) : (
-                                    <Clock size={18} className={`text-${colorTo}`} />
+                                    <Clock size={18} className={textColorClass} />
                                 )}
                             </div>
                         </div>
