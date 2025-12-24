@@ -119,15 +119,14 @@ export default function HomePage() {
         <main className="relative z-10 max-w-6xl mx-auto px-6 py-20 flex flex-col items-center">
 
             {/* Header */}
-            <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
+            <div className="text-center max-w-3xl mx-auto mb-10 space-y-6">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-xs font-mono text-slate-400 mb-4 backdrop-blur-sm">
                     <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_#6366f1]"></span>
                     Core Foundations v1.0
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-indigo-100 to-slate-500 tracking-tight leading-tight drop-shadow-sm">
-                    הליבה ההנדסית <br/>
-                    של מערכות AI
+               <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-indigo-100 to-slate-500 tracking-tight leading-tight drop-shadow-sm px-4">
+                    הליבה ההנדסית של מערכות AI
                 </h1>
 
                 <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
