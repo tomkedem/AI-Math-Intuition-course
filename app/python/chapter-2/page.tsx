@@ -5,14 +5,13 @@ import React from 'react';
 import { InsightBox } from '@/components/content/InsightBox';
 import { CodeBlock } from '@/components/content/CodeBlock';
 import { Quiz } from '@/components/content/Quiz';
+// --- התיקון: ייבוא מהתיקייה הייעודית של פרק 2 ---
+import { AgeDemo, SlicingDemo, ComprehensionDemo, CleanSentencesDemo } from '@/components/demos/chapter-2';
 import { 
     Variable, Split, Repeat, Scissors, Type, 
     ToggleRight, Braces, Terminal, Check, X,
     Sparkles, Edit3
 } from 'lucide-react';
-
-// ייבוא הרכיבים האינטראקטיביים החדשים
-import { AgeDemo, SlicingDemo, ComprehensionDemo, CleanSentencesDemo } from '@/components/content/InteractiveDemos';
 import { ChapterLayout } from '@/components/ChapterLayout';
 
 export default function Chapter2() {
@@ -66,8 +65,6 @@ for i, name in enumerate(names):
   const loopOutput = `0: תמר
 1: נועם
 2: תומר`;
-
-
 
   // --- שאלות למבחן ---
   const questions = [
@@ -136,6 +133,7 @@ for i, name in enumerate(names):
             <p className="text-lg text-slate-300 leading-relaxed">
                 בפייתון הכול מתחיל בפשטות. אבל מאחורי הפשטות הזו מסתתרת הרבה חכמה.
                 בניגוד לשפות שמכריחות אותך להצהיר מראש על טיפוס המשתנה, בפייתון הטיפוס שייך לערך, לא למשתנה עצמו.
+                זו אחת התפיסות החשובות ביותר להבין לפני שמתחילים לעבוד איתה ברצינות.
             </p>
         </section>
 
@@ -183,7 +181,7 @@ for i, name in enumerate(names):
                 language="python" 
                 filename="type_safety.py" 
                 code={typeHintsCode}
-                output="Result: 30" // סימולציה של פלט תקין
+                output="Result: 30" 
             />
         </section>
 
@@ -194,6 +192,9 @@ for i, name in enumerate(names):
                 תנאים והיגיון בוליאני
             </h3>
             
+            <p className="text-slate-300">
+                התחביר פשוט להפליא: אין סוגריים, אין נקודה-פסיק. הקוד נקרא כמו אנגלית.
+            </p>
             <CodeBlock 
                 language="python" 
                 code={conditionalCode} 
@@ -248,7 +249,7 @@ for i, name in enumerate(names):
             <CodeBlock language="python" code={loopCode} output={loopOutput} />
         </section>
 
-        {/* --- חיתוכים (עם הדגמה אינטראקטיבית) --- */}
+        {/* --- חיתוכים (עם הדגמה אינטראקטיבית מתוך התיקייה החדשה) --- */}
         <section className="mt-16 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-pink-500 pr-4 flex items-center gap-2">
                 <Scissors size={24} className="text-pink-500"/>
@@ -264,7 +265,6 @@ for i, name in enumerate(names):
                 </span>
             </p>
             
-            {/* שימוש ברכיב האינטראקטיבי החדש */}
             <SlicingDemo />
             
             <InsightBox type="info" title="חיבור מחרוזות יעיל">
@@ -285,7 +285,6 @@ for i, name in enumerate(names):
                 זה מאפשר לבצע חישובים ישירות בתוך הטקסט.
             </p>
             
-            {/* שימוש ברכיב האינטראקטיבי החדש */}
             <AgeDemo />
 
         </section>
@@ -304,7 +303,6 @@ for i, name in enumerate(names):
                 </p>
             </div>
             
-            {/* שימוש ברכיב האינטראקטיבי החדש */}
             <ComprehensionDemo />
             
             <div className="flex gap-4 mt-4 text-sm text-slate-400">
@@ -313,22 +311,22 @@ for i, name in enumerate(names):
             </div>
         </section>
 
-       {/* --- דוגמה מסכמת --- */}
-<section className="mt-20 space-y-6">
-    <h3 className="text-2xl font-bold text-white border-r-4 border-indigo-500 pr-4 flex items-center gap-2">
-        <Terminal size={24} className="text-indigo-500"/>
-        דוגמה מרכזית: ניקוי נתונים הנדסי
-    </h3>
+        {/* --- דוגמה מסכמת (עם הדגמה אינטראקטיבית) --- */}
+        <section className="mt-20 space-y-6">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-indigo-500 pr-4 flex items-center gap-2">
+                <Terminal size={24} className="text-indigo-500"/>
+                דוגמה מרכזית: ניקוי נתונים הנדסי
+            </h3>
+            
+            <p className="text-slate-300">
+                הגיע הזמן לחבר הכל. נבנה פונקציה שמקבלת רשימת משפטים, מנקה רווחים, ומסננת שורות ריקות.
+                <br/>
+                <strong>נסה בעצמך:</strong> ערוך את הטקסטים ברשימה למטה (raw), הוסף שורות חדשות, ותראה איך הפלט מתעדכן אוטומטית.
+            </p>
 
-    <p className="text-slate-300">
-        הגיע הזמן לחבר הכל. נבנה פונקציה שמקבלת רשימת משפטים, מנקה רווחים, ומסננת שורות ריקות.
-        <br/>
-        <strong>נסה בעצמך:</strong> ערוך את הטקסטים ברשימה למטה (raw), הוסף שורות חדשות, ותראה איך הפלט מתעדכן אוטומטית.
-    </p>
-
-    {/* השימוש ברכיב החדש במקום CodeBlock רגיל */}
-    <CleanSentencesDemo />
-</section>
+            {/* רכיב ה-CleanSentencesDemo מתוך התיקייה החדשה */}
+            <CleanSentencesDemo />
+        </section>
 
         {/* --- סיכום --- */}
         <section className="mt-20 bg-linear-to-br from-slate-900 to-slate-800 p-8 rounded-2xl border border-slate-700">
