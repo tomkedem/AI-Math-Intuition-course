@@ -6,25 +6,41 @@ import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-javascript'; 
-import { Check, Copy, FileCode } from 'lucide-react';
+import { Check, Copy, FileCode, Play, Terminal } from 'lucide-react';
 
 interface CodeBlockProps {
     code: string;
     language?: 'python' | 'bash' | 'javascript';
     filename?: string;
+    output?: string; // פרמטר חדש לפלט
 }
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python', filename }) => {
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python', filename, output }) => {
     const [copied, setCopied] = useState(false);
+    const [showOutput, setShowOutput] = useState(false);
+    const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
         Prism.highlightAll();
-    }, [code, language]);
+    }, [code, language, showOutput]);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(code);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleRun = () => {
+        if (showOutput) {
+            setShowOutput(false);
+            return;
+        }
+        setIsRunning(true);
+        // סימולציה של ריצה
+        setTimeout(() => {
+            setIsRunning(false);
+            setShowOutput(true);
+        }, 800);
     };
 
     return (
@@ -36,22 +52,38 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
                     <span>{filename || language}</span>
                 </div>
                 
-                <button 
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 hover:text-white transition-colors bg-slate-700/50 hover:bg-slate-700 px-2 py-1 rounded-md"
-                >
-                    {copied ? (
-                        <>
-                            <Check size={12} className="text-emerald-400" />
-                            <span className="text-emerald-400">הועתק!</span>
-                        </>
-                    ) : (
-                        <>
-                            <Copy size={12} />
-                            <span>העתק</span>
-                        </>
+                <div className="flex items-center gap-2">
+                    {output && (
+                        <button 
+                            onClick={handleRun}
+                            className={`flex items-center gap-1.5 text-[10px] font-medium transition-all px-2 py-1 rounded-md border ${
+                                showOutput 
+                                ? 'bg-slate-700 text-slate-300 border-slate-600' 
+                                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+                            }`}
+                        >
+                            <Play size={10} className={isRunning ? "animate-spin" : ""} />
+                            <span>{isRunning ? 'Running...' : showOutput ? 'Hide Output' : 'Run Code'}</span>
+                        </button>
                     )}
-                </button>
+                    
+                    <button 
+                        onClick={handleCopy}
+                        className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 hover:text-white transition-colors bg-slate-700/50 hover:bg-slate-700 px-2 py-1 rounded-md"
+                    >
+                        {copied ? (
+                            <>
+                                <Check size={12} className="text-emerald-400" />
+                                <span className="text-emerald-400">Copied</span>
+                            </>
+                        ) : (
+                            <>
+                                <Copy size={12} />
+                                <span>Copy</span>
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
 
             {/* Code Area */}
@@ -62,6 +94,19 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
                     </code>
                 </pre>
             </div>
+
+            {/* Output Area (New) */}
+            {showOutput && (
+                <div className="border-t border-slate-700/50 bg-[#020617] animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/50 border-b border-slate-800 text-[10px] text-slate-500 font-mono uppercase tracking-wider">
+                        <Terminal size={12} />
+                        Output
+                    </div>
+                    <pre className="p-4 text-sm font-mono text-slate-300 overflow-x-auto">
+                        {output}
+                    </pre>
+                </div>
+            )}
         </div>
     );
 };

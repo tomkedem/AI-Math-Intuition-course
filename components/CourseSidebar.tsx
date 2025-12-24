@@ -153,7 +153,7 @@ export function CourseSidebar() {
                                     {chapter.id === 0 ? "מבוא" : `פרק ${chapter.id}`}
                                 </span>
                                 <span className={`truncate leading-tight font-medium ${isActive ? 'text-white' : ''}`}>
-                                    {chapter.label.he}
+                                    {chapter.title.he}
                                 </span>
                             </div>
                         </div>

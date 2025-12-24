@@ -203,7 +203,7 @@ export default function PythonIntroPage() {
 
           {/* --- THE PROBLEM --- */}
           {/* הוספנו z-20 ורקע כדי שזה "יעלה" על ה-Hero בצורה יפה */}
-          <section className="max-w-3xl mx-auto space-y-8 mb-24 relative z-20 px-4 -mt-8">
+          <section className="max-w-3xl mx-auto space-y-8 mb-8 relative z-20 px-4 -mt-8">
             <h2 className="text-2xl md:text-3xl font-bold text-white border-r-4 border-yellow-500 pr-6">
                 למה מתכנתים מנוסים צריכים את הספר הזה?
             </h2>
