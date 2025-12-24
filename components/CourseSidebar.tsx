@@ -94,9 +94,9 @@ export function CourseSidebar() {
                 </div>
 
                 <div className="flex flex-col text-right min-w-0 relative z-10">
-                    <span className="text-white font-bold text-sm leading-tight">תומר קדם</span>
-                    <span className="text-slate-400 text-[10px]">מחבר הלומדה</span>
-                    <span className="text-indigo-400 text-[10px] mt-0.5 font-medium">AI Developer Series</span>
+                    <span className="text-white font-bold text-md leading-tight">תומר קדם</span>
+                    <span className="text-slate-400 text-[12px]">מחבר הלומדה</span>
+                    <span className="text-indigo-400 text-[14px] mt-0.5 font-medium">AI Developer Series</span>
                 </div>
             </div>
 

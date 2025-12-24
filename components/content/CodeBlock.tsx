@@ -12,7 +12,7 @@ interface CodeBlockProps {
     code: string;
     language?: 'python' | 'bash' | 'javascript';
     filename?: string;
-    output?: string; // פרמטר חדש לפלט
+    output?: string;
 }
 
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python', filename, output }) => {
@@ -36,12 +36,15 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
             return;
         }
         setIsRunning(true);
-        // סימולציה של ריצה
         setTimeout(() => {
             setIsRunning(false);
             setShowOutput(true);
         }, 800);
     };
+
+    // --- פונקציה לזיהוי עברית ---
+    // בודקת האם יש תווים בטווח היוניקוד של עברית
+    const isHebrew = (text: string) => /[\u0590-\u05FF]/.test(text);
 
     return (
         <div className="my-6 rounded-xl overflow-hidden border border-slate-700/50 bg-[#0F172A] shadow-lg group" dir="ltr">
@@ -95,14 +98,18 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
                 </pre>
             </div>
 
-            {/* Output Area (New) */}
+            {/* Output Area (With RTL Support) */}
             {showOutput && (
                 <div className="border-t border-slate-700/50 bg-[#020617] animate-in slide-in-from-top-2 duration-300">
                     <div className="flex items-center gap-2 px-4 py-2 bg-slate-900/50 border-b border-slate-800 text-[10px] text-slate-500 font-mono uppercase tracking-wider">
                         <Terminal size={12} />
                         Output
                     </div>
-                    <pre className="p-4 text-sm font-mono text-slate-300 overflow-x-auto">
+                    {/* בדיקת כיוון הטקסט לפי תוכן הפלט */}
+                    <pre 
+                        dir={isHebrew(output || "") ? "rtl" : "ltr"}
+                        className={`p-4 text-sm font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap ${isHebrew(output || "") ? "text-right font-sans" : "text-left"}`}
+                    >
                         {output}
                     </pre>
                 </div>
