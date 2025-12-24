@@ -2,15 +2,16 @@
 
 import React, { useCallback } from 'react';
 import Link from 'next/link';
-import { courses } from "@/lib/courseData"; 
-import { ArrowLeft, Terminal, Sigma, BrainCircuit, BookOpen } from "lucide-react";
+import { courses } from "@/lib/courseData";
+// עדכון אייקונים: הוספנו את CodeXml ו-BrainCog
+import { ArrowLeft, CodeXml, Sigma, BrainCog, BookOpen } from "lucide-react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine, ISourceOptions } from "tsparticles-engine";
 import { Tilt } from 'react-tilt';
 
 export default function HomePage() {
-  
+
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSlim(engine);
   }, []);
@@ -35,39 +36,46 @@ export default function HomePage() {
     detectRetina: true,
   };
 
-  // הגדרות לאפקט ה"דחיפה"
+  // --- הגדרות מעודכנות לאפקט "דחיפה" חזק יותר ---
   const tiltOptions = {
-    reverse:        true,   
-    max:            15,     
-    perspective:    1000,   
-    scale:          1.05,   
-    speed:          1000,   
-    transition:     true,   
-    axis:           null,   
-    reset:          true,   
+    reverse:        true,   // נשאר true לדחיפה
+    max:            20,     // הגדלנו את הזווית לאפקט חזק יותר
+    perspective:    500,    // הקטנו את הפרספקטיבה לעומק דרמטי יותר
+    scale:          0.98,   // הקטנה קלה במקום הגדלה - תורם לתחושת דחיפה פנימה
+    speed:          1000,
+    transition:     true,
+    axis:           null,
+    reset:          true,
     easing:         "cubic-bezier(.03,.98,.52,.99)",
   };
 
+  // פונקציית האייקונים החדשה
   const getIcon = (id: string) => {
     switch(id) {
-        case 'python': return <Terminal size={32} />;
-        case 'probability': return <BrainCircuit size={32} />;
+        case 'python': return <CodeXml size={32} />; // אייקון קוד חדש
+        case 'probability': return <BrainCog size={32} />; // אייקון מוח-מכונה חדש
         default: return <Sigma size={32} />;
     }
   };
 
+  // פונקציית הצבעים החדשה - סגנון זוהר (Glow)
   const getIconColor = (id: string) => {
     switch(id) {
-        case 'python': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-        case 'probability': return 'bg-pink-500/10 text-pink-400 border-pink-500/20';
-        default: return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        case 'python':
+            // צהוב/כתום זוהר עם גרדיאנט וצללית
+            return 'bg-gradient-to-br from-yellow-400/20 to-orange-500/20 text-yellow-300 border-yellow-400/30 shadow-[0_0_15px_rgba(250,204,21,0.3)]';
+        case 'probability':
+            // ורוד/סגול זוהר
+            return 'bg-gradient-to-br from-pink-400/20 to-purple-500/20 text-pink-300 border-pink-400/30 shadow-[0_0_15px_rgba(232,121,249,0.3)]';
+        default: // math
+            // כחול/תכלת זוהר
+            return 'bg-gradient-to-br from-blue-400/20 to-cyan-500/20 text-blue-300 border-blue-400/30 shadow-[0_0_15px_rgba(96,165,250,0.3)]';
     }
   };
 
-  // --- הגדרת התוכן והסדר החדש (לפי הנחיות הארכיטקט) ---
   const heroCards = [
     {
-        id: 'python', // מזהה הקורס ב-courseData
+        id: 'python',
         title: "פייתון פרקטי למתכנתים לעידן ה-AI",
         description: "מעבר מכתיבת סקריפטים להנדסת מערכות AI יציבות (Production-Ready). הספר מתמקד בשיטות עבודה מודרניות, Type Hints, ניהול תלויות, עיבוד מקבילי וארכיטקטורה נכונה לבסיס קוד סקיילבילי."
     },
@@ -85,7 +93,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 relative overflow-hidden" dir="rtl">
-        
+
         {/* --- כרטיס קרדיט צף (ימין למעלה) --- */}
         <div className="fixed top-6 right-6 z-50 hidden md:flex animate-fade-in-down">
             <div className="group flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#0B1121]/60 backdrop-blur-xl border border-slate-700/50 shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:border-indigo-500/50 transition-all duration-500 hover:scale-105 cursor-default hover:shadow-indigo-500/20">
@@ -96,7 +104,7 @@ export default function HomePage() {
                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#0B1121] rounded-full animate-pulse"></div>
                 </div>
                 <div className="flex flex-col items-start gap-0.5">
-                    <span className="text-[10px] text-slate-400 font-medium group-hover:text-indigo-300 transition-colors uppercase tracking-wider">נבנה ע&quot;י</span>
+                    <span className="text-[10px] text-slate-400 font-medium group-hover:text-indigo-300 transition-colors uppercase tracking-wider">נבנה על ידי</span>
                     <span className="text-sm font-black text-white tracking-wide leading-none">תומר קדם</span>
                 </div>
             </div>
@@ -109,21 +117,21 @@ export default function HomePage() {
         <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#020617]/80 to-[#020617]"></div>
 
         <main className="relative z-10 max-w-6xl mx-auto px-6 py-20 flex flex-col items-center">
-            
+
             {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-xs font-mono text-slate-400 mb-4 backdrop-blur-sm">
                     <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_#6366f1]"></span>
                     Core Foundations v1.0
                 </div>
-                
+
                 <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-indigo-100 to-slate-500 tracking-tight leading-tight drop-shadow-sm">
                     הליבה ההנדסית <br/>
                     של מערכות AI
                 </h1>
-                
+
                 <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
-                    להבין את מה שמתחת למכסה המנוע: 
+                    להבין את מה שמתחת למכסה המנוע:
                     <strong> המתמטיקה</strong>, <strong>ההסתברות</strong> ו-<strong>קוד הפייתון</strong> שמניעים את המודלים.
                     לומדה אינטראקטיבית למתכנתים.
                 </p>
@@ -131,16 +139,15 @@ export default function HomePage() {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full relative z-20 pb-20">
-                {/* כאן אנחנו משתמשים במערך החדש heroCards כדי להבטיח את הסדר והטקסט */}
                 {heroCards.map((card) => {
-                    const originalCourseData = courses[card.id]; // שליפת הנתונים הטכניים (פרקים, לינקים)
+                    const originalCourseData = courses[card.id];
                     if (!originalCourseData) return null;
 
                     const firstChapterHref = originalCourseData.chapters[0]?.href || '#';
 
                     return (
                         <Tilt key={card.id} options={tiltOptions} className="h-full">
-                            <Link 
+                            <Link
                                 href={firstChapterHref}
                                 className="group relative h-full block"
                             >
@@ -148,14 +155,15 @@ export default function HomePage() {
                                 <div className="absolute inset-0 rounded-3xl border border-slate-700/50 group-hover:border-indigo-500/50 transition-colors duration-300"></div>
 
                                 <div className="relative h-full p-8 flex flex-col items-start">
-                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-colors duration-300 ${getIconColor(card.id)} shadow-lg`}>
+                                    {/* שימוש באייקון ובצבע החדשים */}
+                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-all duration-300 ${getIconColor(card.id)} group-hover:scale-110`}>
                                         {getIcon(card.id)}
                                     </div>
 
                                     <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">
                                         {card.title}
                                     </h2>
-                                    
+
                                     <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-1">
                                         {card.description}
                                     </p>
@@ -165,7 +173,7 @@ export default function HomePage() {
                                             <BookOpen size={14} />
                                             {originalCourseData.chapters.length} פרקים
                                         </span>
-                                        
+
                                         <span className="flex items-center gap-2 text-sm font-bold text-white group-hover:-translate-x-1 transition-transform">
                                             התחל ללמוד
                                             <ArrowLeft size={16} />
