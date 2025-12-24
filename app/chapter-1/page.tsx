@@ -160,7 +160,7 @@ export default function ChapterOne() {
     <ChapterLayout currentChapterId={1}>
           
           {/* --- סעיף 1 --- */}
-          <section id="part-1" className="scroll-mt-24">
+          <section id="part-1" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400"><Eye size={20}/></div>
@@ -208,7 +208,7 @@ export default function ChapterOne() {
 
 
           {/* --- סעיף 2 --- */}
-          <section id="part-2" className="scroll-mt-24">
+          <section id="part-2" className="scroll-mt-24 mb-8" >
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-500/20 rounded-lg text-purple-400"><Activity size={20}/></div>

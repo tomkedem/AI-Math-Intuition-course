@@ -68,9 +68,11 @@ export function CourseSidebar() {
   הופך את המתמטיקה של ה-AI לשפה פשוטה ונגישה לכל אחד
 </span>
   </div>
-  <div className="w-10 h-10 rounded-full bg-fuchsia-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-fuchsia-400">
-    תק
-  </div>
+<div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+    <div className="w-14 h-14 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-blue-400 m-2">
+        תק
+    </div>
+</div>
 </div>
 
             {/* Progress Bar */}

@@ -76,7 +76,7 @@ const HikerGame = () => {
         } else {
             const newPos = Math.sign(pos) * Math.min(Math.abs(pos * 1.3), 100); 
             setPos(newPos);
-            setMessage("⚠️ שים לב! אתה מטפס למעלה. ב-AI אנחנו תמיד רוצים לרדת בטעות.");
+            setMessage("⚠️ שים לב! אתה מטפס למעלה. ב-AI אנחנו תמיד רוצים לרדת במדד הטעות.");
         }
     };
 
