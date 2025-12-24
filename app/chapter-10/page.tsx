@@ -28,7 +28,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle, color = "cyan" }: { icon: 
             <div className={`p-3 bg-${color}-500/10 rounded-xl text-${color}-400 shadow-[0_0_15px_rgba(0,0,0,0.3)] border border-${color}-500/20`}>
                 <Icon size={32} />
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight">{title}</h2>
+            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">{title}</h2>
         </div>
         <p className="text-lg text-slate-300 max-w-4xl leading-relaxed font-medium opacity-90">{subtitle}</p>
     </div>
@@ -404,7 +404,7 @@ export default function ChapterTen() {
         </TextBlock>
       </section>
 
-      <section className="my-1 space-y-16" dir="rtl">
+      <section className="my-1 space-y-8" dir="rtl">
           <SectionHeader icon={Mountain} title="1. רעיון ירידת המפל (The Descent)" subtitle="Gradient Descent הוא רעיון מתמטי פשוט שמדמה ירידה על מדרון. המודל מחפש את הירידה בעקומת הטעות ומתקדם צעד אחר צעד לנקודה עם טעות נמוכה יותר." color="yellow" />
           <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -436,7 +436,7 @@ export default function ChapterTen() {
           <div className="absolute top-0 left-0 p-10 opacity-5 pointer-events-none"><TrendingDown size={400} /></div>
           <div className="relative z-10 space-y-12">
               <div className="text-center max-w-4xl mx-auto">
-                  <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">למה המודל זז &quot;נגד&quot; השיפוע?</h2>
+                  <h2 className="text-2xl md:text-3xl font-black text-white mb-6 tracking-tight">למה המודל זז &quot;נגד&quot; השיפוע?</h2>
                   <p className="text-slate-300 text-xl leading-relaxed">
                       אחד המשפטים המבלבלים הוא: &quot;המודל זז נגד השיפוע&quot;. למה לא איתו? הרי השיפוע הוא הכיוון!
                       <br/><span className="text-cyan-400 font-bold bg-cyan-900/20 px-2 rounded">התשובה פשוטה:</span> השיפוע מצביע לכיוון העלייה. אנחנו רוצים לרדת.
@@ -456,7 +456,7 @@ export default function ChapterTen() {
               </div>
               <div className="mt-16 bg-slate-950/80 p-12 rounded-[30px] border border-slate-800 text-center max-w-3xl mx-auto shadow-2xl backdrop-blur-xl">
                   <div className="text-yellow-500 font-bold text-sm uppercase tracking-[0.3em] mb-6 flex items-center justify-center gap-2"><Zap size={16}/> הנוסחה הקדושה <Zap size={16}/></div>
-                  <div className="font-mono text-4xl md:text-6xl text-white font-black tracking-wider drop-shadow-xl" dir="ltr">
+                  <div className="font-mono text-3xl md:text-4xl text-white font-black tracking-wider drop-shadow-xl" dir="ltr">
                       x = x <span className="text-red-500">-</span> (rate * slope)
                   </div>
                   

@@ -378,7 +378,7 @@ export default function ChapterThree() {
                     <strong>איך מייצגים תרחיש בצורה שהמודל מסוגל להבין וללמוד ממנו?</strong>
                 </p>
                 <p>
-                    מבחינת המודל, &quot;תרחיש&quot; הוא פשוט רגע שבו משהו קורה. הוא לא יודע אם זה &quot;משתמש לוחץ על כפתור&quot; או &quot;מייל שמגיע&quot;.
+                    מבחינת המודל, &quot;תרחיש&quot; הוא פשוט רגע שבו משהו קורה. הוא לא יודע אם זה &quot;משתמש שלוחץ על כפתור&quot; או &quot;מייל שמגיע&quot;.
                     מה שהוא צריך זה ייצוג מספרי שנותן תמונה ברורה של מה קורה ומה קרה בעבר.
                 </p>
                 <p>
@@ -387,7 +387,7 @@ export default function ChapterThree() {
                     אם בקשות מסוימות ל-API כושלות בעיקר בלילה, זה תרחיש חוזר.
                 </p>
                 <p>
-                    הנה כמה דוגמאות ללמה דברים קורים יותר או פחות:
+                    להלן מספר דוגמאות ללמה דברים קורים יותר או פחות:
                 </p>
             </div>
 
@@ -418,7 +418,7 @@ export default function ChapterThree() {
                 />
             </div>
             
-            <div className="mt-8 bg-slate-900/50 p-4 border-r-4 border-purple-500 rounded-r text-sm text-slate-400">
+            <div className="mt-8 mb-8 bg-slate-900/50 p-4 border-r-4 border-purple-500 rounded-r text-sm text-slate-400">
                 <strong>מה המשותף לכל הדוגמאות?</strong> העיקרון הבסיסי חוזר שוב ושוב: דברים שקורים הרבה מקבלים משקל גבוה, ודברים שקורים מעט מקבלים משקל נמוך.
                 זה הכול. מזה נבנים מודלים מורכבים.
             </div>
@@ -426,7 +426,7 @@ export default function ChapterThree() {
 
 
           {/* סעיף 3: סיווג והדגמה מעשית */}
-          <section id="part-3" className="scroll-mt-24">
+          <section id="part-3" className="scroll-mt-24 mb-8">
              <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Activity size={20} /></div>
@@ -443,7 +443,9 @@ export default function ChapterThree() {
                     </p>
                     <p>
                         למה דווקא Spam/Ham הוא הדוגמה הכי קלאסית? כי זה מקרה פשוט להבנה והוא מגלה בדיוק איך המודל &quot;חושב&quot;.
-                        הנה טבלה שמדגימה איך המודל משתמש בתדירויות של מילים:
+                    </p>
+                    <p>                        
+                        להלן טבלה שמדגימה איך המודל משתמש בתדירויות של מילים:
                     </p>
                 </div>
             </div>

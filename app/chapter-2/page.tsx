@@ -385,7 +385,7 @@ export default function ChapterTwo() {
       <ChapterLayout currentChapterId={2}>
           
           {/* סעיף 1: המרכז */}
-          <section id="part-1" className="scroll-mt-24">
+          <section id="part-1" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><BarChart3 size={20} /></div>
@@ -439,7 +439,7 @@ export default function ChapterTwo() {
           </section>
 
           {/* סעיף 2: פיזור */}
-          <section id="part-2" className="scroll-mt-24">
+          <section id="part-2" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><TrendingUp size={20} /></div>
@@ -482,7 +482,7 @@ export default function ChapterTwo() {
           </section>
 
           {/* סעיף 3: דוגמאות מהעולם האמיתי */}
-          <section id="part-3" className="scroll-mt-24">
+          <section id="part-3" className="scroll-mt-24 mb-8">
              <div className="flex items-center gap-3 mb-8">
                 <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Users size={20} /></div>
                 <div>

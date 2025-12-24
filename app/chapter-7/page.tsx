@@ -374,7 +374,7 @@ export default function ChapterSeven() {
             <ChapterLayout currentChapterId={7}>
           
           {/* סעיף 1: דמיון ככיוון ולא כמרחק */}
-          <section id="part-1" className="scroll-mt-24">
+          <section id="part-1" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><RotateCw size={20} /></div>
@@ -420,7 +420,7 @@ export default function ChapterSeven() {
 
 
           {/* סעיף 2: איך מודדים דמיון בין שני משפטים */}
-          <section id="part-2" className="scroll-mt-24">
+          <section id="part-2" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Code size={20} /></div>

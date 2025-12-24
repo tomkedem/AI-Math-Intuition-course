@@ -483,7 +483,7 @@ export default function ChapterSix() {
             <ChapterLayout currentChapterId={6}>
           
           {/* סעיף 1: מהי נורמה? (אורך) */}
-          <section id="norma" className="scroll-mt-24">
+          <section id="norma" className="scroll-mt-24 mb-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-fuchsia-500/10 rounded-xl text-fuchsia-400 border border-fuchsia-500/20"><Scale size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">1. מהי נורמה? (האורך של הוקטור)</h2>
@@ -497,9 +497,9 @@ export default function ChapterSix() {
                     אם תצייר וקטור על לוח כקווים, הנורמה היא האורך של הקו. לדוגמה, <span className="font-bold">וקטור V = [3, 4]</span> הנורמה שלו היא 5 (על בסיס פיתגורס).
                 </p>
                 <p>
-                    הנורמה (L2) היא הדרך היחידה למדוד את המרחק הגיאומטרי האמיתי (הקו הישר) מהראשית במרחב הרב-ממדי. במודלי AI, היא קובעת את ה&quot;משקל&quot; או ה&quot;עוצמה&quot; של הוקטור.
+                    במרחב רב־ממדי, הנורמה (L2) היא הדרך למדידת המרחק הגיאומטרי האמיתי בין נקודות במרחב, לא סכום צעדים ולא קיצורים מלאכותיים.  במודלי AI, היא קובעת את ה&quot;משקל&quot; או ה&quot;עוצמה&quot; של הוקטור.
                 </p>
-
+                
                 
                 <FormulaDisplay 
                     title="נוסחת הנורמה (L2 - הכללת פיתגורס)"
@@ -554,19 +554,19 @@ print(f'Norm: {norm_v:.2f}')`}
 
 
           {/* סעיף 2: מדידת מרחק בין וקטורים */}
-          <section id="distance" className="scroll-mt-24">
+          <section id="distance" className="scroll-mt-24 mb-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20"><Target size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">2. מרחק אוקלידי: המדד הראשון לדמיון</h2>
             </div>
             
-            <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6">
+            <div className="prose prose-invert text-slate-400 text-lg leading-relaxed max-w-none space-y-6 mb-6">
                 <h3 className="text-xl font-bold text-white mb-4">הצעד הראשון: מרחק</h3>
                 <p>
                     כדי להשוות בין שני וקטורים, הדרך האינטואיטיבית ביותר היא למדוד את המרחק ביניהם. אנו משתמשים ב<b>מרחק אוקלידי (L2 Distance)</b>, שהוא למעשה אורך הוקטור המחבר בין שתי הנקודות במרחב הרב-ממדי.
                 </p>
                 <p className="font-bold text-white border-r-4 border-emerald-500 pr-3 bg-emerald-500/5 py-1 rounded-r">
-                    מרחק קטן $\leftarrow$ הוקטורים קרובים גיאומטרית. מרחק גדול $\leftarrow$ הוקטורים רחוקים גיאומטרית.
+                    מרחק קטן ← הוקטורים קרובים גיאומטרית. מרחק גדול ← הוקטורים רחוקים גיאומטרית.
                 </p>
             </div>
             
@@ -602,7 +602,7 @@ print(f'Distance: {distance:.2f}')`}
 
 
           {/* סעיף 3: הבעיה הקריטית עם מרחק (הכנה לקוסינוס) */}
-          <section id="problem" className="scroll-mt-24">
+          <section id="problem" className="scroll-mt-24 mb-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-red-500/10 rounded-xl text-red-400 border border-red-500/20"><Layout size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">3. הבעיה הגדולה: מרחק מול משמעות</h2>

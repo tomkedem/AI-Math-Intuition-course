@@ -284,7 +284,7 @@ export default function ChapterNine() {
           </section>
 
           {/* סעיף 2: איך השיפוע עוזר למודל? */}
-          <section id="part-2">
+          <section id="part-2" className="mb-8">
             <div className="prose prose-invert text-slate-300 text-lg leading-relaxed max-w-none space-y-6">
                 <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2"><BookOpen className="text-blue-400"/> איך השיפוע עוזר למודל?</h3>
                 <p>
@@ -323,7 +323,7 @@ export default function ChapterNine() {
           </section>
 
           {/* סעיף 3: למה שיפוע = כמות הטעות */}
-          <section id="part-3">
+          <section id="part-3" className="mb-8">
             <div className="bg-slate-900/30 border border-slate-800 p-8 rounded-2xl">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400"><AlertCircle size={20} /></div>

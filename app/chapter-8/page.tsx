@@ -240,7 +240,7 @@ export default function ChapterEight() {
             <ChapterLayout currentChapterId={8}>
           
           {/* סעיף 1: קלט ← פלט בצורה הכי פשוטה */}
-          <section id="part-1" className="scroll-mt-24">
+          <section id="part-1" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><FunctionSquare size={20} /></div>
@@ -294,7 +294,7 @@ export default function ChapterEight() {
 
 
           {/* סעיף 2: מה זה "עקומה"? */}
-          <section id="part-2" className="scroll-mt-24">
+          <section id="part-2" className="scroll-mt-24 mb-8">
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-red-500/10 rounded-lg text-red-400"><Activity size={20} /></div>

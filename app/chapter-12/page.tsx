@@ -273,7 +273,7 @@ export default function ChapterTwelve() {
             <ChapterLayout currentChapterId={12}>
           
           {/* סעיף 1: למה זה חוזר בכל מודל? */}
-          <section id="part-1" className="scroll-mt-24">
+          <section id="part-1" className="scroll-mt-24 mt-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400 border border-blue-500/20"><Brain size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">1. המודל לא מבין עולם, הוא מבין מתמטיקה</h2>
@@ -301,7 +301,7 @@ export default function ChapterTwelve() {
 
 
           {/* סעיף 2: הדגמת NLP */}
-          <section id="part-2" className="scroll-mt-24">
+          <section id="part-2" className="scroll-mt-24 mt-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20"><MessageSquare size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">2. בזמן אמת: איך צ&#39;אטבוט עובד?</h2>
@@ -318,7 +318,7 @@ export default function ChapterTwelve() {
 
 
           {/* סעיף 3: מה הלאה? */}
-          <section id="part-3" className="scroll-mt-24">
+          <section id="part-3" className="scroll-mt-24 mt-8">
             <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400 border border-purple-500/20"><BookOpen size={24} /></div>
                 <h2 className="text-3xl font-bold text-white">3. איפה פוגשים את זה בספר הבא?</h2>
