@@ -59,15 +59,19 @@ export function CourseSidebar() {
             </div>
 
             {/* User Card */}
-            <div className="bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-xs text-white font-bold">
-                    תק
-                </div>
-                <div className="flex-1">
-                    <div className="text-xs font-bold text-slate-200">תומר קדם</div>
-                    <div className="text-[10px] text-slate-500">ארכיטקט תוכנה</div>
-                </div>
-            </div>
+            <div className="flex items-center bg-slate-900 rounded-2xl px-6 py-3 gap-4 w-fit shadow-lg">
+  <div className="flex flex-col text-right">
+    <span className="text-white font-bold text-base leading-tight">תומר קדם</span>
+    <span className="text-slate-400 text-xs">מתכנן ומפתח הלומדה</span>
+    
+    <span className="text-slate-500 text-xs mt-1">
+  הופך את המתמטיקה של ה-AI לשפה פשוטה ונגישה לכל אחד
+</span>
+  </div>
+  <div className="w-10 h-10 rounded-full bg-fuchsia-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-fuchsia-400">
+    תק
+  </div>
+</div>
 
             {/* Progress Bar */}
             <div className="mt-4">
