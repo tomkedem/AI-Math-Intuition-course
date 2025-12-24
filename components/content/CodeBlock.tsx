@@ -6,15 +6,17 @@ import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-javascript'; 
-import 'prismjs/components/prism-json'; // הוספתי תמיכה ב-JSON
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-yaml'; // <-- הוספנו תמיכה ב-YAML
 import { Check, Copy, FileCode, Play, Terminal } from 'lucide-react';
 
 interface CodeBlockProps {
     code: string;
-    language?: 'python' | 'bash' | 'javascript' | 'json';
+    // עדכנו את הטיפוסים המותרים:
+    language?: 'python' | 'bash' | 'javascript' | 'json' | 'yaml' | 'toml';
     filename?: string;
     output?: string;
-    dir?: 'ltr' | 'rtl' | 'auto'; // <-- תוספת קריטית
+    dir?: 'ltr' | 'rtl' | 'auto';
 }
 
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python', filename, output, dir = 'auto' }) => {
@@ -44,12 +46,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
         }, 800);
     };
 
-    // זיהוי עברית רק לצורך ברירת מחדל
     const isHebrew = (text: string) => /[\u0590-\u05FF]/.test(text);
-
-    // חישוב הכיוון הסופי:
-    // 1. אם המפתח קבע ידנית (למשל dir="ltr") - זה קובע.
-    // 2. אם לא, בודקים אם יש עברית.
     const finalDir = dir !== 'auto' ? dir : (output && isHebrew(output) ? 'rtl' : 'ltr');
     const isRtl = finalDir === 'rtl';
 
@@ -112,14 +109,11 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
                         <Terminal size={12} />
                         Output
                     </div>
-                    
                     <pre 
                         dir={finalDir}
                         style={{ 
                             direction: finalDir, 
-                            // אם זה RTL, ישר לימין. אחרת לשמאל.
                             textAlign: isRtl ? 'right' : 'left',
-                            // זה הפתרון לבעיית הסוגריים: נותן לדפדפן לנהל כיווניות ברמת התו
                             unicodeBidi: 'plaintext' 
                         }}
                         className={`p-4 text-sm font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap ${isRtl ? "font-sans" : ""}`}
