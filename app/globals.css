@@ -125,3 +125,35 @@
 }
 
 @import 'katex/dist/katex.min.css';
+
+@layer utilities {
+  /* הגדרת פס הגלילה המודרני */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;              /* רוחב דק ואלגנטי */
+    height: 6px;             /* גובה (לגלילה אופקית אם תהיה) */
+  }
+
+  /* המסלול (הרקע של הפס) - שקוף לגמרי כדי שיתמזג */
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+
+  /* הידית (החלק שזז) - עיצוב זכוכית כהה */
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2); /* Slate-400 עם שקיפות */
+    border-radius: 100vh;    /* פינות עגולות לגמרי (צורת קפסולה) */
+    transition: background 0.3s ease;
+  }
+
+  /* כשעוברים עם העכבר על הפס - הוא נהיה ברור יותר */
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5); /* Slate-400 כהה יותר */
+    cursor: grab;
+  }
+
+  /* תמיכה בפיירפוקס (שעובד בסטנדרט אחר) */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+  }
+}

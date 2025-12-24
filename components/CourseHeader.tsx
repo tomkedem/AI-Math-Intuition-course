@@ -48,7 +48,7 @@ export const CourseHeader: React.FC<CourseHeaderProps> = ({
         <header 
             className={`
                 sticky top-0 z-40 w-full transition-all duration-500
-                border-b ${borderColorClass}/20
+                border-b border-amber-400/20
                 ${isScrolled 
                     ? 'py-3 bg-[#0B1121]/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
                     : 'py-6 bg-[#0F172A]' 
