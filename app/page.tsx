@@ -7,7 +7,6 @@ import { ArrowLeft, Terminal, Sigma, BrainCircuit, BookOpen } from "lucide-react
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine, ISourceOptions } from "tsparticles-engine";
-// ייבוא של ספריית האפקט
 import { Tilt } from 'react-tilt';
 
 export default function HomePage() {
@@ -36,17 +35,17 @@ export default function HomePage() {
     detectRetina: true,
   };
 
-  // הגדרות לאפקט ההטיה
+  // --- הגדרות מעודכנות לאפקט ה"דחיפה" ---
   const tiltOptions = {
-    reverse:        false,  // הפוך את כיוון ההטיה
-    max:            15,     // זווית הטיה מקסימלית (במעלות) - הורדתי כדי שיהיה עדין
-    perspective:    1000,   // פרספקטיבה (ככל שנמוך יותר, ההטיה קיצונית יותר)
-    scale:          1.05,   // זום-אין קל בהובר
-    speed:          1000,   // מהירות האנימציה (במילישניות)
-    transition:     true,   // מעבר חלק בכניסה/יציאה
-    axis:           null,   // איזה ציר לנטרל (null = שניהם עובדים)
-    reset:          true,   // אם לאפס את ההטיה ביציאה
-    easing:         "cubic-bezier(.03,.98,.52,.99)", // פונקציית החלקה לאנימציה
+    reverse:        true,   // <--- זה השינוי! true גורם לכרטיס "להידחף" פנימה
+    max:            15,     // זווית הטיה (אפשר להקטין ל-10 אם זה חזק מדי)
+    perspective:    1000,   
+    scale:          1.05,   // זום עדין פנימה
+    speed:          1000,   
+    transition:     true,   
+    axis:           null,   
+    reset:          true,   
+    easing:         "cubic-bezier(.03,.98,.52,.99)",
   };
 
   const getIcon = (id: string) => {
@@ -117,11 +116,11 @@ export default function HomePage() {
                     const firstChapterHref = course.chapters[0]?.href || '#';
 
                     return (
-                        // עטיפה ב-Tilt
+                        // עטיפה ב-Tilt עם האפשרויות החדשות
                         <Tilt key={course.id} options={tiltOptions} className="h-full">
                             <Link 
                                 href={firstChapterHref}
-                                className="group relative h-full block" // block חשוב כאן
+                                className="group relative h-full block"
                             >
                                 <div className="absolute inset-0 bg-linear-to-b from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-3xl transform transition-transform duration-300 group-hover:shadow-2xl shadow-black/50"></div>
                                 <div className="absolute inset-0 rounded-3xl border border-slate-700/50 group-hover:border-indigo-500/50 transition-colors duration-300"></div>
@@ -157,7 +156,7 @@ export default function HomePage() {
                 })}
             </div>
 
-            {/* Footer מינימלי למטה (רק זכויות יוצרים) */}
+            {/* Footer מינימלי למטה */}
             <footer className="mt-auto py-8 text-center text-slate-600 text-xs font-mono relative z-20">
                 <p>© 2025 AI Dev Track. כל הזכויות שמורות.</p>
             </footer>
