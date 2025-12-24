@@ -7,17 +7,17 @@ import { ArrowLeft, Terminal, Sigma, BrainCircuit, BookOpen } from "lucide-react
 // ייבואים עבור הרקע המונפש
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
-import type { Engine } from "tsparticles-engine";
+import type { Engine, ISourceOptions } from "tsparticles-engine"; // <--- הוספנו את ISourceOptions
 
 export default function HomePage() {
   
-  // --- הגדרות לרקע החלקיקים ---
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSlim(engine);
   }, []);
 
-  const particlesOptions = {
-    fullScreen: { enable: false }, // כדי שיהיה בתוך הדיב שלנו ולא על כל המסך
+  // הגדרת הטיפוס בצורה מפורשת
+  const particlesOptions: ISourceOptions = {
+    fullScreen: { enable: false },
     background: {
         color: { value: "transparent" },
     },
@@ -26,7 +26,7 @@ export default function HomePage() {
         events: {
             onHover: {
                 enable: true,
-                mode: "grab", // חיבור נקודות לעכבר בהובר
+                mode: "grab",
             },
             resize: true,
         },
@@ -35,30 +35,30 @@ export default function HomePage() {
                 distance: 150,
                 links: {
                     opacity: 0.5,
-                    color: "#6366f1" // צבע אינדיגו לחיבור לעכבר
+                    color: "#6366f1"
                 }
             },
         },
     },
     particles: {
         color: {
-            value: ["#4f46e5", "#60a5fa", "#a78bfa"], // פלטת צבעים: אינדיגו, כחול, סגול בהיר
+            value: ["#4f46e5", "#60a5fa", "#a78bfa"],
         },
         links: {
-            color: "#4f46e5", // צבע הקווים המחברים
+            color: "#4f46e5",
             distance: 150,
             enable: true,
-            opacity: 0.2, // שקיפות עדינה לקווים
+            opacity: 0.2,
             width: 1,
         },
         move: {
-            direction: "none" as const,
+            direction: "none",
             enable: true,
             outModes: {
-                default: "bounce" as const,
+                default: "bounce",
             },
             random: true,
-            speed: 1, // תנועה איטית ואלגנטית
+            speed: 1,
             straight: false,
         },
         number: {
@@ -66,14 +66,14 @@ export default function HomePage() {
                 enable: true,
                 area: 800,
             },
-            value: 100, // כמות החלקיקים
+            value: 100,
         },
         opacity: {
             value: 0.5,
             random: true,
         },
         shape: {
-            type: "circle", // אפשר לשנות גם ל-"edge" או "triangle" למראה יותר גיאומטרי
+            type: "circle",
         },
         size: {
             value: { min: 1, max: 3 },
@@ -81,7 +81,6 @@ export default function HomePage() {
     },
     detectRetina: true,
   };
-  // ---------------------------
 
   const getIcon = (id: string) => {
     switch(id) {
@@ -100,7 +99,6 @@ export default function HomePage() {
   };
 
   return (
-    // הוספתי relative ו-overflow-hidden כדי שהחלקיקים לא יברחו
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 relative overflow-hidden" dir="rtl">
         
         {/* --- רקע חלקיקים מונפש --- */}
@@ -108,18 +106,17 @@ export default function HomePage() {
              <Particles
                 id="tsparticles"
                 init={particlesInit}
-                options={particlesOptions as any}
+                options={particlesOptions} // <--- עכשיו זה תקין ללא as any
                 className="absolute inset-0 h-full w-full"
             />
         </div>
 
-        {/* שכבת גרדיאנט עדינה מעל החלקיקים לעומק נוסף */}
+        {/* שכבת גרדיאנט עדינה מעל החלקיקים */}
         <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#020617]/80 to-[#020617]"></div>
-
 
         <main className="relative z-10 max-w-6xl mx-auto px-6 py-20 flex flex-col items-center">
             
-            {/* Header Updated Text */}
+            {/* Header */}
             <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-xs font-mono text-slate-400 mb-4 backdrop-blur-sm">
                     <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_#6366f1]"></span>
@@ -131,7 +128,6 @@ export default function HomePage() {
                     של מערכות AI
                 </h1>
                 
-                {/* טקסט מעודכן - ממוקד במה שיש עכשיו */}
                 <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
                     להבין את מה שמתחת למכסה המנוע: 
                     <strong> המתמטיקה</strong>, <strong>ההסתברות</strong> ו-<strong>קוד הפייתון</strong> שמניעים את המודלים.
@@ -139,7 +135,7 @@ export default function HomePage() {
                 </p>
             </div>
 
-            {/* Grid הקורסים - הוספתי backdrop-blur כדי שיבלוט מעל הרקע הזז */}
+            {/* Grid הקורסים */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative z-20">
                 {Object.values(courses).map((course) => {
                     const firstChapterHref = course.chapters[0]?.href || '#';
@@ -150,14 +146,11 @@ export default function HomePage() {
                             href={firstChapterHref}
                             className="group relative h-full"
                         >
-                            {/* רקע הכרטיס עם טשטוש קל */}
                             <div className="absolute inset-0 bg-linear-to-b from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-3xl transform transition-transform duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl shadow-black/50"></div>
                             
-                            {/* גבול זוהר בהובר */}
                             <div className="absolute inset-0 rounded-3xl border border-slate-700/50 group-hover:border-indigo-500/50 transition-colors duration-300"></div>
 
                             <div className="relative h-full p-8 flex flex-col items-start">
-                                {/* אייקון */}
                                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-colors duration-300 ${getIconColor(course.id)} shadow-lg`}>
                                     {getIcon(course.id)}
                                 </div>
@@ -187,12 +180,28 @@ export default function HomePage() {
                 })}
             </div>
 
-            <footer className="mt-32 text-center text-slate-600 text-sm pb-10 relative z-20">
-                <p className="flex items-center justify-center gap-1.5">
-                    <span>© 2025 נבנה ע&quot;י</span>
-                    <span className="text-slate-400 font-bold hover:text-white transition-colors cursor-default">תומר קדם</span>
-                    <span>עבור מפתחי AI.</span>
-                </p>
+        
+            <footer className="w-full mt-32 py-12 border-t border-slate-800/60 bg-[#0B1121]/50 backdrop-blur-sm relative z-20">
+                <div className="flex flex-col items-center justify-center gap-4 text-center">
+                    
+                 
+                    <div className="flex flex-col items-center gap-1">
+                        <span className="text-slate-400 text-base font-medium">נבנה ופותח ע&quot;י</span>
+                        <span className="text-3xl font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                            תומר קדם
+                        </span>
+                    </div>
+
+                  
+                    <div className="flex items-center gap-3 text-slate-500 text-sm mt-2 font-mono">
+                        <span>© 2025</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+                        <span>עבור מפתחי AI</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-600"></span>
+                        <span>גרסה 4.0</span>
+                    </div>
+                    
+                </div>
             </footer>
         </main>
     </div>

@@ -3,36 +3,37 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Circle, PlayCircle, Menu, X, Terminal, Sigma, BrainCircuit } from 'lucide-react';
+// הוספנו את ArrowRight לרשימת האייקונים
+import { Circle, PlayCircle, Menu, X, Terminal, Sigma, BrainCircuit, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { courses } from "@/lib/courseData"; // ייבוא הנתונים האמיתיים
+import { courses } from "@/lib/courseData"; 
 
 export function CourseSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // 1. זיהוי הקורס הנוכחי מתוך ה-URL
+  // 1. זיהוי הקורס
   const segments = pathname?.split('/').filter(Boolean) || [];
-  const currentCourseId = segments[0]; // "math", "python", "probability"
+  let currentCourseId = segments[0];
   
-  // שליפת הנתונים מהקובץ המרכזי
+  // הגנה: אם הקורס לא מזוהה, נשתמש במתמטיקה כברירת מחדל (או נחזיר null)
+  if (!courses[currentCourseId]) {
+      currentCourseId = 'math'; 
+  }
+  
   const course = courses[currentCourseId];
-
-  // אם אנחנו לא בתוך קורס מוכר, לא נציג סרגל (או שנציג ריק)
   if (!course) return null;
 
   // חישוב התקדמות
   const currentChapterIndex = course.chapters.findIndex(c => c.href === pathname);
-  // אם לא מצאנו פרק (למשל במבוא), נניח שאנחנו ב-0% או לפי ההיגיון
   const safeIndex = currentChapterIndex === -1 ? 0 : currentChapterIndex;
   const progress = Math.round(((safeIndex + 1) / course.chapters.length) * 100);
 
-  // בחירת אייקון ראשי לפי הקורס
   const getCourseIcon = () => {
       switch(currentCourseId) {
           case 'python': return <Terminal size={20} />;
           case 'probability': return <BrainCircuit size={20} />;
-          default: return <Sigma size={20} />; // math
+          default: return <Sigma size={20} />; 
       }
   };
 
@@ -40,15 +41,24 @@ export function CourseSidebar() {
       switch(currentCourseId) {
           case 'python': return 'text-yellow-400';
           case 'probability': return 'text-pink-400';
-          default: return 'text-sky-400'; // math
+          default: return 'text-sky-400'; 
       }
   };
 
-  // תוכן הסרגל
   const sidebarContent = (
       <div className="flex flex-col h-full bg-[#0f172a]">
-          {/* Header - שם הקורס */}
+          {/* Header */}
           <div className="p-6 border-b border-slate-800">
+            
+            {/* --- כפתור חזרה ללובי (חדש) --- */}
+            <Link 
+                href="/" 
+                className="flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-indigo-400 transition-colors mb-6 group"
+            >
+                <ArrowRight size={14} className="group-hover:-translate-x-1 transition-transform" />
+                <span>חזרה לקטלוג הקורסים</span>
+            </Link>
+
             <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold shadow-lg shadow-black/20 border border-slate-700">
                     <span className={getCourseColor()}>{getCourseIcon()}</span>
@@ -57,12 +67,11 @@ export function CourseSidebar() {
                     <h1 className="font-bold text-white text-base truncate leading-tight">
                         {course.title.he}
                     </h1>
-                    <span className="text-gray-500 text-[12px] mt-0.5 truncate">
+                    <span className="text-gray-500 text-[10px] mt-0.5 truncate">
                         {course.description.he}
                     </span>
                 </div>
                 
-                {/* כפתור סגירה למובייל */}
                 {isOpen && (
                     <button 
                         onClick={() => setIsOpen(false)}
@@ -73,9 +82,8 @@ export function CourseSidebar() {
                 )}
             </div>
 
-            {/* User Card - העיצוב המקורי שלך */}
+            {/* User Card */}
             <div className="flex items-center bg-[#1E293B] rounded-2xl p-3 gap-3 w-full shadow-lg border border-slate-700/50 relative overflow-hidden group">
-                {/* אפקט ברק עדין ברקע */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 
                 <div className="relative shrink-0">
@@ -87,8 +95,8 @@ export function CourseSidebar() {
 
                 <div className="flex flex-col text-right min-w-0 relative z-10">
                     <span className="text-white font-bold text-sm leading-tight">תומר קדם</span>
-                    <span className="text-slate-400 text-[12px]">מחבר הלומדה</span>
-                    <span className="text-indigo-400 text-[16px] mt-0.5 font-medium">AI Developer Series</span>
+                    <span className="text-slate-400 text-[10px]">מחבר הלומדה</span>
+                    <span className="text-indigo-400 text-[10px] mt-0.5 font-medium">AI Developer Series</span>
                 </div>
             </div>
 
@@ -114,13 +122,8 @@ export function CourseSidebar() {
               </div>
               
               {course.chapters.map((chapter) => {
-                  // נשתמש ב-href מה-data
                   const isActive = pathname === chapter.href;
-                  
-                  // גזירת צבע ייחודי לפרק הפעיל (למשל מכחול לטקסט כחול)
                   const activeTextColor = chapter.labelColor || "text-blue-400";
-                  
-                  // בחירת אייקון
                   const Icon = isActive ? PlayCircle : Circle;
 
                   return (
@@ -136,7 +139,6 @@ export function CourseSidebar() {
                                 : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 border border-transparent'
                             }
                         `}>
-                            {/* פס צבע צדדי לפרק פעיל */}
                             {isActive && (
                                 <div className={`absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full bg-current ${activeTextColor} opacity-80`}></div>
                             )}
@@ -173,7 +175,6 @@ export function CourseSidebar() {
 
   return (
       <>
-          {/* כפתור תפריט מובייל (צף) */}
           <button
               onClick={() => setIsOpen(true)}
               className="fixed top-4 left-4 z-50 p-2.5 rounded-xl bg-[#0F172A]/90 text-white shadow-lg backdrop-blur-md border border-slate-700 md:hidden hover:scale-105 transition-transform"
@@ -181,16 +182,13 @@ export function CourseSidebar() {
               <Menu size={20} />
           </button>
           
-          {/* Desktop Sidebar */}
           <aside className="hidden md:flex w-80 bg-[#0f172a] border-l border-slate-800/60 flex-col h-screen shrink-0 sticky top-0 shadow-2xl z-30" dir="rtl">
               {sidebarContent}
           </aside>
 
-          {/* Mobile Sidebar Modal */}
           <AnimatePresence>
               {isOpen && (
                   <>
-                      {/* רקע כהה */}
                       <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 0.6 }}
@@ -200,7 +198,6 @@ export function CourseSidebar() {
                           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-90 md:hidden"
                       />
                       
-                      {/* הסרגל עצמו */}
                       <motion.div
                           initial={{ x: '100%' }}
                           animate={{ x: 0 }}
