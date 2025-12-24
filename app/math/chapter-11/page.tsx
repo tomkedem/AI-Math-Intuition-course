@@ -259,7 +259,7 @@ x_new = x - (lr * slope)
                   <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-8">
                       עכשיו יש לך את האינטואיציה ואת הקוד. בפרק הבא והאחרון, נראה איך כל הדברים האלו מתחברים לטכנולוגיה ששינתה את העולם: NLP ומודלי שפה.
                   </p>
-                  <Link href="/chapter-12">
+                  <Link href="chapter-12">
                     <Button size="lg" className="h-14 px-10 bg-white text-blue-600 hover:bg-blue-50 border-0 font-bold shadow-xl hover:scale-105 transition-transform">
                         המשך לפרק האחרון: NLP <ChevronLeft className="mr-2 h-5 w-5" />
                     </Button>

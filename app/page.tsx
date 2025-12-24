@@ -1,65 +1,200 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useCallback } from 'react';
+import Link from 'next/link';
+import { courses } from "@/lib/courseData"; 
+import { ArrowLeft, Terminal, Sigma, BrainCircuit, BookOpen } from "lucide-react";
+// ייבואים עבור הרקע המונפש
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
+import type { Engine } from "tsparticles-engine";
+
+export default function HomePage() {
+  
+  // --- הגדרות לרקע החלקיקים ---
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
+  }, []);
+
+  const particlesOptions = {
+    fullScreen: { enable: false }, // כדי שיהיה בתוך הדיב שלנו ולא על כל המסך
+    background: {
+        color: { value: "transparent" },
+    },
+    fpsLimit: 120,
+    interactivity: {
+        events: {
+            onHover: {
+                enable: true,
+                mode: "grab", // חיבור נקודות לעכבר בהובר
+            },
+            resize: true,
+        },
+        modes: {
+            grab: {
+                distance: 150,
+                links: {
+                    opacity: 0.5,
+                    color: "#6366f1" // צבע אינדיגו לחיבור לעכבר
+                }
+            },
+        },
+    },
+    particles: {
+        color: {
+            value: ["#4f46e5", "#60a5fa", "#a78bfa"], // פלטת צבעים: אינדיגו, כחול, סגול בהיר
+        },
+        links: {
+            color: "#4f46e5", // צבע הקווים המחברים
+            distance: 150,
+            enable: true,
+            opacity: 0.2, // שקיפות עדינה לקווים
+            width: 1,
+        },
+        move: {
+            direction: "none" as const,
+            enable: true,
+            outModes: {
+                default: "bounce" as const,
+            },
+            random: true,
+            speed: 1, // תנועה איטית ואלגנטית
+            straight: false,
+        },
+        number: {
+            density: {
+                enable: true,
+                area: 800,
+            },
+            value: 100, // כמות החלקיקים
+        },
+        opacity: {
+            value: 0.5,
+            random: true,
+        },
+        shape: {
+            type: "circle", // אפשר לשנות גם ל-"edge" או "triangle" למראה יותר גיאומטרי
+        },
+        size: {
+            value: { min: 1, max: 3 },
+        },
+    },
+    detectRetina: true,
+  };
+  // ---------------------------
+
+  const getIcon = (id: string) => {
+    switch(id) {
+        case 'python': return <Terminal size={32} />;
+        case 'probability': return <BrainCircuit size={32} />;
+        default: return <Sigma size={32} />;
+    }
+  };
+
+  const getIconColor = (id: string) => {
+    switch(id) {
+        case 'python': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+        case 'probability': return 'bg-pink-500/10 text-pink-400 border-pink-500/20';
+        default: return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-39.5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    // הוספתי relative ו-overflow-hidden כדי שהחלקיקים לא יברחו
+    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 relative overflow-hidden" dir="rtl">
+        
+        {/* --- רקע חלקיקים מונפש --- */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+             <Particles
+                id="tsparticles"
+                init={particlesInit}
+                options={particlesOptions as any}
+                className="absolute inset-0 h-full w-full"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/8 px-5 transition-colors hover:border-transparent hover:bg-black/4 dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-39.5"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
         </div>
-      </main>
+
+        {/* שכבת גרדיאנט עדינה מעל החלקיקים לעומק נוסף */}
+        <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/20 via-[#020617]/80 to-[#020617]"></div>
+
+
+        <main className="relative z-10 max-w-6xl mx-auto px-6 py-20 flex flex-col items-center">
+            
+            {/* Header Updated Text */}
+            <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-xs font-mono text-slate-400 mb-4 backdrop-blur-sm">
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_#6366f1]"></span>
+                    Core Foundations v1.0
+                </div>
+                
+                <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-indigo-100 to-slate-500 tracking-tight leading-tight drop-shadow-sm">
+                    הליבה ההנדסית <br/>
+                    של מערכות AI
+                </h1>
+                
+                {/* טקסט מעודכן - ממוקד במה שיש עכשיו */}
+                <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                    להבין את מה שמתחת למכסה המנוע: 
+                    <strong> המתמטיקה</strong>, <strong>ההסתברות</strong> ו-<strong>קוד הפייתון</strong> שמניעים את המודלים.
+                    לומדה אינטראקטיבית למתכנתים שרוצים לבנות הבנה עמוקה.
+                </p>
+            </div>
+
+            {/* Grid הקורסים - הוספתי backdrop-blur כדי שיבלוט מעל הרקע הזז */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative z-20">
+                {Object.values(courses).map((course) => {
+                    const firstChapterHref = course.chapters[0]?.href || '#';
+
+                    return (
+                        <Link 
+                            key={course.id} 
+                            href={firstChapterHref}
+                            className="group relative h-full"
+                        >
+                            {/* רקע הכרטיס עם טשטוש קל */}
+                            <div className="absolute inset-0 bg-linear-to-b from-slate-800/80 to-slate-900/80 backdrop-blur-md rounded-3xl transform transition-transform duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl shadow-black/50"></div>
+                            
+                            {/* גבול זוהר בהובר */}
+                            <div className="absolute inset-0 rounded-3xl border border-slate-700/50 group-hover:border-indigo-500/50 transition-colors duration-300"></div>
+
+                            <div className="relative h-full p-8 flex flex-col items-start">
+                                {/* אייקון */}
+                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-6 transition-colors duration-300 ${getIconColor(course.id)} shadow-lg`}>
+                                    {getIcon(course.id)}
+                                </div>
+
+                                <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">
+                                    {course.title.he}
+                                </h2>
+                                
+                                <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-1">
+                                    {course.description.he}
+                                </p>
+
+                                <div className="w-full pt-6 border-t border-slate-700/50 flex items-center justify-between mt-auto">
+                                    <span className="text-xs font-mono text-slate-500 flex items-center gap-2">
+                                        <BookOpen size={14} />
+                                        {course.chapters.length} פרקים
+                                    </span>
+                                    
+                                    <span className="flex items-center gap-2 text-sm font-bold text-white group-hover:-translate-x-1 transition-transform">
+                                        התחל ללמוד
+                                        <ArrowLeft size={16} />
+                                    </span>
+                                </div>
+                            </div>
+                        </Link>
+                    );
+                })}
+            </div>
+
+            <footer className="mt-32 text-center text-slate-600 text-sm pb-10 relative z-20">
+                <p className="flex items-center justify-center gap-1.5">
+                    <span>© 2025 נבנה ע&quot;י</span>
+                    <span className="text-slate-400 font-bold hover:text-white transition-colors cursor-default">תומר קדם</span>
+                    <span>עבור מפתחי AI.</span>
+                </p>
+            </footer>
+        </main>
     </div>
   );
 }
