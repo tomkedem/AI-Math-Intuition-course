@@ -4,14 +4,13 @@ import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { CodeBlock } from '@/components/content/CodeBlock';
 import { Quiz } from '@/components/content/Quiz';
+import { InsightBox } from '@/components/content/InsightBox';
 import { 
-    FolderTree, Archive, 
-    GitBranch, CheckCircle2, Share2, 
-    ShieldCheck, Globe, 
-    Folder, File, Cpu
+    FolderTree, Archive, GitBranch, CheckCircle2, 
+    Share2, ShieldCheck, Globe, Folder, File, 
+    Cpu, Database, Zap, Microscope, Boxes, Terminal, Code2
 } from 'lucide-react';
 
-// רכיב שורת קובץ/תיקייה מעוצב - פתרון הנדסי ליישור
 interface FileNodeProps {
   name: string;
   comment: string;
@@ -26,16 +25,16 @@ const FileNode = ({ name, comment, level = 0, isFolder = true }: FileNodeProps) 
         <div key={i} className="w-6 h-6 border-l border-slate-700 ml-2 opacity-50" />
       ))}
       {isFolder ? (
-        <Folder size={18} className="text-blue-400 mr-2 shrink-0" />
+        <Folder size={16} className="text-blue-400 mr-2 shrink-0" />
       ) : (
-        <File size={18} className="text-slate-500 mr-2 shrink-0" />
+        <File size={16} className="text-slate-500 mr-2 shrink-0" />
       )}
-      <span className="text-slate-200 font-mono text-sm font-medium tracking-tight">
+      <span className="text-slate-200 font-mono text-xs font-medium tracking-tight">
         {name}
       </span>
     </div>
     <div className="flex-1 text-right" dir="rtl">
-      <span className="text-slate-500 text-xs font-sans group-hover:text-slate-400 transition-colors italic">
+      <span className="text-slate-500 text-[11px] font-sans group-hover:text-slate-400 transition-colors italic">
         {comment}
       </span>
     </div>
@@ -47,149 +46,222 @@ export default function Chapter18() {
     <ChapterLayout courseId="python" currentChapterId={18}>
         
         {/* --- Hero Section --- */}
-        <section className="relative py-20 mb-20 overflow-hidden rounded-[2.5rem] bg-slate-900/40 border border-slate-800">
+        <section className="relative py-10 mb-12 overflow-hidden rounded-xl bg-slate-900/40 border border-slate-800 shadow-2xl">
             <div className="absolute top-0 right-0 w-full h-full bg-linear-to-br from-emerald-500/5 via-transparent to-blue-500/5" />
-            <div className="relative z-10 px-10 text-right" dir="rtl">
-                <div className="flex items-center justify-start gap-3 text-emerald-400 mb-6">
-                    <Cpu size={32} className="animate-pulse" />
-                    <span className="font-mono text-sm tracking-[0.3em] uppercase">Architecture Capstone</span>
+            <div className="relative z-10 px-8 text-right" dir="rtl">
+                <div className="flex items-center justify-start gap-2 text-emerald-400 mb-3">
+                    <Cpu size={20} className="animate-pulse" />
+                    <span className="font-mono text-[10px] tracking-[0.2em] uppercase">Architecture & Scalability</span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6">
-                    ממתכנת לארכיטקט <span className="text-emerald-400">AI</span>
+                <h1 className="text-2xl font-black text-white leading-tight mb-4">
+                    סיכום הנדסי: בניית תשתית למוצר AI
                 </h1>
-                <p className="text-xl text-slate-300 max-w-4xl leading-relaxed">
-                    זהו רגע השיא. כאן תלמדו איך לארוז את כל מה שלמדתם לשלד הנדסי מלא. 
-                    אנחנו לא בונים עוד &quot;סקריפט&quot;, אלא <strong>מוצר</strong> שמוכן לעבודה בצוות אמיתי.
+                <p className="text-base text-slate-300 max-w-4xl leading-relaxed">
+                    הגענו לקו הסיום של מסלול פייתון ל-AI. בפרק זה נלמד כיצד לאגד את כל היכולות שרכשנו לכדי שלד (Skeleton) מקצועי. המטרה היא לעבור מכתיבת פונקציות בודדות לבניית מערכת חסינה, מודולרית וברת-הרחבה שניתן להפעיל בסביבות עבודה אמיתיות.
                 </p>
             </div>
         </section>
 
-        <div className="space-y-32 text-right" dir="rtl">
+        <div className="space-y-20 text-right" dir="rtl">
+
+            {/* --- Strategic Concept --- */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-r-4 border-emerald-500 pr-4">
+                    <Boxes className="text-emerald-400" size={24} />
+                    <h2 className="text-lg font-bold text-white uppercase tracking-wide">הפרדיגמה של הנדסת AI</h2>
+                </div>
+                <div className="text-slate-300 space-y-4 text-base leading-relaxed">
+                    <p>
+                        בניגוד לפיתוח תוכנה מסורתי, פרויקט AI מתאפיין בשלושה רכיבים דינמיים המשתנים בקצבים שונים: <strong>הלוגיקה</strong>, <strong>הנתונים</strong> ו<strong>המודל</strong>. ניהול ידני של הרכיבים הללו בתיקייה אחת מוביל במהירות לאובדן שליטה טכני.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                        <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50">
+                            <span className="text-emerald-400 font-bold block mb-1">1. הקוד (Logic)</span>
+                            <p className="text-xs opacity-70">אלגוריתמי הניקוי, הטרנספורמציה והלוגיקה העסקית.</p>
+                        </div>
+                        <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50">
+                            <span className="text-blue-400 font-bold block mb-1">2. הנתונים (Data)</span>
+                            <p className="text-xs opacity-70">דאטהסטים גולמיים ומעובדים הדורשים ניהול גרסאות נפרד.</p>
+                        </div>
+                        <div className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50">
+                            <span className="text-purple-400 font-bold block mb-1">3. המודל (Model)</span>
+                            <p className="text-xs opacity-70">קובצי ה-Weights וה-Artifacts הנוצרים בתום תהליך האימון.</p>
+                        </div>
+                    </div>
+                    <p>
+                        הנדסת תוכנה איכותית ב-AI מבוססת על הפרדת תחומי אחריות. ככל שהרכיבים הללו יהיו מנותקים יותר זה מזה (Decoupled), כך המערכת תהיה גמישה יותר לשינויים עתידיים, כמו החלפת ספק ענן או שדרוג המודל המתמטי.
+                    </p>
+                </div>
+            </section>
 
             {/* --- Project Anatomy Explorer --- */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4 border-r-4 border-blue-500 pr-6">
-                    <FolderTree className="text-blue-500" size={32} />
-                    <h2 className="text-3xl font-bold text-white">אנטומיה של פרויקט מקצועי</h2>
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-r-4 border-blue-500 pr-4">
+                    <FolderTree className="text-blue-500" size={24} />
+                    <h2 className="text-lg font-bold text-white uppercase tracking-wide">היררכיית קבצים תעשייתית</h2>
                 </div>
+                
+                <p className="text-slate-400 text-sm italic">
+                    זהו המבנה המקובל בצוותי הנדסת נתונים ו-ML. עבודה לפיו מבטיחה סדר הנדסי ושקיפות:
+                </p>
 
-                <div className="bg-slate-900/80 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl">
-                    <div className="bg-slate-800/50 px-6 py-3 border-b border-slate-700 flex justify-between items-center">
-                        <div className="flex gap-1.5">
-                            <div className="w-3 h-3 rounded-full bg-red-500/30" />
-                            <div className="w-3 h-3 rounded-full bg-yellow-500/30" />
-                            <div className="w-3 h-3 rounded-full bg-emerald-500/30" />
+                <div className="bg-[#020617] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                    <div className="bg-slate-900 px-4 py-2 border-b border-slate-800 flex justify-between items-center">
+                        <span className="text-slate-500 font-mono text-[10px] uppercase tracking-tighter">Production-Ready Directory Layout</span>
+                        <div className="flex gap-1">
+                            <div className="w-2 h-2 rounded-full bg-slate-700" />
+                            <div className="w-2 h-2 rounded-full bg-slate-700" />
                         </div>
-                        <span className="text-slate-400 font-mono text-xs uppercase tracking-widest">Project Explorer</span>
                     </div>
 
                     <div className="p-2">
-                        <FileNode name="project_root/" comment="שורש הפרויקט - נקודת המוצא" level={0} />
-                        <FileNode name="config/" comment="ניהול הגדרות ותצורה (YAML/JSON)" level={1} />
-                        <FileNode name="data/" comment="אחסון דאטהסטים (לא נשמר ב-Git)" level={1} />
-                        <FileNode name="raw/" comment="נתונים מקוריים (בלתי ניתנים לשינוי)" level={2} />
-                        <FileNode name="processed/" comment="נתונים נקיים לאחר Preprocessing" level={2} />
-                        <FileNode name="domain/" comment="ליבת הלוגיקה העסקית וה-ML" level={1} />
-                        <FileNode name="entities/" comment="הגדרת מבני הנתונים שלכם" level={2} />
-                        <FileNode name="src/" comment="מימוש האפליקציה (CLI / API)" level={1} />
-                        <FileNode name="infrastructure/" comment="חיבור לשירותים חיצוניים ו-DB" level={2} />
-                        <FileNode name="notebooks/" comment="מרחב המחקר והניסויים (Jupyter)" level={1} />
-                        <FileNode name="models/" comment="ארכיון המודלים המאומנים" level={1} />
-                        <FileNode name="tests/" comment="בדיקות אוטומטיות (Safety Gate)" level={1} />
-                        <FileNode name="pyproject.toml" comment="ניהול חבילות וגרסאות" level={1} isFolder={false} />
-                    </div>
-                </div>
-            </section>
-            
-            
-
-            {/* --- Engineering Pillars --- */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="group bg-slate-900/50 p-8 rounded-[2rem] border border-slate-800 hover:border-orange-500/30 transition-all shadow-lg">
-                    <div className="bg-orange-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-orange-400 mb-6 group-hover:scale-110 transition-transform">
-                        <Archive size={28} />
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">אריזה ב-Docker</h3>
-                    <p className="text-slate-400 leading-relaxed text-sm mb-6">
-                        כדי שהפרויקט יעבוד זהה בכל מחשב, אנחנו אורזים אותו בתוך &quot;קונטיינר&quot;. זה מבטיח שהמודל שאימנתם יעבוד על השרת בדיוק כפי שעבד בלפטופ.
-                    </p>
-                    <CodeBlock language="bash" dir="ltr" code={`# Building the image\ndocker build -t ai-project .`} />
-                </div>
-
-                <div className="group bg-slate-900/50 p-8 rounded-[2rem] border border-slate-800 hover:border-blue-500/30 transition-all shadow-lg">
-                    <div className="bg-blue-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform">
-                        <GitBranch size={28} />
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">אוטומציית CI/CD</h3>
-                    <p className="text-slate-400 leading-relaxed text-sm mb-6">
-                        אף אחד לא בודק קוד ידנית. בצוות מקצועי, כל &quot;Push&quot; מפעיל Pipeline שבודק איכות, מריץ בדיקות יחידה ומוודא שהכל תקין לפני הפריסה.
-                    </p>
-                    <CodeBlock language="yaml" dir="ltr" code={`name: CI\non: [push]\njobs:\n  test: { run: pytest }`} />
-                </div>
-            </section>
-
-            {/* --- Strategic Insights --- */}
-            <section className="space-y-12">
-                <div className="flex items-center gap-4 border-r-4 border-purple-500 pr-6">
-                    <ShieldCheck className="text-purple-500" size={32} />
-                    <h2 className="text-3xl font-bold text-white">השכבה החכמה: Domain Logic</h2>
-                </div>
-                <div className="bg-linear-to-br from-indigo-950/20 to-purple-950/20 p-10 rounded-[2.5rem] border border-indigo-500/20 shadow-inner">
-                    <p className="text-xl text-slate-200 leading-relaxed italic mb-8">
-                        &quot;הסוד של מערכות AI גדולות הוא לא המודל - אלא היכולת להחליף אותו בלי לשבור את המערכת.&quot;
-                    </p>
-                    <div className="text-slate-300 space-y-4 text-lg">
-                        <p>
-                            שימו לב לתיקיית ה-<code>domain</code>. היא חייבת להיות נקייה מתלויות טכניות. היא לא יודעת אם אתם משתמשים ב-AWS או ב-Azure. היא מכילה רק את ה&quot;אמת המדעית&quot; של הפרויקט שלכם.
-                        </p>
-                        <p>
-                            זה מאפשר לכם להחליף את בסיס הנתונים או את המודל עצמו בלי לשנות את קוד האפליקציה המרכזי. זה נקרא <strong>Decoupling</strong>.
-                        </p>
+                        <FileNode name="project_root/" comment="שורש הפרויקט" level={0} />
+                        <FileNode name="config/" comment="ניהול הגדרות - API Keys, Paths ופרמטרים של המודל" level={1} />
+                        <FileNode name="settings.yaml" comment="קובץ הגדרות מרכזי לקריאה קלה" level={2} isFolder={false} />
+                        <FileNode name="data/" comment="ניהול נתונים - מוחרג מניהול גרסאות הקוד (Git)" level={1} />
+                        <FileNode name="raw/" comment="נתונים גולמיים - Immutable (קריאה בלבד)" level={2} />
+                        <FileNode name="processed/" comment="נתונים מעובדים לאחר טרנספורמציה" level={2} />
+                        <FileNode name="domain/" comment="לב המערכת - הלוגיקה המדעית והמודל העסקי" level={1} />
+                        <FileNode name="entities/" comment="הגדרת אובייקטי הנתונים (Schemas)" level={2} />
+                        <FileNode name="src/" comment="Application Layer - הקוד שמחבר ומפעיל את הכל" level={1} />
+                        <FileNode name="api/" comment="חשיפת היכולות כ-Service (FastAPI / Web)" level={2} />
+                        <FileNode name="cli/" comment="ממשק שורת פקודה למשתמשי קצה" level={2} />
+                        <FileNode name="infrastructure/" comment="Adapters - חיבור לבסיסי נתונים ושירותי ענן" level={1} />
+                        <FileNode name="notebooks/" comment="מחקר ופיתוח - ניסויים מהירים ב-Jupyter" level={1} />
+                        <FileNode name="models/" comment="Model Registry - שמירת Artifacts וגרסאות מודל" level={1} />
+                        <FileNode name="tests/" comment="בקרת איכות - בדיקות יחידה ואינטגרציה אוטומטיות" level={1} />
                     </div>
                 </div>
             </section>
 
-            {/* --- Course Finale --- */}
-            <section className="py-32 text-center border-t border-slate-800">
-                <div className="relative inline-block mb-10">
-                    <div className="absolute -inset-10 bg-emerald-500/20 blur-3xl rounded-full" />
-                    <CheckCircle2 size={100} className="relative text-emerald-400 mx-auto animate-pulse" />
+            {/* --- In-Depth: Data Management --- */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-r-4 border-orange-500 pr-4">
+                    <Database className="text-orange-500" size={24} />
+                    <h2 className="text-lg font-bold text-white uppercase tracking-wide">עמוד תווך 1: שלמות הנתונים</h2>
                 </div>
-                
-                <h2 className="text-5xl font-black text-white tracking-tight mb-8">המסע הושלם. המשימה מתחילה.</h2>
-                <p className="text-2xl text-slate-400 max-w-4xl mx-auto leading-relaxed mb-16">
-                    עברתם משורת הקוד הראשונה לבניית מערכות AI הנדסיות מלאות. 
-                    מהיום, אתם לא רק כותבים קוד — אתם מעצבים את העתיד.
+                <div className="text-slate-300 space-y-4 text-base leading-relaxed">
+                    <h3 className="text-md font-bold text-white">הפרדה מבנית: Raw לעומת Processed</h3>
+                    <p>
+                        אחד האתגרים המרכזיים ב-AI הוא מניעת &quot;זיהום נתונים&quot; (Data Contamination). נתח את המקרה שבו סקריפט עיבוד משנה בטעות את נתוני המקור; במצב כזה, נאבד את היכולת להשוות את ביצועי המודל מול נקודת ייחוס אמינה.
+                    </p>
+                    <InsightBox type="warning" title="עקרון ה-Immutability">
+                        נתוני המקור (Raw Data) הם רכיב מהותי במחקר. אין לבצע עליהם פעולות כתיבה. זרימת העבודה התקינה דורשת קריאה מ-`raw`, ביצוע עיבוד בזיכרון, וכתיבת התוצאה לתיקיית `processed`. זהו הבסיס למהימנות מדעית.
+                    </InsightBox>
+                    <h3 className="text-md font-bold text-white mt-4">ניהול גרסאות נתונים</h3>
+                    <p>
+                        Git תוכנן לניהול קוד (טקסט) והוא אינו יעיל בניהול קבצים בינאריים כבדים. העלאת דאטהסטים ל-Git תאט את סביבת העבודה ותקשה על ניהול הגרסאות. הפתרון ההנדסי הוא שימוש ב-<code>.gitignore</code> להחרגת נתונים, וניהול גרסאות הדאטה באמצעות כלים ייעודיים כמו DVC או אחסון ענן.
+                    </p>
+                </div>
+            </section>
+
+            {/* --- In-Depth: Decoupling --- */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-r-4 border-purple-500 pr-4">
+                    <ShieldCheck className="text-purple-500" size={24} />
+                    <h2 className="text-lg font-bold text-white uppercase tracking-wide">עמוד תווך 2: ניתוק תלויות (Decoupling)</h2>
+                </div>
+                <div className="text-slate-300 space-y-4 text-base leading-relaxed">
+                    <p>
+                        ארכיטקטורה יציבה מפרידה בין ה-&quot;מה&quot; (הלוגיקה) לבין ה-&quot;איך&quot; (התשתית). ניתוק תלויות (Decoupling) מבטיח ששינוי טכנולוגי לא יחלחל ללב המודל.
+                    </p>
+                    <div className="bg-slate-800/20 p-6 rounded-xl border border-slate-700 space-y-4">
+                        <div className="flex items-start gap-4">
+                            <Code2 className="text-blue-400 mt-1" size={20} />
+                            <div>
+                                <h4 className="text-white font-bold">שכבת ה-Domain</h4>
+                                <p className="text-sm opacity-80 text-right">המיקוד כאן הוא בבעיה המדעית: ניתוח טקסט או חיזוי. הקוד כאן אינו מודע לשאלה האם הנתונים מגיעים מקובץ מקומי או מבסיס נתונים מרוחק.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-4 border-t border-slate-700 pt-4">
+                            <Terminal className="text-emerald-400 mt-1" size={20} />
+                            <div>
+                                <h4 className="text-white font-bold">שכבת ה-Infrastructure</h4>
+                                <p className="text-sm opacity-80 text-right">כאן מנוהלים ה&quot;פרטים הטכניים&quot;: התחברות לשרתים וניהול לוגים. אלו הם הצינורות שדרכם זורמים הנתונים אל ה-Domain.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- In-Depth: CI/CD & Automation --- */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-r-4 border-indigo-500 pr-4">
+                    <GitBranch className="text-indigo-500" size={24} />
+                    <h2 className="text-lg font-bold text-white uppercase tracking-wide">עמוד תווך 3: אוטומציה ובקרת איכות</h2>
+                </div>
+                <div className="text-slate-300 space-y-4 text-base leading-relaxed">
+                    <p>
+                        מערכת AI מקצועית מחייבת תהליכי בדיקה אוטומטיים (CI/CD). מטרתם לוודא שכל עדכון קוד אינו פוגע בביצועי המערכת הקיימת.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-6">
+                        <div className="space-y-4">
+                            <h4 className="text-white font-bold">תהליך עבודה הנדסי</h4>
+                            <ul className="list-decimal list-inside space-y-2 text-sm opacity-80">
+                                <li>ביצוע Push לשרת הניהול.</li>
+                                <li>שרת אוטומציה בונה סביבת עבודה נקייה.</li>
+                                <li>ביצוע בדיקות יחידה (Unit Tests).</li>
+                                <li>אימות שלמות הנתונים ותקינות המודל.</li>
+                            </ul>
+                        </div>
+                        <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 shadow-2xl" dir="ltr">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Zap size={14} className="text-yellow-400" />
+                                <span className="text-[10px] text-slate-500 font-mono">automated_qa_workflow.yml</span>
+                            </div>
+                            <CodeBlock language="yaml" code={`name: Quality Assurance\non: [push]\njobs:\n  run_tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install -r requirements.txt\n      - run: pytest tests/`} />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- Finale --- */}
+            <section className="py-20 text-center border-t border-slate-800">
+                <div className="relative inline-block mb-6">
+                    <div className="absolute -inset-8 bg-emerald-500/10 blur-3xl rounded-full" />
+                    <CheckCircle2 size={64} className="relative text-emerald-400 mx-auto animate-pulse" />
+                </div>
+                <h2 className="text-xl font-black text-white tracking-tight mb-4">המסע הושלם. המשימה מתחילה.</h2>
+                <p className="text-base text-slate-400 max-w-3xl mx-auto leading-relaxed mb-10">
+                    למדתם את היסודות והארכיטקטורה הנדרשת. מהיום, הידע שצברתם מאפשר לכם לבנות מערכות בינה מלאכותית שלמות ויציבות. הקוד הוא הכלי, והארכיטקטורה היא הדרך להשגת פתרונות משמעותיים.
                 </p>
-
-                <div className="flex flex-col sm:flex-row justify-center gap-6">
-                    <button className="flex items-center justify-center gap-3 px-12 py-6 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full font-black text-2xl transition-all shadow-2xl hover:scale-105 active:scale-95">
-                        <Share2 size={24} /> שתפו את תעודת הסיום
-                    </button>
-                    <button className="flex items-center justify-center gap-3 px-12 py-6 bg-slate-800 hover:bg-slate-700 text-white rounded-full font-black text-2xl transition-all border border-slate-700 hover:scale-105">
-                        <Globe size={24} /> צפו בפרויקטים נוספים
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <button className="flex items-center justify-center gap-2 px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full font-bold text-base transition-all shadow-lg hover:scale-105">
+                        <Share2 size={18} /> שיתוף הצלחה
                     </button>
                 </div>
             </section>
 
         </div>
 
-        {/* --- Final Quiz --- */}
-        <section className="mt-32">
+        {/* --- Final Master Quiz --- */}
+        <section className="mt-20">
             <Quiz 
-                title="מבדק אדריכלות סופי"
+                title="מבחן ארכיטקטורה מסכם"
                 questions={[
                     {
                         id: 1,
-                        question: "מדוע הפרדת ה-Domain לתיקייה נפרדת היא קריטית?",
+                        question: "מהי המטרה העיקרית של הפרדת שכבת ה-Domain משכבת ה-Infrastructure?",
                         options: [
-                            "כדי שהקוד ייראה ארוך יותר ומקצועי",
-                            "כדי לבודד את הלוגיקה המדעית מטכנולוגיות משתנות כמו ענן או בסיסי נתונים",
-                            "כי פייתון דורשת זאת",
-                            "אין לזה חשיבות ממשית"
+                            "להפוך את מבנה הפרויקט ליפה יותר",
+                            "לאפשר תחזוקה של הלוגיקה המדעית ללא תלות בטכנולוגיות התשתית",
+                            "לצמצם את כמות שורות הקוד בפרויקט",
+                            "זוהי דרישה טכנית של שפת פייתון"
                         ],
                         correctAnswer: 1,
-                        explanation: "בידוד הלוגיקה מאפשר תחזוקה קלה והחלפת רכיבי תשתית ללא סיכון הליבה של ה-AI."
+                        explanation: "ניתוק תלויות (Decoupling) מאפשר גמישות ועדכון רכיבים טכנולוגיים ללא סיכון ליבת המערכת."
+                    },
+                    {
+                        id: 2,
+                        question: "מדוע נתוני מקור (Raw Data) נחשבים לערך מהותי שאין לשנותו?",
+                        options: [
+                            "כדי לחסוך מקום באחסון הנתונים",
+                            "כדי להבטיח את היכולת לשחזר ניסויים (Reproducibility) ולמנוע זיהום נתונים",
+                            "כי פייתון אינה מאפשרת כתיבה לקבצי מקור",
+                            "אין לכך סיבה הנדסית ממשית"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "נתונים גולמיים מהווים את נקודת הייחוס לכל עיבוד עתידי; שינוי שלהם פוגע באמינות המחקר והתוצאות."
                     }
                 ]} 
             />
