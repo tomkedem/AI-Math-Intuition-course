@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-// הוספנו את ArrowRight לרשימת האייקונים
 import { Circle, PlayCircle, Menu, X, Terminal, Sigma, BrainCircuit, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { courses } from "@/lib/courseData"; 
@@ -11,20 +10,31 @@ import { courses } from "@/lib/courseData";
 export function CourseSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 1. זיהוי הקורס
+  // פתרון הריצוד: שימוש ב-useLayoutEffect לביצוע הגלילה לפני הציור על המסך
+  // פתרון שגיאת ה-Lint: אנחנו מוותרים על ה-isReady state ומשתמשים במיקום ה-Scroll בלבד
+  useLayoutEffect(() => {
+    const savedScrollPos = sessionStorage.getItem('sidebar-scroll-pos');
+    if (savedScrollPos && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = parseInt(savedScrollPos, 10);
+    }
+  }, []);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    sessionStorage.setItem('sidebar-scroll-pos', target.scrollTop.toString());
+  };
+
+  // זיהוי הקורס - תיקון שגיאת prefer-const
   const segments = pathname?.split('/').filter(Boolean) || [];
-  let currentCourseId = segments[0];
-  
-  // הגנה: אם הקורס לא מזוהה, נשתמש במתמטיקה כברירת מחדל (או נחזיר null)
-  if (!courses[currentCourseId]) {
-      currentCourseId = 'math'; 
-  }
+  const initialCourseId = segments[0] || 'math';
+  const currentCourseId = courses[initialCourseId] ? initialCourseId : 'math';
   
   const course = courses[currentCourseId];
   if (!course) return null;
 
-  // חישוב התקדמות
+  // חישוב התקדמות - בשימוש בתוך ה-UI
   const currentChapterIndex = course.chapters.findIndex(c => c.href === pathname);
   const safeIndex = currentChapterIndex === -1 ? 0 : currentChapterIndex;
   const progress = Math.round(((safeIndex + 1) / course.chapters.length) * 100);
@@ -48,9 +58,7 @@ export function CourseSidebar() {
   const sidebarContent = (
       <div className="flex flex-col h-full bg-[#0f172a]">
           {/* Header */}
-          <div className="p-6 border-b border-slate-800">
-            
-            {/* --- כפתור חזרה ללובי (חדש) --- */}
+          <div className="p-6 border-b border-slate-800 shrink-0">
             <Link 
                 href="/" 
                 className="flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-indigo-400 transition-colors mb-6 group"
@@ -85,7 +93,6 @@ export function CourseSidebar() {
             {/* User Card */}
             <div className="flex items-center bg-[#1E293B] rounded-2xl p-3 gap-3 w-full shadow-lg border border-slate-700/50 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                
                 <div className="relative shrink-0">
                     <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md border-2 border-blue-400">
                         תק
@@ -116,7 +123,11 @@ export function CourseSidebar() {
           </div>
 
           {/* Navigation List */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-0.5">
+          <div 
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-0.5"
+          >
               <div className="text-[10px] font-bold text-slate-500 mb-2 px-2 uppercase tracking-widest opacity-70 mt-2">
                   תוכן העניינים
               </div>

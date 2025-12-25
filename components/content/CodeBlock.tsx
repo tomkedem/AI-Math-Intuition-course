@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Prism from 'prismjs';
+// ערכות נושא ורכיבי שפה
 import 'prismjs/themes/prism-tomorrow.css'; 
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-javascript'; 
 import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-yaml'; // <-- הוספנו תמיכה ב-YAML
+import 'prismjs/components/prism-yaml';
 import { Check, Copy, FileCode, Play, Terminal } from 'lucide-react';
 
 interface CodeBlockProps {
     code: string;
-    // עדכנו את הטיפוסים המותרים:
     language?: 'python' | 'bash' | 'javascript' | 'json' | 'yaml' | 'toml';
     filename?: string;
     output?: string;
@@ -20,12 +20,17 @@ interface CodeBlockProps {
 }
 
 export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python', filename, output, dir = 'auto' }) => {
-    const [copied, setCopied] = useState(false);
-    const [showOutput, setShowOutput] = useState(false);
-    const [isRunning, setIsRunning] = useState(false);
+    const [copied, setCopied] = React.useState(false);
+    const [showOutput, setShowOutput] = React.useState(false);
+    const [isRunning, setIsRunning] = React.useState(false);
+    const codeRef = useRef<HTMLElement>(null);
 
+    // טיפול ב-Highlighting בתוך useEffect אחד
+    // זה קורה רק בצד הלקוח, ולכן אין צורך ב-isMounted state נפרד
     useEffect(() => {
-        Prism.highlightAll();
+        if (codeRef.current) {
+            Prism.highlightElement(codeRef.current);
+        }
     }, [code, language, showOutput]);
 
     const handleCopy = () => {
@@ -95,8 +100,14 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'python',
 
             {/* Code Area */}
             <div className="relative overflow-x-auto custom-scrollbar">
-                <pre className="m-0! p-4! bg-transparent! text-sm! leading-relaxed font-mono">
-                    <code className={`language-${language}`}>
+                <pre 
+                    className={`m-0! p-4! bg-transparent! text-sm! leading-relaxed font-mono language-${language}`}
+                    suppressHydrationWarning
+                >
+                    <code 
+                        ref={codeRef}
+                        className={`language-${language}`}
+                    >
                         {code.trim()}
                     </code>
                 </pre>
