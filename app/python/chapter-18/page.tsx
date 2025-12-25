@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { ChapterLayout } from '@/components/ChapterLayout';
-import { CodeBlock } from '@/components/content/CodeBlock';
 import { Quiz } from '@/components/content/Quiz';
 import { InsightBox } from '@/components/content/InsightBox';
 import { 
@@ -10,6 +10,12 @@ import {
     Share2, ShieldCheck, Globe, Folder, File, 
     Cpu, Database, Zap, Microscope, Boxes, Terminal, Code2
 } from 'lucide-react';
+
+// פתרון Hydration: טעינה דינמית של בלוק הקוד רק בצד הלקוח
+const CodeBlock = dynamic(() => import('@/components/content/CodeBlock').then(mod => mod.CodeBlock), { 
+  ssr: false,
+  loading: () => <div className="h-24 w-full bg-slate-900/50 animate-pulse rounded-xl" />
+});
 
 interface FileNodeProps {
   name: string;
@@ -106,33 +112,24 @@ export default function Chapter18() {
                 </p>
 
                 <div className="bg-[#020617] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-                    <div className="bg-slate-900 px-4 py-2 border-b border-slate-800 flex justify-between items-center">
-                        <span className="text-slate-500 font-mono text-[10px] uppercase tracking-tighter">Production-Ready Directory Layout</span>
-                        <div className="flex gap-1">
-                            <div className="w-2 h-2 rounded-full bg-slate-700" />
-                            <div className="w-2 h-2 rounded-full bg-slate-700" />
-                        </div>
-                    </div>
-
                     <div className="p-2">
                         <FileNode name="project_root/" comment="שורש הפרויקט" level={0} />
-                        <FileNode name="config/" comment="ניהול הגדרות - API Keys, Paths ופרמטרים של המודל" level={1} />
-                        <FileNode name="settings.yaml" comment="קובץ הגדרות מרכזי לקריאה קלה" level={2} isFolder={false} />
+                        <FileNode name="config/" comment="ניהול הגדרות - API Keys, Paths ופרמטרים" level={1} />
+                        <FileNode name="settings.yaml" comment="קובץ הגדרות מרכזי" level={2} isFolder={false} />
                         <FileNode name="data/" comment="ניהול נתונים - מוחרג מניהול גרסאות הקוד (Git)" level={1} />
                         <FileNode name="raw/" comment="נתונים גולמיים - Immutable (קריאה בלבד)" level={2} />
                         <FileNode name="processed/" comment="נתונים מעובדים לאחר טרנספורמציה" level={2} />
                         <FileNode name="domain/" comment="לב המערכת - הלוגיקה המדעית והמודל העסקי" level={1} />
-                        <FileNode name="entities/" comment="הגדרת אובייקטי הנתונים (Schemas)" level={2} />
                         <FileNode name="src/" comment="Application Layer - הקוד שמחבר ומפעיל את הכל" level={1} />
                         <FileNode name="api/" comment="חשיפת היכולות כ-Service (FastAPI / Web)" level={2} />
-                        <FileNode name="cli/" comment="ממשק שורת פקודה למשתמשי קצה" level={2} />
                         <FileNode name="infrastructure/" comment="Adapters - חיבור לבסיסי נתונים ושירותי ענן" level={1} />
-                        <FileNode name="notebooks/" comment="מחקר ופיתוח - ניסויים מהירים ב-Jupyter" level={1} />
                         <FileNode name="models/" comment="Model Registry - שמירת Artifacts וגרסאות מודל" level={1} />
                         <FileNode name="tests/" comment="בקרת איכות - בדיקות יחידה ואינטגרציה אוטומטיות" level={1} />
                     </div>
                 </div>
             </section>
+
+            
 
             {/* --- In-Depth: Data Management --- */}
             <section className="space-y-6">
@@ -153,6 +150,7 @@ export default function Chapter18() {
                         Git תוכנן לניהול קוד (טקסט) והוא אינו יעיל בניהול קבצים בינאריים כבדים. העלאת דאטהסטים ל-Git תאט את סביבת העבודה ותקשה על ניהול הגרסאות. הפתרון ההנדסי הוא שימוש ב-<code>.gitignore</code> להחרגת נתונים, וניהול גרסאות הדאטה באמצעות כלים ייעודיים כמו DVC או אחסון ענן.
                     </p>
                 </div>
+                
             </section>
 
             {/* --- In-Depth: Decoupling --- */}
@@ -182,6 +180,7 @@ export default function Chapter18() {
                         </div>
                     </div>
                 </div>
+                
             </section>
 
             {/* --- In-Depth: CI/CD & Automation --- */}
@@ -205,10 +204,6 @@ export default function Chapter18() {
                             </ul>
                         </div>
                         <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 shadow-2xl" dir="ltr">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Zap size={14} className="text-yellow-400" />
-                                <span className="text-[10px] text-slate-500 font-mono">automated_qa_workflow.yml</span>
-                            </div>
                             <CodeBlock language="yaml" code={`name: Quality Assurance\non: [push]\njobs:\n  run_tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install -r requirements.txt\n      - run: pytest tests/`} />
                         </div>
                     </div>
@@ -222,7 +217,7 @@ export default function Chapter18() {
                     <CheckCircle2 size={64} className="relative text-emerald-400 mx-auto animate-pulse" />
                 </div>
                 <h2 className="text-xl font-black text-white tracking-tight mb-4">המסע הושלם. המשימה מתחילה.</h2>
-                <p className="text-base text-slate-400 max-w-3xl mx-auto leading-relaxed mb-10">
+                <p className="text-base text-slate-400 max-w-4xl mx-auto leading-relaxed mb-10">
                     למדתם את היסודות והארכיטקטורה הנדרשת. מהיום, הידע שצברתם מאפשר לכם לבנות מערכות בינה מלאכותית שלמות ויציבות. הקוד הוא הכלי, והארכיטקטורה היא הדרך להשגת פתרונות משמעותיים.
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -234,7 +229,6 @@ export default function Chapter18() {
 
         </div>
 
-        {/* --- Final Master Quiz --- */}
         <section className="mt-20">
             <Quiz 
                 title="מבחן ארכיטקטורה מסכם"
@@ -255,8 +249,8 @@ export default function Chapter18() {
                         id: 2,
                         question: "מדוע נתוני מקור (Raw Data) נחשבים לערך מהותי שאין לשנותו?",
                         options: [
-                            "כדי לחסוך מקום באחסון הנתונים",
                             "כדי להבטיח את היכולת לשחזר ניסויים (Reproducibility) ולמנוע זיהום נתונים",
+                            "כדי לחסוך מקום באחסון הנתונים",
                             "כי פייתון אינה מאפשרת כתיבה לקבצי מקור",
                             "אין לכך סיבה הנדסית ממשית"
                         ],
