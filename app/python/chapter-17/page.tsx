@@ -47,11 +47,11 @@ export default function Chapter17() {
                 <div className="space-y-4 text-slate-300 leading-relaxed">
                     <p>
                         בעולם ה-AI, אנחנו עובדים עם המון נתונים (Data) והמון ניסויים (Notebooks/Tests). 
-                        אם נזרוק הכל לתיקייה אחת, נאבד שליטה. 
+                        אם נזרוק הכל לתיקייה אחת, נאבד שליטה מהר מאוד.
                     </p>
-                    <p className="bg-blue-500/10 p-4 rounded-lg border-r-2 border-blue-400 italic">
-                        <strong>ההסבר ההנדסי:</strong> הפרדת ה-<code>src</code> מה-<code>tests</code> מאפשרת לנו להפיץ רק את הקוד הנחוץ ללקוח, מבלי להכביד עליו עם קבצי בדיקה ונתוני גלם.
-                    </p>
+                    <div className="bg-blue-500/10 p-6 rounded-lg border-r-2 border-blue-400 italic">
+                        <strong>ההסבר ההנדסי:</strong> הפרדת ה-<code>src</code> (קוד מקור) מה-<code>tests</code> (בדיקות) מאפשרת לנו להפיץ רק את הקוד הנחוץ ללקוח או לשרת ה-Production. בנוסף, שמירת הנתונים בתיקיית <code>data</code> נפרדת מאפשרת לנהל גרסאות של המידע מבלי לנפח את קובץ הקוד. מבנה זה מבטיח שהפרויקט שלכם יוכל לגדול מסימולציה קטנה למערכת בקנה מידה רחב.
+                    </div>
                     <h4 className="font-bold text-white mt-4">המשימה:</h4>
                     <ul className="list-disc list-inside space-y-2">
                         <li>צרו תיקיית שורש בשם <code>mini_text_analyzer</code>.</li>
@@ -71,11 +71,12 @@ export default function Chapter17() {
                         <p className="text-indigo-400 font-mono text-sm uppercase">Phase: Data Processing</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
+                <div className="space-y-4 text-slate-300 leading-relaxed">
                     <p>לפני שכל מודל AI (כמו GPT) נוגע בטקסט, הוא עובר תהליך של <strong>Preprocessing</strong>.</p>
-                    <p className="bg-indigo-500/10 p-4 rounded-lg border-r-2 border-indigo-400">
-                        <strong>ההסבר ההנדסי:</strong> מחשבים לא מבינים &quot;שלום&quot; ו-&quot;שלום!&quot; כשני דברים שונים. נירמול (Normalization) מסיר סימני פיסוק ורווחים מיותרים כדי שהניתוח הסטטיסטי יהיה מדויק.
-                    </p>
+                    
+                    <div className="bg-indigo-500/10 p-6 rounded-lg border-r-2 border-indigo-400">
+                        <strong>ההסבר ההנדסי המעמיק:</strong> מחשבים לא מבינים סמנטיקה באופן טבעי. עבורם, {`"שלום"`} ו-{`"שלום!"`} הן שתי ישויות שונות לחלוטין. נירמול (Normalization) מסיר {`"רעש"`} (סימני פיסוק, רווחים, אותיות גדולות) כדי שהניתוח הסטטיסטי יתמקד בתוכן המהותי. טוקניזציה נכונה היא הצעד הראשון בייצוג טקסט כווקטורים מתמטיים.
+                    </div>
                 </div>
                 <LiveCodeEditor 
                     initialCode={`import re
@@ -104,10 +105,10 @@ def tokenize(text: str) -> list[str]:
                 <div className="space-y-4 text-slate-300">
                     <p>כשפרויקט גדל, קובץ אחד הופך למפלצת. אנחנו מפרידים לוגיקה לעזרים (Utils).</p>
                     <InsightBox type="info" title="למה זה קריטי?">
-                        דמיין שתרצה להשתמש ב-<code>tokenize</code> בפרויקט אחר. אם היא קבורה בתוך סקריפט ה-Pipeline, תצטרך להעתיק-הדבק. אם היא ב-<code>text_utils.py</code>, פשוט תייבא אותה.
+                        אם למשל תרצה להשתמש ב-<code>tokenize</code> בפרויקט אחר בעתיד. אם היא קבורה בתוך סקריפט ה-Pipeline הראשי, תצטרך להעתיק-הדבק. אם היא ב-<code>text_utils.py</code>, פשוט תייבא אותה כחלק מחבילה מסודרת ונקייה.
                     </InsightBox>
                     <p className="font-bold text-white">המשימה:</p>
-                    <p>העבר את פונקציות הניקוי לקובץ <code>src/text_utils.py</code> וודא שיש קובץ <code>__init__.py</code> בתיקייה כדי לאפשר ייבוא.</p>
+                    <p>העבר את פונקציות הניקוי לקובץ <code>src/text_utils.py</code> וודא שיש קובץ <code>__init__.py</code> בתיקייה כדי לאפשר ייבוא תקין בין המודולים השונים.</p>
                 </div>
             </section>
 
@@ -120,11 +121,11 @@ def tokenize(text: str) -> list[str]:
                         <p className="text-yellow-400 font-mono text-sm uppercase">Phase: Configuration</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p>לעולם אל תכתוב נתיבי קבצים או API Keys בתוך הקוד (Hardcoding)!</p>
-                    <p className="bg-yellow-500/10 p-4 rounded-lg border-r-2 border-yellow-400">
-                        <strong>ההסבר ההנדסי:</strong> שימוש ב-JSON מאפשר לנו לשנות את שפת הניתוח או את קובץ הקלט בלי &quot;לפתוח את המנוע&quot; (הקוד). זה מאפשר לאנשים שהם לא מתכנתים להגדיר את המערכת.
-                    </p>
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p>לעולם אל תכתוב נתיבי קבצים או מפתחות סודיים בתוך הקוד (Hardcoding)!</p>
+                    <div className="bg-yellow-500/10 p-6 rounded-lg border-r-2 border-yellow-400">
+                        <strong>ההסבר ההנדסי:</strong> שימוש בקובץ <code>config.json</code> חיצוני מאפשר לנו לשנות את התנהגות המערכת (כמו קובץ הקלט או שפת הניתוח) בלי {`"לפתוח את המנוע"`} ולגעת בקוד המקור. זהו עקרון קריטי בבניית תוכנה שצריכה לרוץ בסביבות שונות (Dev, Staging, Production).
+                    </div>
                 </div>
                 <LiveCodeEditor 
                     initialCode={`import json, pathlib
@@ -147,11 +148,11 @@ def load_config(path: str = "config.json") -> dict:
                         <p className="text-red-400 font-mono text-sm uppercase">Phase: Error Handling</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p>במערכות AI, נתונים יכולים להיות פגומים או חסרים. אסור למערכת &quot;להתרסק&quot;.</p>
-                    <p className="bg-red-500/10 p-4 rounded-lg border-r-2 border-red-400">
-                        <strong>ההסבר ההנדסי:</strong> <code>logging</code> הוא הקופסה השחורה של המהנדס. כשהמערכת תרוץ על שרת בענן ב-3 בלילה, הלוגים יהיו הדרך היחידה שלך לדעת למה היא נכשלה.
-                    </p>
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p>במערכות AI, נתונים יכולים להיות פגומים, חסרים או בפורמט לא תקין. אסור למערכת פשוט {`"להתרסק"`}.</p>
+                    <div className="bg-red-500/10 p-6 rounded-lg border-r-2 border-red-400">
+                        <strong>ההסבר ההנדסי:</strong> מנגנון ה-<code>logging</code> הוא הקופסה השחורה של המהנדס. כשהמערכת תרוץ על שרת מרוחק ב-3 בלילה, הלוגים יהיו הדרך היחידה שלכם להבין למה היא נכשלה, היכן נוצרה החריגה (Exception) ואיך לתקן אותה במהירות.
+                    </div>
                 </div>
                 <CodeBlock language="python" dir="ltr" code={`import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -159,7 +160,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 try:
     config = load_config()
 except FileNotFoundError:
-    logging.error("Critical failure: config.json not found.")
+    logging.error("Critical failure: config.json not found. Check project root.")
     raise`} />
             </section>
 
@@ -172,9 +173,9 @@ except FileNotFoundError:
                         <p className="text-emerald-400 font-mono text-sm uppercase">Phase: OOP Design</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p>אנחנו בונים &quot;מכונת עיבוד&quot; אחת שמרכזת הכל. אובייקט (Class) הוא הדרך לאגד את ההגדרות (Config) יחד עם הפעולות (Methods).</p>
-                    
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p>אנחנו בונים {`"מכונת עיבוד"`} אחת שמרכזת הכל. אובייקט (Class) הוא הדרך הטובה ביותר לאגד את ההגדרות (Config) יחד עם הפעולות (Methods).</p>
+                    <p>במקום להעביר את המילון <code>config</code> לכל פונקציה בנפרד, המחלקה שומרת אותו בתוך ה-<code>self</code>, מה שמאפשר לכל חלקי המערכת לגשת להגדרות בצורה עקבית ומאובטחת.</p>
                 </div>
                 <LiveCodeEditor 
                     initialCode={`class TextPipeline:
@@ -183,8 +184,9 @@ except FileNotFoundError:
         self.results = {}
 
     def run_clean(self, raw_text: str) -> str:
-        # השתמש ב-normalize וב-tokenize
-        return " ".join(tokenize(normalize(raw_text)))`}
+        # המשימה: השתמשו ב-normalize וב-tokenize שבניתם קודם
+        tokens = tokenize(normalize(raw_text))
+        return " ".join(tokens)`}
                     onRun={() => "Pipeline engine blueprint created successfully."}
                 />
             </section>
@@ -198,9 +200,9 @@ except FileNotFoundError:
                         <p className="text-orange-400 font-mono text-sm uppercase">Phase: Pro Code Standards</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p><strong>טיפוסים:</strong> הוסף <code>-&gt; dict</code> ו-<code>: list[str]</code>. זה מונע 90% משגיאות הריצה בצוותים גדולים.</p>
-                    <p><strong>מדידה:</strong> ב-AI, זמן זה כסף. השתמש בדקורטור <code>@measure_time</code> כדי לגלות אילו קבצים לוקחים יותר מדי זמן לעיבוד.</p>
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p><strong>Type Hints:</strong> הוספת הגדרות טיפוסים (כמו <code>list[str]</code>) עוזרת ל-IDE שלכם למצוא טעויות עוד לפני שהרצתם את הקוד. זהו סטנדרט חובה בצוותי פיתוח מודרניים.</p>
+                    <p><strong>מדידה:</strong> ב-AI, זמן עיבוד שווה כסף (GPU/CPU cycles). השתמשו בדקורטור <code>@measure_time</code> שיצרנו כדי לנטר כמה מילי-שניות לוקח לכל שלב ב-Pipeline ולזהות צווארי בקבוק.</p>
                 </div>
             </section>
 
@@ -213,12 +215,13 @@ except FileNotFoundError:
                         <p className="text-pink-400 font-mono text-sm uppercase">Phase: Quality Assurance</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p>בדיקות הן לא מטרד, הן תעודת הביטוח שלך. מה יקרה אם תעדכן את ה-Regex ותהרוס בטעות את הניקוי?</p>
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p>בדיקות הן לא מטרד, הן תעודת הביטוח שלכם. מה יקרה אם מחר תעדכנו את ה-Regex כדי לתמוך בעברית, ותהרוס בטעות את התמיכה באנגלית?</p>
+                    <p>כתיבת בדיקות יחידה (Unit Tests) מבטיחה שכל רכיב במערכת מתפקד בדיוק כפי שצפוי, גם לאחר שינויים משמעותיים בקוד המקור.</p>
                 </div>
                 <LiveCodeEditor 
                     initialCode={`def test_text_normalization():
-    # המשימה: כתוב בדיקה שמוודאת ש-normalize הופך ל-lower case
+    # המשימה: כתבו בדיקה שמוודאת ש-normalize מטפל ברווחים ובאותיות גדולות
     sample = " DATA SCieNCE "
     expected = "data science"
     assert normalize(sample) == expected`}
@@ -236,7 +239,8 @@ except FileNotFoundError:
                     </div>
                 </div>
                 <p className="text-slate-300 leading-relaxed">
-                    למה לעבור בלולאה על מילים אם אפשר להשתמש ב-Pandas? המשימה: הפוך את ה-Tokens ל-Series וחשב את אורך המילים הממוצע (Mean) והמילים הכי נפוצות (Value Counts).
+                    למה לעבור בלולאה איטית על אלפי מילים אם אפשר להשתמש ב-Pandas? המשימה: הפכו את ה-Tokens ל-Series וחשבו את אורך המילים הממוצע (Mean) ואת מספר המילים הייחודיות.
+                    <strong> ההסבר ההנדסי:</strong> פייתון רגילה היא איטית לעיבוד נתונים מאסיבי. Pandas משתמשת ב-Vectorization (פעולות שרצות ברמת ה-C מתחת למכסה המנוע). בעיבוד מיליוני טוקנים, זה ההבדל בין שעה של המתנה לשנייה אחת.
                 </p>
                 <LiveCodeEditor 
                     initialCode={`import pandas as pd
@@ -248,7 +252,7 @@ def analyze_tokens(tokens: list[str]) -> dict:
         "avg_length": s.str.len().mean(),
         "unique_words": s.nunique()
     }`}
-                    onRun={() => "Pandas stats engine operational."}
+                    onRun={() => "Pandas stats engine operational. Speedup: 10x."}
                 />
             </section>
 
@@ -261,10 +265,10 @@ def analyze_tokens(tokens: list[str]) -> dict:
                         <p className="text-orange-500 font-mono text-sm uppercase">Phase: Application Delivery</p>
                     </div>
                 </div>
-                <div className="space-y-4 text-slate-300">
-                    <p>בנה את <code>mintx.py</code>. המטרה היא שכל משתמש יוכל להפעיל את הניתוח שלך מבלי לפתוח את העורך.</p>
+                <div className="space-y-4 text-slate-300 leading-relaxed">
+                    <p>בנו את <code>mintx.py</code> בעזרת ספריית <code>Typer</code>. המטרה היא שכל משתמש יוכל להפעיל את הניתוח שלכם מהטרמינל מבלי להכיר פייתון כלל.</p>
                     <div className="bg-black/60 p-4 rounded-lg font-mono text-emerald-400 border border-slate-700" dir="ltr">
-                        $ python mintx.py clean input.txt --output clean.txt
+                        $ python mintx.py analyze input.txt --verbose
                     </div>
                 </div>
             </section>
@@ -279,36 +283,36 @@ def analyze_tokens(tokens: list[str]) -> dict:
                     </div>
                 </div>
                 <p className="text-slate-300 leading-relaxed">
-                    זהו רגע ההרכבה הסופי. המערכת שלך מוכנה. לחץ על הכפתור כדי לראות איך הנתון זורם דרך כל השכבות שבנית ב-12 השלבים האחרונים.
+                    זהו רגע ההרכבה הסופי. המערכת שלכם מוכנה. לחצו על הכפתור למטה כדי לראות איך הנתון זורם דרך כל 12 השכבות ההנדסיות שבניתם בתיאום מושלם.
                 </p>
                 <TheBigAssembler />
             </section>
 
         </div>
 
-        {/* --- Master AI Engineer Quiz --- */}
+        {/* --- Master AI Engineer Quiz (12 Questions) --- */}
         <section className="mt-40 border-t border-slate-800 pt-20">
             <div className="text-center mb-16 space-y-4">
                 <h2 className="text-4xl font-black text-white">מבחן הסמכה: 12 עקרונות הליבה</h2>
-                <p className="text-slate-400">הוכח שליטה בכל אחד משלבי בניית המערכת</p>
+                <p className="text-slate-400">הוכיחו שליטה מוחלטת בבניית מערכות AI מורכבות</p>
             </div>
             
             <Quiz 
-                title="Capstone Exam"
+                title="Capstone Graduation Exam"
                 questions={[
                     {
                         id: 1,
                         question: "מדוע מפרידים את ה-Config לקובץ JSON חיצוני?",
                         options: ["כדי להסתיר את הקוד", "כדי לאפשר שינוי פרמטרים בלי צורך לשנות את קוד המקור", "כי פייתון לא יודעת לשמור משתנים", "כדי להאט את הריצה"],
                         correctAnswer: 1,
-                        explanation: "הפרדת תצורה מאפשרת גמישות מרבית במעבר בין סביבות (פיתוח, ענן וכו')."
+                        explanation: "הפרדת תצורה מאפשרת גמישות מרבית במעבר בין סביבות פיתוח, בדיקות וענן."
                     },
                     {
                         id: 2,
                         question: "מה תפקידו של normalize בתהליך ה-NLP?",
-                        options: ["להוסיף צבעים לטקסט", "להפוך טקסט לפורמט אחיד (למשל lowercase) למניעת כפילויות בניתוח", "למחוק את כל הקובץ", "לתרגם את הטקסט"],
+                        options: ["להוסיף צבעים לטקסט", "להפוך טקסט לפורמט אחיד למניעת כפילויות בניתוח", "למחוק את כל הקובץ", "לתרגם את הטקסט"],
                         correctAnswer: 1,
-                        explanation: "ללא נירמול, המחשב יתייחס למילים 'Apple' ו-'apple' כשתי ישויות שונות."
+                        explanation: "ללא נירמול, המחשב יתייחס למילים 'Apple' ו-'apple' כשתי ישויות שונות לחלוטין."
                     },
                     {
                         id: 3,
@@ -322,21 +326,21 @@ def analyze_tokens(tokens: list[str]) -> dict:
                         question: "מדוע נשתמש ב-logging במקום ב-print במערכת AI אמיתית?",
                         options: ["כי print לא עובד", "כדי לאפשר תיעוד מסודר לקבצים ושליטה ברמות פירוט (INFO/ERROR)", "כדי לחסוך חשמל", "כי logging יפה יותר"],
                         correctAnswer: 1,
-                        explanation: "לוגים הם הכרחיים לניטור תקלות במערכות שרצות בשרתים מרוחקים."
+                        explanation: "לוגים הם הכרחיים לניטור תקלות במערכות שרצות בשרתים מרוחקים ללא ממשק גרפי."
                     },
                     {
                         id: 5,
                         question: "מהו היתרון של שימוש ב-Type Hints (למשל list[str])?",
                         options: ["זה חובה בפייתון", "זה עוזר למנוע שגיאות לוגיות בזמן הפיתוח ומשפר את התיעוד", "זה גורם לקוד להיות איטי יותר", "אין לזה שום יתרון"],
                         correctAnswer: 1,
-                        explanation: "טיפוסים עוזרים לכלים (כמו ה-IDE) להבין מה אנחנו מצפים לקבל."
+                        explanation: "טיפוסים עוזרים לכלים (כמו ה-IDE) להבין מה אנחנו מצפים לקבל ולמנוע באגים לפני זמן הריצה."
                     },
                     {
                         id: 6,
                         question: "מה התפקיד של raise typer.Exit(code=1)?",
-                        options: ["לכבות את המחשב", "לסמן למערכת שהתהליך נכשל", "לפתוח תפריט עזרה", "להדפיס 'שלום'"],
+                        options: ["לכבות את המחשב", "לסמן למערכת שהתהליך נכשל עם קוד יציאה מתאים", "לפתוח תפריט עזרה", "להדפיס 'שלום'"],
                         correctAnswer: 1,
-                        explanation: "קודי יציאה (Exit Codes) הם הדרך של תוכנות לדבר עם מערכת ההפעלה."
+                        explanation: "קודי יציאה הם השפה שבה תוכנות מתקשרות עם מערכת ההפעלה ועם כלי אוטומציה."
                     },
                     {
                         id: 7,
@@ -350,14 +354,14 @@ def analyze_tokens(tokens: list[str]) -> dict:
                         question: "מה המטרה של בדיקות יחידה (Unit Tests)?",
                         options: ["למצוא באגים באינטרנט", "לוודא שכל חלק קטן בקוד (פונקציה) עובד בדיוק כפי שתכננו", "להאריך את זמן הפרויקט", "להחליף את המתכנת"],
                         correctAnswer: 1,
-                        explanation: "בדיקות יחידה מבטיחות ששינוי עתידי לא יהרוס פונקציונליות קיימת."
+                        explanation: "בדיקות יחידה מבטיחות ששינוי עתידי לא יהרוס פונקציונליות קיימת שכבר עובדת."
                     },
                     {
                         id: 9,
                         question: "מה המשמעות של מודולריות בקוד?",
                         options: ["כתיבת הכל בקובץ אחד", "פירוק המערכת ליחידות עצמאיות (מודולים) הניתנות לשימוש חוזר ובדיקה", "מחיקת פונקציות ישנות", "שימוש רק בטיפוסים בסיסיים"],
                         correctAnswer: 1,
-                        explanation: "מודולריות הופכת את הקוד לקריא, נקי וקל לתחזוקה."
+                        explanation: "מודולריות הופכת את הקוד לקריא, נקי וקל לתחזוקה בצוותים גדולים."
                     },
                     {
                         id: 10,
@@ -371,14 +375,14 @@ def analyze_tokens(tokens: list[str]) -> dict:
                         question: "איזה כלי מאפשר להפוך את הפרויקט לפקודה בטרמינל?",
                         options: ["Pandas", "Typer", "Regex", "Logging"],
                         correctAnswer: 1,
-                        explanation: "Typer (או argparse) בונים את ממשק המשתמש של הכלי שלנו."
+                        explanation: "Typer (או argparse) בונים את ממשק המשתמש של הכלי שלנו בשורת הפקודה."
                     },
                     {
                         id: 12,
                         question: "מהו CI/CD?",
                         options: ["שיטת כתיבה של פייתון", "אוטומציה המריצה בדיקות ופורסת קוד באופן רציף", "שם של פונקציית Pandas", "סוג של קובץ טקסט"],
                         correctAnswer: 1,
-                        explanation: "CI/CD מבטיח שכל שינוי קוד נבדק אוטומטית לפני שהוא מגיע למשתמש."
+                        explanation: "CI/CD מבטיח שכל שינוי קוד נבדק אוטומטית לפני שהוא מגיע למשתמש הקצה."
                     }
                 ]} 
             />
@@ -391,7 +395,7 @@ def analyze_tokens(tokens: list[str]) -> dict:
                 <CheckCircle2 size={80} className="text-emerald-400 mx-auto mb-8 animate-pulse" />
                 <h2 className="text-5xl font-black text-white mb-6 tracking-tighter">המשימה הושלמה.</h2>
                 <p className="text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed italic">
-                    &quot;סיימת את המסע מסטודנט למהנדס. mini_text_analyzer הוא כבר לא קוד על המסך, הוא מוצר הנדסי שבנית במו ידיך.&quot;
+                    &quot;סיימתם את המסע מסטודנט למהנדס. mini_text_analyzer הוא כבר לא קוד על המסך, הוא מוצר הנדסי שבניתם במו ידיכם.&quot;
                 </p>
                 <div className="mt-12">
                     <p className="text-emerald-400 font-mono text-sm tracking-[0.3em] uppercase">Master AI Software Engineer Certified</p>
