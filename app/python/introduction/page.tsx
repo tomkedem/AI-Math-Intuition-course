@@ -163,28 +163,20 @@ export default function PythonIntroPage() {
   return (
    <ChapterLayout courseId="python" currentChapterId={0}>
           
-          <section className="relative min-h-[65vh] flex flex-col justify-start items-center text-center space-y-6 pt-32 pb-12 overflow-hidden">
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/30 via-[#020617] to-[#020617]"></div>
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-top opacity-10 mask-[linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-            </div>    
-
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10 w-full px-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-medium mb-4 backdrop-blur-sm">
-                    <Terminal size={14} />
-                    <span>פייתון פרקטי למתכנתים</span>
-                </div>
-                <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-linear-to-b from-white via-slate-200 to-slate-500 leading-tight mb-4 drop-shadow-lg">
-                    המנוע השקט <br/>
-                    <span className="bg-linear-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">של ה-AI</span>
-                </h1>
-                <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed px-4">
-                    היא לא רק שפת סקריפטים. היא השפה שבה נבנים המודלים הגדולים בעולם. 
-                </p>
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, duration: 0.8 }} className="mt-6 px-4">
-                    <TechScannerImage />
-                </motion.div>
-            </motion.div>
+          <section className="space-y-6">
+            <div className="flex items-center gap-3 text-emerald-400 mb-2">
+                <Terminal size={24} />
+                <span className="font-mono text-sm tracking-wider uppercase">Python for AI Engineers</span>
+            </div>
+            <h1 className="text-4xl font-black text-white leading-tight">
+                המנוע השקט של ה-AI
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed">
+                היא לא רק שפת סקריפטים. היא השפה שבה נבנים המודלים הגדולים בעולם.
+            </p>
+            <div className="mt-6">
+                <TechScannerImage />
+            </div>
           </section>
 
           <section className="max-w-5xl mx-auto space-y-12 mb-28 px-4 text-right" dir="rtl">

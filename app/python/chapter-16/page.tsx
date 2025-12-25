@@ -4,16 +4,22 @@ import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
 import { Quiz } from '@/components/content/Quiz';
-import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
+
 import { CodeBlock } from '@/components/content/CodeBlock';
 import { CLITerminalSim, ArgparseVsTyper } from '@/components/demos/chapter-16';
 import { 
     Terminal as TerminalIcon, Zap, 
     Settings, Share2, Box, Download, ArrowRightLeft, ShieldCheck
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 export default function Chapter16() {
 
+    // Import the editor with SSR disabled
+const LiveCodeEditor = dynamic(() => import('@/components/content/LiveCodeEditor').then(mod => mod.LiveCodeEditor), { 
+  ssr: false,
+  loading: () => <div className="h-40 w-full bg-slate-900 animate-pulse rounded-xl" /> // Optional placeholder
+});
   // סימולציות להרצת קוד
   const simulateArgparse = (userCode: string) => {
     if (userCode.includes("--help") || userCode.includes("-h")) {
@@ -41,16 +47,21 @@ export default function Chapter16() {
             <h1 className="text-4xl font-black text-white leading-tight">
                 ממשק שורת פקודה (CLI)
             </h1>
-            
-            <div className="bg-slate-800/50 border-r-4 border-emerald-500 p-6 rounded-l-xl space-y-4 shadow-xl">
-                <h2 className="text-xl font-bold text-white">למה CLI חשוב בפרויקטי AI?</h2>
-                <p className="text-slate-300 leading-relaxed">
-                    בפרויקטי AI, גם הקוד הכי חכם חסר ערך אם אי אפשר להפעיל אותו בקלות. ממשק שורת הפקודה (CLI) הוא הדרך להפוך קוד גולמי לכלי אמיתי — כזה שאפשר להריץ, לבדוק ולשלב בתהליכים אחרים בלי לפתוח את העורך. 
-                </p>
+            <p className="text-lg text-slate-300 leading-relaxed">
+                בפרויקטי AI, גם הקוד הכי חכם חסר ערך אם אי אפשר להפעיל אותו בקלות. ממשק שורת הפקודה (CLI) הוא הדרך להפוך קוד גולמי לכלי אמיתי — כזה שאפשר להריץ, לבדוק ולשלב בתהליכים אחרים בלי לפתוח את העורך.
+            </p>
+        </section>
+
+        <section className="mt-16 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-emerald-500 pr-4 flex items-center gap-2">
+                <TerminalIcon size={24} className="text-emerald-400" />
+                למה CLI חשוב בפרויקטי AI?
+            </h3>
+            <div className="bg-slate-800/50 p-6 rounded-xl space-y-4 shadow-xl border border-slate-700">
                 <p className="text-slate-300 leading-relaxed">
                     CLI הוא לא שריד מעולם ישן, אלא שכבת השליטה הטבעית של פרויקטים חכמים. הוא מעניק דרך יציבה, מהירה ואחידה להפעיל תהליכים. בין אם מדובר בהרצת מודלים, ניקוי טקסטים או ניתוח נתונים.
                 </p>
-                <p className="text-slate-300">
+                <p className="text-slate-300 leading-relaxed">
                     נניח שבניתם כלי שמנקה טקסטים לפני שליחה למודל. בלי CLI, צריך לפתוח את הקובץ ולהריץ פונקציות מתוך הקוד. עם CLI, זה נראה כך:
                 </p>
                 <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700 font-mono text-sm text-emerald-400" dir="ltr">

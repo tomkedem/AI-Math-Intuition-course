@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { CourseHeader } from "@/components/CourseHeader";
 import { CourseSidebar } from "@/components/CourseSidebar";
@@ -20,24 +20,37 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
     currentChapterId,
     lang = 'he'
 }) => {
-    // --- 1. Hooks (תמיד בהתחלה) ---
+    // --- 1. Hooks & Refs ---
     const [isScrolled, setIsScrolled] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // פתרון לבעיית הגלילה בפרק 16: איפוס מיקום הגלילה בכל מעבר פרק
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = 0;
+        }
+    }, [currentChapterId, courseId]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+        
+        // עדכון מצב Scrolled לצורך עיצוב ה-Header
         if (!isScrolled && scrollTop > 50) setIsScrolled(true);
         else if (isScrolled && scrollTop < 30) setIsScrolled(false);
 
+        // חישוב התקדמות גלילה
         const totalScroll = scrollHeight - clientHeight;
-        if (totalScroll <= 0) { setScrollProgress(0); return; }
+        if (totalScroll <= 0) { 
+            setScrollProgress(0); 
+            return; 
+        }
         setScrollProgress((scrollTop / totalScroll) * 100);
     };
 
     // --- 2. שליפת נתונים ---
     const currentCourse = courses[courseId];
     
-    // הגנה למקרה שהקורס לא נמצא
     if (!currentCourse) {
         return <div className="text-white p-10">Error: Course &quot;{courseId}&quot; not found.</div>;
     }
@@ -45,7 +58,6 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
     const chapters = currentCourse.chapters;
     const chapterIndex = chapters.findIndex(c => c.id === currentChapterId);
     
-    // נתוני ברירת מחדל
     const activeChapter = chapters[chapterIndex] || {
         id: -1,
         num: `0`,
@@ -63,7 +75,6 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
     const nextChapter = chapters[chapterIndex + 1];
     const isIntro = currentChapterId === 0;
 
-    // הגדרות שפה
     const isRTL = lang === 'he';
     const uiText = {
         next: isRTL ? "הבא" : "Next",
@@ -72,14 +83,11 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
         finished: isRTL ? "סיימת את כל הפרקים! 🚀" : "All chapters completed! 🚀"
     };
 
-    // שליפת טקסטים
     const chapterNumDisplay = activeChapter.id === 0 ? activeChapter.num : `${uiText.chapter} ${activeChapter.id}`;
     const chapterTitle = activeChapter.title[lang];
     const chapterDesc = activeChapter.description[lang];
     const chapterLabel = activeChapter.label[lang];
 
-    // --- חילוץ צבע בסיס לשימוש ברקע ובכפתורים ---
-    // לוקח את "from-blue-400" והופך אותו ל-"blue"
     const extractColorName = (fullClass: string) => {
         return fullClass.replace('from-', '').split('-')[0];
     };
@@ -91,11 +99,9 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
             className="flex min-h-screen bg-[#050B14] font-sans text-slate-100 selection:bg-indigo-500/30 overflow-hidden relative" 
             dir={isRTL ? "rtl" : "ltr"}
         >
-            
             {/* --- רקע גלובלי --- */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                  <div className="absolute inset-0 bg-[#050B14]"></div>
-                 
                  <div className="absolute inset-0 opacity-40"> 
                     <div className="absolute inset-0" 
                         style={{ 
@@ -105,10 +111,8 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
                     ></div>
                  </div>
 
-                 {/* כדורי אור: משתמשים בצבע שחילצנו */}
                  <div className={`absolute top-[-20%] ${isRTL ? 'right-[-10%]' : 'left-[-10%]'} w-150 h-150 bg-${themeColorName}-500/20 blur-[120px] rounded-full mix-blend-screen animate-pulse`}></div>
                  <div className={`absolute bottom-[-20%] ${isRTL ? 'left-[-10%]' : 'right-[-10%]'} w-125 h-125 bg-${themeColorName}-600/10 blur-[100px] rounded-full mix-blend-screen`}></div>
-                 
                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050B14_120%)]"></div>
             </div>
 
@@ -121,7 +125,6 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
                     <div className="pointer-events-auto">
                         <CourseHeader 
                             chapterLable={chapterLabel}
-                            // מעבירים את הנתונים החדשים
                             labelColor={activeChapter.labelColor} 
                             chapterNum={chapterNumDisplay}
                             title={chapterTitle}
@@ -135,8 +138,9 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
                     </div>
                 </div>
 
-                {/* תוכן גלילה */}
+                {/* תוכן גלילה - כאן נוסף ה-Ref המטפל באיפוס הגלילה */}
                 <div 
+                    ref={scrollContainerRef}
                     className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth"
                     onScroll={handleScroll}
                 >
@@ -144,7 +148,6 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
                         ${isIntro ? 'pt-12' : 'pt-52 py-12'} 
                     `}>
                         
-                        {/* התוכן שהוזרק (הילדים) */}
                         <div className="min-h-[50vh]">
                             {children}
                         </div>
@@ -169,9 +172,7 @@ export const ChapterLayout: React.FC<ChapterLayoutProps> = ({
                             {/* קדימה */}
                             {nextChapter ? (
                                 (() => {
-                                    // חילוץ צבע דינמי לכפתור "הבא"
                                     const nextColor = extractColorName(nextChapter.colorFrom);
-                                    
                                     return (
                                         <Link href={nextChapter.href || "#"} className={`group relative overflow-hidden rounded-2xl border border-${nextColor}-500/30 bg-${nextColor}-900/10 p-6 transition-all hover:bg-${nextColor}-900/20 hover:border-${nextColor}-500/50 text-left`}>
                                             <div className={`absolute inset-0 bg-linear-to-r from-transparent via-${nextColor}-500/5 to-${nextColor}-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>

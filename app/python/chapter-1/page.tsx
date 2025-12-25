@@ -173,25 +173,18 @@ if __name__ == "__main__":
   return (
    <ChapterLayout courseId="python" currentChapterId={1}>
           
-          {/* --- HERO SECTION --- */}
-          <section className="relative min-h-[40vh] flex flex-col justify-center items-center text-center space-y-6 py-12">
-            
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-indigo-900/30 via-[#020617] to-[#020617]"></div>
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-top opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-            </div>    
-
-            <div className="relative z-10 w-full px-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-medium mb-4 backdrop-blur-sm">
-                    <Terminal size={14} />
-                    <span>פרק 1</span>
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4 drop-shadow-lg">
-                    למה פייתון היא שפה חשובה <br/>
-                    <span className="bg-linear-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">בעידן ה-AI?</span>
-                </h1>
+          {/* --- Hero Section --- */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-3 text-emerald-400 mb-2">
+                <Terminal size={24} />
+                <span className="font-mono text-sm tracking-wider uppercase">Python Foundations</span>
             </div>
+            <h1 className="text-4xl font-black text-white leading-tight">
+                למה פייתון היא שפה חשובה בעידן ה-AI?
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed">
+                בפרק הזה נהפוך את פייתון מכלי &quot;סקריפטים&quot; לשפת תשתית הנדסית שמחזיקה מערכות AI אמיתיות.
+            </p>
           </section>
 
           {/* --- פתיחה: למה אנחנו כאן? --- */}

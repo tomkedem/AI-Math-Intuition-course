@@ -19,16 +19,16 @@ export default function Chapter17() {
     <ChapterLayout courseId="python" currentChapterId={17}>
         
         {/* --- Hero Section --- */}
-        <section className="space-y-6 mb-20 text-right" dir="rtl">
-            <div className="flex items-center justify-start gap-3 text-emerald-400">
-                <Rocket size={32} className="animate-bounce" />
-                <span className="font-mono text-lg tracking-widest uppercase">The Capstone Mission</span>
+        <section className="space-y-6">
+            <div className="flex items-center gap-3 text-emerald-400 mb-2">
+                <Rocket size={24} />
+                <span className="font-mono text-sm tracking-wider uppercase">The Capstone Mission</span>
             </div>
-            <h1 className="text-5xl font-black text-white leading-tight">
+            <h1 className="text-4xl font-black text-white leading-tight">
                 בניית mini_text_analyzer
             </h1>
-            <p className="text-xl text-slate-300 max-w-4xl leading-relaxed">
-                ברוכים הבאים למעבדת ההרכבה. כאן לא רק תכתבו קוד, אלא תבנו **מערכת**. 
+            <p className="text-lg text-slate-300 leading-relaxed max-w-3xl">
+                ברוכים הבאים למעבדת ההרכבה. כאן לא רק תכתבו קוד, אלא תבנו <strong>מערכת</strong> שלמה.
                 כל תרגיל הוא לבנה נוספת בבניין. קראו את ההסבר ההנדסי לפני שתתחילו לכתוב.
             </p>
         </section>

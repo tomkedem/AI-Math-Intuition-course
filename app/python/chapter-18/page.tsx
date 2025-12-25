@@ -52,20 +52,17 @@ export default function Chapter18() {
     <ChapterLayout courseId="python" currentChapterId={18}>
         
         {/* --- Hero Section --- */}
-        <section className="relative py-10 mb-12 overflow-hidden rounded-xl bg-slate-900/40 border border-slate-800 shadow-2xl">
-            <div className="absolute top-0 right-0 w-full h-full bg-linear-to-br from-emerald-500/5 via-transparent to-blue-500/5" />
-            <div className="relative z-10 px-8 text-right" dir="rtl">
-                <div className="flex items-center justify-start gap-2 text-emerald-400 mb-3">
-                    <Cpu size={20} className="animate-pulse" />
-                    <span className="font-mono text-[10px] tracking-[0.2em] uppercase">Architecture & Scalability</span>
-                </div>
-                <h1 className="text-2xl font-black text-white leading-tight mb-4">
-                    סיכום הנדסי: בניית תשתית למוצר AI
-                </h1>
-                <p className="text-base text-slate-300 max-w-4xl leading-relaxed">
-                    הגענו לקו הסיום של מסלול פייתון ל-AI. בפרק זה נלמד כיצד לאגד את כל היכולות שרכשנו לכדי שלד (Skeleton) מקצועי. המטרה היא לעבור מכתיבת פונקציות בודדות לבניית מערכת חסינה, מודולרית וברת-הרחבה שניתן להפעיל בסביבות עבודה אמיתיות.
-                </p>
+        <section className="space-y-6">
+            <div className="flex items-center gap-3 text-emerald-400 mb-2">
+                <Cpu size={24} />
+                <span className="font-mono text-sm tracking-wider uppercase">Architecture & Scalability</span>
             </div>
+            <h1 className="text-4xl font-black text-white leading-tight">
+                סיכום הנדסי: בניית תשתית למוצר AI
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed max-w-3xl">
+                הגענו לקו הסיום של מסלול פייתון ל-AI. בפרק זה נלמד כיצד לאגד את כל היכולות שרכשנו לכדי שלד (Skeleton) מקצועי. המטרה היא לעבור מכתיבת פונקציות בודדות לבניית מערכת חסינה, מודולרית וברת-הרחבה שניתן להפעיל בסביבות עבודה אמיתיות.
+            </p>
         </section>
 
         <div className="space-y-20 text-right" dir="rtl">
