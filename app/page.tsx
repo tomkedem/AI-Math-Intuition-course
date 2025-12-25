@@ -187,7 +187,7 @@ export default function HomePage() {
 
             {/* Footer מינימלי למטה */}
             <footer className="mt-auto py-8 text-center text-slate-600 text-xs font-mono relative z-20">
-                <p>© 2025 AI Dev Track. כל הזכויות שמורות.</p>
+                <p>© 2026 AI Dev Track. כל הזכויות שמורות.</p>
             </footer>
 
         </main>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Play, Layers, Clock, Lock, FileText, CheckCircle2 } from 'lucide-react';
+import { Play, Clock, Lock, FileText } from 'lucide-react';
 import { DemoContainer } from '@/components/demos/ui/DemoShell';
 
 export const DecoratorBuilder = () => {
@@ -42,8 +42,8 @@ export const DecoratorBuilder = () => {
 
         // 5. Timer End
         if (useTimer) {
-            const duration = Date.now() - startTime;
-            newLogs.push(`⏱️ Timer: Finished in 0.002s`);
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(3);
+            newLogs.push(`⏱️ Timer: Finished in ${elapsed}s`);
         }
 
         setLogs(newLogs);

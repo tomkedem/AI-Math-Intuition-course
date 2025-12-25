@@ -6,9 +6,9 @@ import { ChapterLayout } from '@/components/ChapterLayout';
 import { Quiz } from '@/components/content/Quiz';
 import { InsightBox } from '@/components/content/InsightBox';
 import { 
-    FolderTree, Archive, GitBranch, CheckCircle2, 
-    Share2, ShieldCheck, Globe, Folder, File, 
-    Cpu, Database, Zap, Microscope, Boxes, Terminal, Code2
+    FolderTree, GitBranch, CheckCircle2, 
+    Share2, ShieldCheck, Folder, File, 
+    Cpu, Database, Boxes, Terminal, Code2
 } from 'lucide-react';
 
 // פתרון Hydration: טעינה דינמית של בלוק הקוד רק בצד הלקוח
