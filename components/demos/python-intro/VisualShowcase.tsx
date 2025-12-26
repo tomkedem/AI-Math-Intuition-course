@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
+import { ChevronDown } from "lucide-react"; // הייבוא שהיה חסר
 import { CodeBlock } from "@/components/content/CodeBlock";
 
 // הגדרת טיפוסים למניעת שגיאת any
@@ -14,10 +15,45 @@ interface XRayCardProps {
 }
 
 export const TechScannerImage = () => (
-    <div className="relative w-full max-w-5xl mx-auto h-55 md:h-70 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl group my-8">
-        <Image src="/python-hero.png" alt="Python Engineering" fill priority className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" />
-        <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-transparent to-[#020617] opacity-80" />
-        <motion.div animate={{ left: ['0%', '100%', '0%'] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute top-0 w-0.5 h-full bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] z-10 opacity-70" />
+    <div className="flex flex-col items-center">
+        <div className="relative w-full max-w-5xl mx-auto h-55 md:h-70 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl group mt-8 mb-4">
+            <Image 
+                src="/python-hero.png" 
+                alt="Python Engineering" 
+                fill 
+                priority 
+                className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-transparent to-[#020617] opacity-80" />
+            <motion.div 
+                animate={{ left: ['0%', '100%', '0%'] }} 
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }} 
+                className="absolute top-0 w-0.5 h-full bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.8)] z-10 opacity-70" 
+            />
+        </div>
+
+        {/* חץ אנימציה ורמז גלילה ללומד */}
+        <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="flex flex-col items-center gap-2 mb-8"
+        >
+            <span className="text-slate-500 text-xs font-mono tracking-widest uppercase">
+                גוללים למטה כדי להמשיך במסע
+            </span>
+            <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ 
+                    duration: 2, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                }}
+                className="text-emerald-500/70"
+            >
+                <ChevronDown size={32} strokeWidth={1} />
+            </motion.div>
+        </motion.div>
     </div>
 );
 

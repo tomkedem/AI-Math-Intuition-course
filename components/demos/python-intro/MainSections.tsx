@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from "framer-motion";
-import { Terminal, Zap, Box, Layers, Code2, ShieldCheck } from "lucide-react";
+import { Terminal, Zap, Box, Layers, ShieldCheck } from "lucide-react";
 import { CodeBlock } from "@/components/content/CodeBlock";
 
 // --- רכיב ה-Hook המרכזי: הכוח של פייתון כ-Leverage ---
@@ -67,30 +67,17 @@ export const IndustrialRoadmap = () => {
     ];
 
     return (
-        <section className="py-24 relative overflow-hidden text-right" dir="rtl">
-             <div className="flex items-center gap-4 mb-12 border-r-4 border-emerald-500 pr-6">
-                <Code2 className="text-emerald-500" size={32} />
-                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Industrial Pipeline: מהיסודות למערכות AI</h3>
-            </div>
-
-            
-
-            <div className="grid md:grid-cols-4 gap-6 relative z-10 mt-12">
-                {steps.map((step, i) => (
-                    <motion.div 
-                        key={i}
-                        whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                        className="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl hover:border-emerald-500/30 transition-all shadow-xl group"
-                    >
-                        <div className="text-[10px] font-mono text-emerald-500 mb-4 tracking-tighter uppercase opacity-60 group-hover:opacity-100">Phase {step.phase}</div>
-                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 mb-4 group-hover:bg-emerald-500/10 group-hover:text-emerald-400 transition-colors">
-                            <step.icon size={24} />
-                        </div>
-                        <h4 className="text-white font-bold mb-2">{step.title}</h4>
-                        <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
-                    </motion.div>
-                ))}
-            </div>
-        </section>
+        <div className="grid md:grid-cols-4 gap-6 mt-4">
+            {steps.map((step, i) => (
+                <motion.div key={i} className="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl transition-all shadow-xl group">
+                    <div className="text-[10px] font-mono text-emerald-500 mb-4 uppercase opacity-60">Phase {step.phase}</div>
+                    <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 mb-4 group-hover:text-emerald-400">
+                        <step.icon size={24} />
+                    </div>
+                    <h4 className="text-white font-bold mb-2 text-right" dir="rtl">{step.title}</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed text-right" dir="rtl">{step.desc}</p>
+                </motion.div>
+            ))}
+        </div>
     );
 };
