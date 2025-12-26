@@ -65,7 +65,7 @@ export const FireText = ({ text, suffix }: { text: string; suffix: string }) => 
 
       {/* הטקסט האמיתי - עכשיו אתה שולט בגודל דרך ה-className כאן! */}
       <h1 className="relative z-10 text-3xl md:text-4xl font-black tracking-tighter inline-flex gap-4">
-        <span className="bg-gradient-to-b from-white via-yellow-400 to-orange-600 bg-clip-text text-transparent drop-shadow-sm">
+        <span className="bg-linear-to-b from-white via-yellow-400 to-orange-600 bg-clip-text text-transparent drop-shadow-sm">
           {text}
         </span>
         <span className="text-white">
