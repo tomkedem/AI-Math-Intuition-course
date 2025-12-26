@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { 
     Terminal, 
     ChevronLeft
@@ -9,6 +11,9 @@ import Link from 'next/link';
 import { motion } from "framer-motion";
 import { ChapterLayout } from '@/components/ChapterLayout';
 
+// ייבוא המנטור החדש
+import { SmartMentor } from "@/components/mentor/SmartMentor";
+
 // ייבוא הרכיבים מהתיקיות שבנית
 import { 
     IndustrialRoadmap, 
@@ -17,13 +22,34 @@ import {
     CodeShowcase 
 } from "@/components/demos/python-intro";
 
-// שים לב לשורה הזו - היא חייבת לכלול export default
 export default function PythonIntroPage() {
+  // מצב המנטור - שולט במיקום ובטקסט שלו
+  const [activeSection, setActiveSection] = useState('hero');
+
+  // הגדרת ה-Observers לכל חלק בדף
+  const { ref: heroRef } = useInView({ 
+    threshold: 0.3, 
+    onChange: (inView) => { if (inView) setActiveSection('hero'); } 
+  });
+  
+  const { ref: codeRef } = useInView({ 
+    threshold: 0.3, 
+    onChange: (inView) => { if (inView) setActiveSection('code'); } 
+  });
+  
+  const { ref: roadmapRef } = useInView({ 
+    threshold: 0.3, 
+    onChange: (inView) => { if (inView) setActiveSection('roadmap'); } 
+  });
+
   return (
     <ChapterLayout courseId="python" currentChapterId={0}>
           
+          {/* המנטור הצף שמלווה את המסע */}
+          <SmartMentor activeSection={activeSection} />
+          
           {/* --- Hero Section --- */}
-          <section className="pt-40 flex flex-col text-center">
+          <section ref={heroRef} className="pt-40 flex flex-col text-center">
             <div className="flex items-center gap-3 text-emerald-400 mb-2">
                 <Terminal size={20} />
                 <span className="font-mono text-xs tracking-wider uppercase">Introduction</span>
@@ -42,13 +68,13 @@ export default function PythonIntroPage() {
                 </p>
             </div>
 
-            <div className="w-full max-w-4xl px-4 mt-10">
+            <div className="w-full max-w-4xl px-4 mt-10 mx-auto">
                 <TechScannerImage />
             </div>
           </section>
 
           {/* --- הוכחת היכולת: הסבר + קוד --- */}
-          <section className="w-full py-16 bg-slate-950/30 border-y border-slate-900 mt-12 text-right" dir="rtl">
+          <section ref={codeRef} className="w-full py-16 bg-slate-950/30 border-y border-slate-900 mt-12 text-right" dir="rtl">
              <div className="max-w-5xl mx-auto px-6 mb-10">
                 <h3 className="text-2xl font-bold text-white mb-4 italic underline underline-offset-8 decoration-emerald-500/50">למה פייתון? הוכחת המהירות (Velocity)</h3>
                 <p className="text-slate-400 text-lg leading-relaxed">
@@ -75,7 +101,7 @@ export default function PythonIntroPage() {
           </section>
 
           {/* --- Industrial Pipeline --- */}
-          <section className="w-full max-w-7xl mx-auto py-16 px-6 text-right" dir="rtl">
+          <section ref={roadmapRef} className="w-full max-w-7xl mx-auto py-16 px-6 text-right" dir="rtl">
                 <div className="relative inline-flex flex-col mb-10 pr-6">
                     <div className="absolute right-0 top-0 w-1.5 h-full bg-emerald-500 rounded-full" />
                     <h2 className="text-3xl font-black text-white uppercase tracking-wider leading-none">

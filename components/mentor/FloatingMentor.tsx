@@ -37,7 +37,7 @@ export const FloatingMentor = ({ script }: { script: Record<string, string> }) =
         {/* האווטר שלך */}
         <div className="relative w-24 h-24 rounded-full border-2 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] overflow-hidden bg-slate-950">
           <Image 
-            src="/assets/mentor-avatar.png" 
+            src="./assets/mentor-avatar.png" 
             alt="Mentor" 
             fill 
             className="object-cover"
