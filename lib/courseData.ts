@@ -30,13 +30,13 @@ export const courses: Record<string, CourseData> = {
     
     // --- קורס 1: מתמטיקה אינטואיטיבית ---
     mathIntuitive: {
-        id: "math-intuitive",
+        id: "mathIntuitive",
         title: { he: "מתמטיקה אינטואיטיבית ל-AI", en: "Intuitive Math for AI" },
         description: { he: "הבסיס המתמטי שכל מפתח AI חייב להכיר", en: "The mathematical foundation every AI developer needs" },
         chapters: [
             {
                 id: 0,
-                href: "/math/intuitive/introduction",
+                href: "/math/mathIntuitive/introduction",
                 num: "מבוא",
                 label: { he: "ברוכים הבאים", en: "Welcome" },
                 title: { he: "מבוא: להסיר את הווילון מעל ה-AI", en: "Intro: Unveiling the AI Black Box" },
@@ -48,7 +48,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 1,
-                href: "/math/intuitive/chapter-1",
+                href: "/math/mathIntuitive/chapter-1",
                 num: "פרק 1",
                 label: { he: "הבסיס: מתמטיקה", en: "The Math Basis" },
                 title: { he: "למה מתמטיקה היא חלק מהעבודה?", en: "Why is Math Part of the Job?" },
@@ -60,7 +60,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 2,
-                href: "/math/intuitive/chapter-2",
+                href: "/math/mathIntuitive/chapter-2",
                 num: "פרק 2",
                 label: { he: "סטטיסטיקה", en: "Statistics" },
                 title: { he: "ממוצע, חציון וסטיית תקן – בלי סיבוכים", en: "Mean, Median, Std Dev - Made Simple" },
@@ -72,7 +72,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 3,
-                href: "/math/intuitive/chapter-3",
+                href: "/math/mathIntuitive/chapter-3",
                 num: "פרק 3",
                 label: { he: "הסתברות למתכנתים", en: "Probability" },
                 title: { he: "הסתברות שמדברת בשפה של מתכנת", en: "Probability for Developers" },
@@ -84,7 +84,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 4,
-                href: "/math/intuitive/chapter-4",
+                href: "/math/mathIntuitive/chapter-4",
                 num: "פרק 4",
                 label: { he: "בייס והתניה", en: "Bayes & Conditionals" },
                 title: { he: "הסתברות מותנית ובייס – הגרסה האנושית", en: "Conditional Probability & Bayes" },
@@ -96,7 +96,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 5,
-                href: "/math/intuitive/chapter-5",
+                href: "/math/mathIntuitive/chapter-5",
                 num: "פרק 5",
                 label: { he: "וקטורים ב-AI", en: "Vectors" },
                 title: { he: "וקטורים – הלב של כל מודל", en: "Vectors - The Heart of Every Model" },
@@ -108,7 +108,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 6,
-                href: "/math/intuitive/chapter-6",
+                href: "/math/mathIntuitive/chapter-6",
                 num: "פרק 6",
                 label: { he: "נורמה ומרחק", en: "Norms & Distance" },
                 title: { he: "נורמה ומרחק – מודדים את העולם", en: "Norms & Distance" },
@@ -120,7 +120,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 7,
-                href: "/math/intuitive/chapter-7",
+                href: "/math/mathIntuitive/chapter-7",
                 num: "פרק 7",
                 label: { he: "דמיון קוסינוס", en: "Cosine Similarity" },
                 title: { he: "זווית ודמיון קוסינוס", en: "Angle & Cosine Similarity" },
@@ -132,7 +132,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 8,
-                href: "/math/intuitive/chapter-8",
+                href: "/math/mathIntuitive/chapter-8",
                 num: "פרק 8",
                 label: { he: "פונקציות ועקומות", en: "Functions" },
                 title: { he: "פונקציות – איך מודל חושב", en: "Functions - How Models Think" },
@@ -144,7 +144,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 9,
-                href: "/math/intuitive/chapter-9",
+                href: "/math/mathIntuitive/chapter-9",
                 num: "פרק 9",
                 label: { he: "שיפוע (Slope)", en: "Slope" },
                 title: { he: "שיפוע – המנוע של הלמידה", en: "Slope - The Engine of Learning" },
@@ -156,7 +156,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 10,
-                href: "/math/intuitive/chapter-10",
+                href: "/math/mathIntuitive/chapter-10",
                 num: "פרק 10",
                 label: { he: "Gradient Descent", en: "Gradient Descent" },
                 title: { he: "Gradient Descent – הלמידה עצמה", en: "Gradient Descent - The Learning Itself" },
@@ -168,7 +168,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 11,
-                href: "/math/intuitive/chapter-11",
+                href: "/math/mathIntuitive/chapter-11",
                 num: "פרק 11",
                 label: { he: "פרויקט סיום", en: "Final Project" },
                 title: { he: "פרויקט סיום – mini_math_primer", en: "Final Project - mini_math_primer" },
@@ -180,7 +180,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 12,
-                href: "/math/intuitive/chapter-12",
+                href: "/math/mathIntuitive/chapter-12",
                 num: "פרק 12",
                 label: { he: "סיכום וחיבור ל-ML", en: "Summary" },
                 title: { he: "איך כל זה מתחבר ל-ML ול-NLP", en: "Connecting to Machine Learning" },
@@ -432,13 +432,13 @@ export const courses: Record<string, CourseData> = {
 
     // --- קורס 3: מתמטיקה והיגיון הסתברותי ---
     mathProbabilistic: {
-        id: "math-probabilistic",
+        id: "mathProbabilistic",
         title: { he: "מתמטיקה והיגיון הסתברותי", en: "Math & Probabilistic Logic" },
         description: { he: "להבין את המספרים שמאחורי ההחלטות", en: "Understanding the numbers behind decisions" },
         chapters: [
             {
                 id: 0,
-                href: "/math/probabilistic/introduction",
+                href: "/math/mathProbabilistic/introduction",
                 num: "מבוא",
                 label: { he: "פתיחה", en: "Intro" },
                 title: { he: "מבוא: לנהל שיחה עם המודל", en: "Intro: Conversing with the Model" },
@@ -450,7 +450,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 1,
-                href: "/math/probabilistic/chapter-1",
+                href: "/math/mathProbabilistic/chapter-1",
                 num: "פרק 1",
                 label: { he: "המתמטיקה", en: "The Math" },
                 title: { he: "למה צריך מתמטיקה יישומית?", en: "Why Applied Math?" },
@@ -462,7 +462,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 2,
-                href: "/math/probabilistic/chapter-2",
+                href: "/math/mathProbabilistic/chapter-2",
                 num: "פרק 2",
                 label: { he: "גיאומטריה", en: "Geometry" },
                 title: { he: "וקטורים ומטריצות – הגיאומטריה של ה-AI", en: "Vectors & Matrices" },
@@ -474,7 +474,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 3,
-                href: "/math/probabilistic/chapter-3",
+                href: "/math/mathProbabilistic/chapter-3",
                 num: "פרק 3",
                 label: { he: "סטטיסטיקה", en: "Statistics" },
                 title: { he: "סטטיסטיקה תיאורית והבנת דאטה", en: "Descriptive Stats" },
@@ -486,7 +486,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 4,
-                href: "/math/probabilistic/chapter-4",
+                href: "/math/mathProbabilistic/chapter-4",
                 num: "פרק 4",
                 label: { he: "הסתברות", en: "Probability" },
                 title: { he: "היגיון הסתברותי וקבלת החלטות", en: "Probabilistic Logic" },
@@ -498,7 +498,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 5,
-                href: "/math/probabilistic/chapter-5",
+                href: "/math/mathProbabilistic/chapter-5",
                 num: "פרק 5",
                 label: { he: "פונקציות עלות", en: "Loss Functions" },
                 title: { he: "פונקציות עלות – איך מודל מרגיש שטעה", en: "Loss Functions" },
@@ -510,7 +510,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 6,
-                href: "/math/probabilistic/chapter-6",
+                href: "/math/mathProbabilistic/chapter-6",
                 num: "פרק 6",
                 label: { he: "Gradient Descent", en: "Gradient Descent" },
                 title: { he: "Gradient Descent – מנוע הלמידה", en: "Gradient Descent" },
@@ -522,7 +522,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 7,
-                href: "/math/probabilistic/chapter-7",
+                href: "/math/mathProbabilistic/chapter-7",
                 num: "פרק 7",
                 label: { he: "מוצר ו-AI", en: "Product & AI" },
                 title: { he: "תרגום שאלות מוצר למודלים הסתברותיים", en: "Product Questions to Models" },
@@ -534,7 +534,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 8,
-                href: "/math/probabilistic/chapter-8",
+                href: "/math/mathProbabilistic/chapter-8",
                 num: "פרק 8",
                 label: { he: "טעויות נפוצות", en: "Common Mistakes" },
                 title: { he: "דפוסים שגויים ואיך לתקן אותם", en: "Patterns & Fixes" },
@@ -546,7 +546,7 @@ export const courses: Record<string, CourseData> = {
             },
             {
                 id: 9,
-                href: "/math/probabilistic/chapter-9",
+                href: "/math/mathProbabilistic/chapter-9",
                 num: "פרק 9",
                 label: { he: "פרויקט", en: "Project" },
                 title: { he: "פרויקט סיום: mini_mathlab", en: "Final Project" },

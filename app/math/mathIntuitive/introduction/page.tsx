@@ -118,7 +118,7 @@ const VectorDemo = () => {
 
 export default function IntroPage() {
   return (
-   <ChapterLayout courseId="math"currentChapterId={0}>
+   <ChapterLayout courseId="mathIntuitive"currentChapterId={0}>
           
           {/* --- HERO SECTION משודרג עם תמונה --- */}
          <section className="relative min-h-[80vh] flex flex-col justify-center items-center text-center space-y-8 py-12 overflow-hidden">
@@ -128,8 +128,6 @@ export default function IntroPage() {
                     src="/0a0f6cf1-3f4f-4205-b7d2-888396fd8529.png"
                     alt="AI Math Background"
                     fill
-                    // שינוי 1: הסרתי את mix-blend-screen והגדלתי את ה-opacity
-                    // זה ישמור על הצבעים המקוריים אבל יכהה אותם מעט כדי לא להסתנוור
                     className="object-cover opacity-80" 
                     priority
                 />
