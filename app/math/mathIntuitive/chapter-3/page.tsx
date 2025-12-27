@@ -310,7 +310,7 @@ export default function ChapterThree() {
   return (
   
       
-      <ChapterLayout courseId="math" currentChapterId={3}>
+      <ChapterLayout courseId="mathIntuitive" currentChapterId={3}>
           
           {/* סעיף 1: הסתברות כתדירות */}
           <section id="part-1" className="scroll-mt-24">

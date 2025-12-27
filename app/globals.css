@@ -186,3 +186,18 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
   .custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(148, 163, 184, 0.2) transparent; }
 }
+
+/* globals.css */
+
+@layer base {
+  button, 
+  [role="button"],
+  a,
+  select,
+  input[type="submit"],
+  input[type="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer !important;
+  }
+}

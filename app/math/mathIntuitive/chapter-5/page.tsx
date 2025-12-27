@@ -528,7 +528,7 @@ export default function ChapterFive() {
   return (
    
           
-            <ChapterLayout courseId="math" currentChapterId={5}>
+            <ChapterLayout courseId="mathIntuitive" currentChapterId={5}>
         
             {/* סעיף 1: איך אובייקט הופך לוקטור */}
             <section id="part-1" className="scroll-mt-24 mb-8">

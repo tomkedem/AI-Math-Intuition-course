@@ -179,7 +179,7 @@ x = x - lr * slope(x)
                                     <div className="w-full pt-6 border-t border-slate-800 flex items-center justify-between">
                                         <span className="text-xs font-mono text-slate-500 flex items-center gap-2">
                                             <BookOpen size={14} />
-                                            {originalCourseData.chapters.length} פרקים
+                                            {originalCourseData.chapters.length - 1} פרקים
                                         </span>
                                         <span className="flex items-center gap-2 text-sm font-bold text-white group-hover:-translate-x-1 transition-transform">
                                             התחל ללמוד

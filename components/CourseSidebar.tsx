@@ -26,10 +26,18 @@ export function CourseSidebar() {
     sessionStorage.setItem('sidebar-scroll-pos', target.scrollTop.toString());
   };
 
-  // זיהוי הקורס - תיקון שגיאת prefer-const
-  const segments = pathname?.split('/').filter(Boolean) || [];
-  const initialCourseId = segments[0] || 'math';
-  const currentCourseId = courses[initialCourseId] ? initialCourseId : 'math';
+  // הלוגיקה החדשה והחכמה יותר:
+const segments = pathname?.split('/').filter(Boolean) || [];
+
+// אם החלק הראשון הוא 'math', ניקח את החלק השני כ-ID של הקורס
+// אחרת, ניקח את החלק הראשון (עבור קורסים כמו 'python')
+let courseIdFromPath = segments[0];
+
+if (segments[0] === 'math' && segments[1]) {
+  courseIdFromPath = segments[1];
+}
+
+const currentCourseId = courses[courseIdFromPath] ? courseIdFromPath : 'mathIntuitive';
   
   const course = courses[currentCourseId];
   if (!course) return null;
