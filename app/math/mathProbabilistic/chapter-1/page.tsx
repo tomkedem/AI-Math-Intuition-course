@@ -1,343 +1,317 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
-import { Button } from "@/components/ui/button";
+import React from 'react';
 import { 
-  ChevronLeft, Terminal, Play, Check, Brain, 
-  Target, Zap, Activity, Fingerprint, Compass, Eye, 
-  ShieldAlert, TrendingUp, Cpu, Layers, AlertTriangle,
-  Info, Sparkles, Scale, Code2, Database,
-  Binary, Gauge, X, Lightbulb, MousePointer2
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import Link from 'next/link';
+    Binary, Compass, Target, Layers, 
+    ShieldAlert, Zap, MousePointer2, BrainCircuit,
+    LineChart, Terminal, GraduationCap, ArrowRightLeft
+} from 'lucide-react';
+
+import { InsightBox } from '@/components/content/InsightBox';
+import { CodeBlock } from '@/components/content/CodeBlock';
 import { ChapterLayout } from '@/components/ChapterLayout';
+import { AssessmentEngine } from '@/components/content/AssessmentEngine';
 
-// --- רכיבים פנימיים משופרים עם הנעה לפעולה ---
+// רכיבי המעבדות המקומיים
+import { VectorLab } from './components/VectorLab';
+import { DistanceSim } from './components/DistanceSim';
 
-const VectorDNAModule = () => {
-    const [word, setWord] = useState("AI");
-    const vector = useMemo(() => {
-        const seed = word.length || 1;
-        return Array.from({ length: 8 }, (_, i) => {
-            const val = (Math.sin(seed * (i + 1)) + 1) / 2;
-            return parseFloat(val.toFixed(2));
-        });
-    }, [word]);
+export default function Chapter1() {
 
-    return (
-        <div className="bg-slate-900/60 border border-emerald-500/30 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-emerald-500/20 rotate-12 pointer-events-none"><MousePointer2 size={64}/></div>
-            <div className="flex items-center gap-3 justify-end mb-4">
-                <h4 className="text-emerald-400 font-black text-xl tracking-tighter">מעבדה 01: יצירת DNA וקטורי</h4>
-                <div className="p-2 bg-emerald-500/20 rounded-xl text-emerald-400"><Fingerprint size={20} /></div>
-            </div>
-            
-            <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-2xl mb-6 text-right">
-                <p className="text-xs text-emerald-300 font-bold flex items-center justify-end gap-2 italic">
-                    <Zap size={14}/> הוראות למפעיל:
-                </p>
-                <p className="text-[13px] text-slate-400 mt-1">
-                    הקלד מילים בעלות אופי שונה (למשל: &quot;שמחה&quot; לעומת &quot;מחשב&quot;) וצפה כיצד חתימת המספרים של המודל משתנה בזמן אמת.
-                </p>
-            </div>
+  // --- Code Snippets & Outputs ---
+  
+  const vectorInitCode = `import numpy as np
 
-            <div className="bg-black/40 p-6 rounded-2xl border border-slate-800 space-y-6 relative z-10">
-                <div className="text-right">
-                    <input 
-                        type="text" value={word} onChange={(e) => setWord(e.target.value)}
-                        className="w-full bg-slate-950 border-b-2 border-emerald-500/30 py-2 text-white text-right font-mono text-xl outline-none focus:border-emerald-400 transition-colors"
-                        placeholder="כתוב כאן..."
-                    />
-                </div>
-                <div className="flex items-end justify-center gap-2 h-24">
-                    {vector.map((val, i) => (
-                        <motion.div key={i} animate={{ height: `${val * 100}%` }}
-                            className="w-4 bg-emerald-500/40 border-t border-emerald-400 rounded-t-sm" />
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
+# וקטור המייצג תכונות מופשטות של מילה
+v = np.array([0.3, 1.2, 4.8])
 
-const CosineSimilarityModule = () => {
-    const [angle, setAngle] = useState(45);
-    const similarity = Math.cos((angle * Math.PI) / 180).toFixed(3);
+print("Vector:", v)`;
+  const vectorInitOutput = `Vector: [0.3 1.2 4.8]`;
 
-    return (
-        <div className="bg-slate-900/60 border border-blue-500/30 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-md text-right">
-            <h4 className="text-blue-400 font-black text-xl mb-4 flex items-center gap-2 justify-end">
-                מעבדה 02: ניווט סמנטי <Compass size={20} />
-            </h4>
-            
-            <div className="bg-blue-500/5 border border-blue-500/20 p-4 rounded-2xl mb-6">
-                <p className="text-xs text-blue-300 font-bold flex items-center justify-end gap-2 italic">
-                    <Zap size={14}/> הוראות למפעיל:
-                </p>
-                <p className="text-[13px] text-slate-400 mt-1">
-                    גרור את הסליידר כדי לשנות את הזווית בין שני רעיונות. שים לב כיצד ב-NLP, זווית של 0 מעידה על זהות מוחלטת בכוונות המודל.
-                </p>
-            </div>
+  const distanceCalcCode = `import numpy as np
 
-            <div className="flex flex-col items-center gap-6 py-4 bg-black/40 rounded-3xl border border-slate-800">
-                <div className="text-5xl font-mono font-black text-white">{similarity}</div>
-                <div className="w-full px-6 space-y-4">
-                    <input 
-                        type="range" min="0" max="180" value={angle} onChange={(e) => setAngle(parseInt(e.target.value))}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    />
-                    <div className="flex justify-between text-[10px] text-slate-500 font-black">
-                        <span>180° (מנוגד)</span>
-                        <span>0° (זהה)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
+a = np.array([1.0, 2.0, 3.0])
+b = np.array([1.5, 2.3, 2.7])
 
-// --- רכיב מבחן משודרג עם משוב לכל שאלה ---
-const CertificationQuiz = () => {
-    const [answers, setAnswers] = useState<Record<number, number>>({});
-    const [showFeedback, setShowFeedback] = useState<Record<number, boolean>>({});
-    const [submitted, setSubmitted] = useState(false);
-    
-    const questions = [
-        {
-            id: 1,
-            q: "מדוע המודל מתרגם טקסט ותמונות לוקטורים של מספרים?",
-            options: [
-                "כדי לחסוך מקום בזיכרון השרת",
-                "כדי שיוכל לבצע חישובים מתמטיים כמו מרחק וזווית להבנת דמיון",
-                "כדי שהמשתמשים לא יוכלו להעתיק את קוד המקור"
-            ],
-            correct: 1,
-            explanation: "נכון מאוד! מחשבים לא מבינים 'משמעות' אנושית, הם מבינים רק פעולות חשבוניות על רשימות של מספרים (וקטורים)."
-        },
-        {
-            id: 2,
-            q: "מהי המשמעות המעשית של 'לוס' (Loss) עבור מפתח AI?",
-            options: [
-                "מדד לכמות הנתונים שנמחקו בטעות",
-                "חישוב של זמן התגובה של ה-API",
-                "מדד לשגיאה שאומר למודל כמה הוא רחוק מהמטרה ואיך להשתפר"
-            ],
-            correct: 2,
-            explanation: "בדיוק. הלוס הוא ה'דלק' של הלמידה. ללא מדידת טעות, למודל אין דרך לדעת לאיזה כיוון לעדכן את המשקולות שלו."
-        },
-        {
-            id: 3,
-            q: "מתי נעדיף להשתמש בדמיון קוסינוס על פני מרחק אוקלידי?",
-            options: [
-                "בכל פעם שאנו עובדים עם קבצי Excel",
-                "כשהכיוון הרעיוני חשוב לנו יותר מגודל הוקטור האבסולוטי (NLP)",
-                "כשאנו רוצים שהמודל ירוץ מהר יותר על המעבד"
-            ],
-            correct: 1,
-            explanation: "נכון. בטקסט (Embeddings), הכיוון של הוקטור מייצג את הקונספט, בעוד שהאורך יכול להשתנות בגלל אורך המשפט בלבד."
-        }
-    ];
+# חישוב מרחק אוקלידי (Euclidean Distance)
+distance = np.linalg.norm(a - b)
+print("Distance:", distance)`;
+  const distanceCalcOutput = `Distance: 0.655`;
 
-    const score = Object.keys(answers).filter(id => answers[Number(id)] === questions[Number(id)-1].correct).length;
+  const cosineSimCode = `import numpy as np
 
-    return (
-        <div className="max-w-3xl mx-auto py-24 border-t border-slate-800 mt-32">
-            <div className="text-center mb-16 space-y-4">
-                <div className="inline-block p-3 bg-indigo-500/10 rounded-2xl text-indigo-400 mb-2 border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.1)]"><Gauge size={32} /></div>
-                <h3 className="text-4xl font-black text-white tracking-tight">מבחן הסמכה: פרק 1</h3>
-                <p className="text-slate-400 text-sm">הפעל את האינטואיציה שצברת וענה על השאלות כדי להתקדם.</p>
-            </div>
+a = np.array([1.0, 2.0, 3.0])
+b = np.array([1.0, 2.0, 2.5])
 
-            <div className="space-y-10">
-                {questions.map((q) => {
-                    const isAnswered = answers[q.id] !== undefined;
-                    const isCorrect = answers[q.id] === q.correct;
-                    
-                    return (
-                        <div key={q.id} className={`bg-slate-900/40 border p-8 rounded-[2.5rem] text-right transition-all duration-500 ${isAnswered ? (isCorrect ? 'border-green-500/30 shadow-[0_0_40px_rgba(34,197,94,0.05)]' : 'border-red-500/30 shadow-[0_0_40px_rgba(239,68,68,0.05)]') : 'border-slate-800'}`}>
-                            <p className="text-white font-bold text-lg mb-6 leading-tight">{q.q}</p>
-                            <div className="grid gap-3">
-                                {q.options.map((opt, oIdx) => (
-                                    <button 
-                                        key={oIdx} 
-                                        onClick={() => {
-                                            if (!submitted) {
-                                                setAnswers({...answers, [q.id]: oIdx});
-                                                setShowFeedback({...showFeedback, [q.id]: true});
-                                            }
-                                        }}
-                                        className={`p-4 rounded-2xl text-right transition-all border text-sm cursor-pointer relative overflow-hidden group
-                                            ${answers[q.id] === oIdx 
-                                                ? (oIdx === q.correct ? 'border-green-500 bg-green-500/10 text-white' : 'border-red-500 bg-red-500/10 text-white') 
-                                                : 'border-slate-800 bg-black/20 text-slate-400 hover:border-slate-600'}`}
-                                        disabled={submitted}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span>{opt}</span>
-                                            {answers[q.id] === oIdx && (oIdx === q.correct ? <Check size={18} className="text-green-400"/> : <X size={18} className="text-red-400"/>)}
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
-                            
-                            <AnimatePresence>
-                                {showFeedback[q.id] && (
-                                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`mt-6 p-5 rounded-2xl border flex items-start gap-3 justify-end ${isCorrect ? 'bg-green-500/5 border-green-500/20 text-green-400/90' : 'bg-red-500/5 border-red-500/20 text-red-400/90'}`}>
-                                        <div className="text-sm font-medium leading-relaxed italic">{isCorrect ? q.explanation : "לא בדיוק. נסה לחשוב שוב על הצורך של המחשב לתרגם משמעות לשפה שהוא מכיר - מספרים."}</div>
-                                        <Lightbulb size={18} className="shrink-0 mt-1"/>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    );
-                })}
-            </div>
-            
-            <div className="mt-16 text-center">
-                {!submitted ? (
-                    <Button 
-                        onClick={() => setSubmitted(true)} 
-                        disabled={Object.keys(answers).length < 3}
-                        className="h-16 px-16 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-black text-xl shadow-2xl shadow-indigo-500/20 cursor-pointer disabled:opacity-30 transition-all"
-                    >
-                        סיום והסמכה
-                    </Button>
-                ) : (
-                    <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="p-10 bg-slate-900 border-2 border-indigo-500/30 rounded-[3rem] shadow-3xl">
-                        <div className="mb-6">
-                            <span className="text-slate-500 uppercase tracking-widest text-[10px] font-black">Final Score</span>
-                            <div className="text-6xl font-black text-white">{Math.round((score/3)*100)}%</div>
-                        </div>
-                        {score === 3 ? (
-                            <Link href="/math/mathProbabilistic/chapter-2">
-                                <Button className="h-16 px-12 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full font-bold cursor-pointer gap-3 text-lg transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-emerald-500/20">
-                                    מעולה! המשך לפרק 2 <ChevronLeft size={22}/>
-                                </Button>
-                            </Link>
-                        ) : (
-                            <Button onClick={() => {setSubmitted(false); setAnswers({}); setShowFeedback({});}} className="h-14 px-10 bg-red-600/20 text-red-400 rounded-full font-bold cursor-pointer border border-red-500/20 hover:bg-red-600/30 transition-all">
-                                נסה שוב - נדרשים 100% למעבר
-                            </Button>
-                        )}
-                    </motion.div>
-                )}
-            </div>
-        </div>
-    );
-};
+dot_product = np.dot(a, b)
+norm_a = np.linalg.norm(a)
+norm_b = np.linalg.norm(b)
 
-export default function ChapterOne() {
+# דמיון קוסינוס - בוחן את הזווית בין הוקטורים
+cosine_sim = dot_product / (norm_a * norm_b)
+print("Cosine Similarity:", cosine_sim)`;
+  const cosineSimOutput = `Cosine Similarity: 0.985`;
+
+  const gradientStepCode = `def loss(x): return (x - 3) ** 2
+def slope(x): return 2 * (x - 3)
+
+x = -1        # ניחוש התחלתי
+lr = 0.1      # קצב למידה (Learning Rate)
+
+# צעד אחד של Gradient Descent להקטנת השגיאה
+x = x - lr * slope(x)
+
+print(f"Loss after step: {loss(x):.4f}")`;
+  const gradientStepOutput = `Loss after step: 10.2400`;
+
+  const dataSensitivityCode = `import numpy as np
+
+x = np.array([1, 2, 3, 4])
+y = np.array([2, 4, 6, 8]) # יחס מושלם y=2x
+
+# הוספת שינוי זעיר (0.8) לנקודה אחת
+y_modified = y.copy()
+y_modified[2] += 0.8 
+
+slope_modified = np.sum(x * y_modified) / np.sum(x * x)
+print(f"Modified slope: {slope_modified:.3f}")`;
+  const dataSensitivityOutput = `Modified slope: 2.114`;
+
+  // --- Quiz Questions (5 Standardized Questions) ---
+  const questions = [
+    {
+        id: 1,
+        question: "מהי המשמעות המעשית של 'מיקום וקטורי' עבור מודל AI?",
+        options: [
+            "כמות הזיכרון שהמילה תופסת בשרת",
+            "כתובת גיאומטרית במרחב סמנטי המגדירה את ה'משמעות' של הנתון",
+            "המספר הסידורי של המילה במילון",
+            "דירוג הפופולריות של המילה"
+        ],
+        correctAnswer: 1,
+        explanation: "וקטור הוא הדרך של המודל לייצג משמעות כמיקום גיאומטרי. פריטים קרובים במרחב נתפסים כדומים רעיונית."
+    },
+    {
+        id: 2,
+        question: "כיצד 'דמיון קוסינוס' עוזר לנו מעבר למרחק רגיל?",
+        options: [
+            "הוא מהיר יותר לחישוב",
+            "הוא בוחן את כיוון המחשבה (הקשר) ולא רק את עוצמתה",
+            "הוא מוחק נתונים מיותרים",
+            "הוא מחשב את מספר האותיות"
+        ],
+        correctAnswer: 1,
+        explanation: "דמיון קוסינוס בודק את הזווית. אם שני וקטורים מצביעים לאותו כיוון, הם חולקים את אותו הקשר סמנטי."
+    },
+    {
+        id: 3,
+        question: "מדוע שגיאת ה'לוס' (Loss) נחשבת ל'דלק' של הלמידה?",
+        options: [
+            "כי היא מחממת את המעבד",
+            "כי המודל לומד רק על ידי זיהוי הפער בין הניבוי למציאות וניסיון לצמצם אותו",
+            "כי היא מנקה באגים בקוד",
+            "כי היא קובעת את מהירות האינטרנט"
+        ],
+        correctAnswer: 1,
+        explanation: "למידה היא תהליך אופטימיזציה. בלי לדעת כמה הוא טעה (Loss), למודל אין מצפן לשיפור."
+    },
+    {
+        id: 4,
+        question: "מה תפקידו של מנגנון ה-Gradient Descent?",
+        options: [
+            "הוא מאחל את משקולות המודל מחדש",
+            "הוא מחשב את הדרך הקצרה ביותר להגיע למינימום של פונקציית הלוס",
+            "הוא מוחק נתונים שהמודל כבר למד",
+            "הוא מייצר וקטורים חדשים"
+        ],
+        correctAnswer: 1,
+        explanation: "Gradient Descent הוא מנגנון הניווט המתמטי שמאפשר למודל להבין לאיזה כיוון עליו להשתנות כדי להקטין את השגיאה."
+    },
+    {
+        id: 5,
+        question: "מה קורה כאשר המודל סובל מ'הטיה' (Bias) בנתונים?",
+        options: [
+            "הוא לומד את הטעות כחלק מהמציאות ומפיק תוצאות מוטות באופן עקבי",
+            "הוא פשוט מפסיק לעבוד",
+            "הוא לומד מהר יותר",
+            "הוא משתמש בפחות זיכרון"
+        ],
+        correctAnswer: 0,
+        explanation: "מודלים מגיבים למספרים. אם הדאטה מוטה, המודל ילמד טעות יציבה ויתרגם אותה לניבויים שגויים."
+    }
+  ];
+
   return (
     <ChapterLayout courseId="mathProbabilistic" currentChapterId={1}>
         
-        {/* פתיחה דרמטית (תוכן מקורי) */}
-        <section className="relative pt-16 pb-20 text-right">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto px-4">
-                <div className="flex items-center gap-3 justify-end mb-8">
-                    <span className="bg-emerald-500/10 text-emerald-400 px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase border border-emerald-500/20">Learning Protocol: Alpha</span>
+        {/* --- Hero Section --- */}
+        <section className="space-y-6">
+            <div className="flex items-center gap-3 text-blue-400 mb-2">
+                <Terminal size={24} />
+                <span className="font-mono text-sm tracking-wider uppercase">Math Foundations 01</span>
+            </div>
+            <h1 className="text-4xl font-black text-white leading-tight">
+                למה אנחנו צריכים מתמטיקה יישומית בעולם של AI?
+            </h1>
+            <p className="text-lg text-slate-300 leading-relaxed">
+                בכל פעולה שהמודל מבצע - מסכם טקסט, משלים קוד או מסווג תמונה - מתרחש שם משחק מתמטי מדויק. 
+                כאן נבין איך משמעות הופכת לגיאומטריה ושגיאות הופכות ללמידה.
+            </p>
+            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex gap-4 mt-6">
+                <BrainCircuit className="text-blue-500 shrink-0" size={24} />
+                <div>
+                    <h4 className="font-bold text-white mb-1">הקופסה השחורה נפתחת</h4>
+                    <p className="text-sm text-slate-400">
+                        כשמבינים את ההיגיון שמאחורי המספרים, המודל מפסיק להיות קסם. במקום לנחש, תוכל להגיד בביטחון אם התוצאה הגיונית או שהדאטה מטעה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        {/* --- 1. וקטורים --- */}
+        <section className="mt-16 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-blue-500 pr-4 flex items-center gap-2 text-right">
+                <Layers size={24} className="text-blue-500"/>
+                וקטורים: ה-DNA של המידע
+            </h3>
+            
+            <p className="text-slate-300">
+                המודל מתרגם כל פיסת מידע לוקטור - רשימה מסודרת של מספרים המייצגת משמעות במרחב רב-ממדי.
+            </p>
+            
+            <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
+                <VectorLab />
+            </div>
+
+            <CodeBlock 
+                language="python" 
+                code={vectorInitCode} 
+                output={vectorInitOutput} 
+            />
+
+            <InsightBox type="intuition" title="וקטור הוא כתובת">
+                תחשוב על וקטור כעל כתובת GPS במרחב ה&quot;משמעות&quot;. מושגים דומים יגורו באותה שכונה מתמטית.
+            </InsightBox>
+        </section>
+
+        {/* --- 2. נורמות ומרחקים --- */}
+        <section className="mt-20 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-emerald-500 pr-4 flex items-center gap-2 text-right">
+                <Compass size={24} className="text-emerald-400"/>
+                נורמות ומרחקים: הגיאומטריה של הדמיון
+            </h3>
+            
+            <p className="text-slate-300">
+                כדי להבין מה דומה למה, המודל מודד מרחק. המרחק האוקלידי בודק את הקו הישר, בעוד שדמיון קוסינוס בודק את כיוון הוקטורים.
+            </p>
+
+            <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
+                <DistanceSim />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+                <CodeBlock 
+                    language="python" 
+                    code={distanceCalcCode} 
+                    output={distanceCalcOutput} 
+                />
+                <CodeBlock 
+                    language="python" 
+                    code={cosineSimCode} 
+                    output={cosineSimOutput} 
+                />
+            </div>
+            
+            <InsightBox type="info" title="דמיון קוסינוס">
+                כשהמספר קרוב ל-1, הוקטורים מצביעים לאותו כיוון. זהו הבסיס לחיפוש סמנטי ו-Embeddings.
+            </InsightBox>
+        </section>
+
+        {/* --- 3. לוס (Loss) --- */}
+        <section className="mt-20 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-red-500 pr-4 flex items-center gap-2 text-right">
+                <Target size={24} className="text-red-500"/>
+                לוס: למה מודלים לומדים מטעויות?
+            </h3>
+            
+            <p className="text-slate-300">
+                מודלים לא לומדים מ&quot;הצלחה&quot;, אלא מטעויות. הלוס מודד את הפער בין הניבוי למציאות, והוא המצפן שמוביל את המודל לשיפור.
+            </p>
+
+            <CodeBlock 
+                language="python" 
+                code={gradientStepCode} 
+                output={gradientStepOutput} 
+            />
+
+            <div className="bg-red-500/5 border border-red-500/20 p-6 rounded-xl flex gap-4">
+                <Zap className="text-red-400 shrink-0" size={24} />
+                <p className="text-sm text-slate-300 italic leading-relaxed">
+                    נניח שהמודל ניבא 30 והאמת היא 35. השגיאה (5) משמשת את ה-Gradient Descent כדי לכוון מחדש את הפרמטרים ולהקטין את הלוס בצעד הבא.
+                </p>
+            </div>
+        </section>
+
+        {/* --- 4. טעויות נפוצות --- */}
+        <section className="mt-20 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-amber-500 pr-4 flex items-center gap-2 text-right">
+                <ShieldAlert size={24} className="text-amber-500"/>
+                בורות נפוצים של מפתחים
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 bg-slate-800/40 rounded-xl border border-slate-700">
+                    <h4 className="text-white font-bold mb-2">התעלמות מגודל השגיאה</h4>
+                    <p className="text-slate-400 text-sm">ראיית הפלט כאמת מוחלטת בלי לשאול מה הלוס סיפר למודל על הביטחון שלו בתוצאה.</p>
+                </div>
+                <div className="p-6 bg-slate-800/40 rounded-xl border border-slate-700">
+                    <h4 className="text-white font-bold mb-2">קצב למידה שגוי</h4>
+                    <p className="text-slate-400 text-sm">בחירת Learning Rate גבוה מדי גורמת למודל לדלג מעל הפתרון הנכון ולא להתכנס לעולם.</p>
+                </div>
+            </div>
+        </section>
+
+        {/* --- 5. רגישות לדאטה --- */}
+        <section className="mt-20 space-y-8">
+            <h3 className="text-2xl font-bold text-white border-r-4 border-pink-500 pr-4 flex items-center gap-2 text-right">
+                <LineChart size={24} className="text-pink-500"/>
+                דוגמה הנדסית: רגישות המודל לדאטה
+            </h3>
+            
+            <p className="text-slate-300">
+                צפה איך שינוי זעיר (Data Drift) בנקודת קלט אחת מסוגל להסיט את כל כיוון הניבוי של המודל.
+            </p>
+
+            <CodeBlock 
+                language="python" 
+                code={dataSensitivityCode} 
+                output={dataSensitivityOutput} 
+            />
+            
+            <InsightBox type="warning" title="כלל הברזל">
+                מודלים מגיבים בצורה מדויקת ועקבית למספרים. אם הדאטה מוטה או לא יציב, הלמידה תנוע בכיוון שגוי.
+            </InsightBox>
+        </section>
+
+        {/* --- Quiz Section --- */}
+        <section className="mt-32 border-t border-white/5 pt-20">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex items-center gap-4 justify-center mb-16">
+                    <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400">
+                        <GraduationCap size={24} />
+                    </div>
+                    <h2 className="text-3xl font-black text-white">בוחן הסמכה: פרק 1</h2>
                 </div>
                 
-                <h1 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter leading-tight">
-                    המתמטיקה היא המנוע, <br/>
-                    <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-emerald-400 to-indigo-500">לא הקישוט</span>
-                </h1>
-                
-                <div className="prose prose-invert text-slate-300 text-base max-w-3xl ml-auto leading-relaxed space-y-6">
-                    <p className="border-r-4 border-emerald-500 pr-6 py-2 bg-emerald-500/5 rounded-l-2xl font-medium italic">
-                        &quot;יש משפט שמסתובב כבר שנים בעולם הפיתוח: AI זה מתמטיקה. אבל כשאתה עובד עם מודלים ביום יום, זה בכלל לא מרגיש ככה.&quot;
-                    </p>
-                    <p>
-                        אתה שולח שאילתה, מחכה רגע, מקבל תשובה. אין משוואות על המסך. אבל בתוך המודל – הכל נעלם. לא נשארת שפה, לא נשארת תמונה. הכל מתורגם לצורה אחת בלבד: <strong>מספרים</strong>.
-                    </p>
-                </div>
-            </motion.div>
-        </section>
-
-        {/* שלב 1: וקטורים + מעבדה */}
-        <section className="py-24 border-t border-slate-800/50 text-right">
-            <div className="max-w-5xl mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                    <div className="space-y-8 order-2 lg:order-1">
-                        <div className="flex items-center gap-4 justify-end">
-                            <h2 className="text-3xl font-black text-white tracking-tight text-right">וקטורים: ה-DNA של המשמעות</h2>
-                            <Cpu className="text-emerald-500" size={32} />
-                        </div>
-                        <div className="prose prose-invert text-slate-300 text-[15px] leading-relaxed space-y-6">
-                            <p>
-                                המודל מקבל <strong>וקטור</strong> – רשימה של מספרים שמייצגים משמעות. משפט אחד יקבל וקטור מסוים, ומשפט אחר יקבל וקטור אחר.
-                            </p>
-                            <p>
-                                כשאתה מבין איך מודל רואה מידע, אתה מבין למה משפטים דומים מקבלים תחזיות דומות, ולמה &quot;רעש&quot; בנתונים מרסק ביצועים.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="order-1 lg:order-2">
-                        <VectorDNAModule />
-                    </div>
+                <div className="bg-[#0a0f1a]/50 p-1 rounded-[3rem] border border-white/5 backdrop-blur-3xl shadow-2xl">
+                    <AssessmentEngine 
+                        title="הוכח שליטה באבני היסוד" 
+                        subtitle="ענה על 5 שאלות בעיון כדי לקבל הסמכה להמשך" 
+                        questions={questions} 
+                    />
                 </div>
             </div>
         </section>
-
-        {/* שלב 2: גיאומטריה ומרחקים + מעבדה */}
-        <section className="py-24 bg-slate-950/40 text-right">
-            <div className="max-w-5xl mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div className="order-2 lg:order-1">
-                        <CosineSimilarityModule />
-                    </div>
-                    <div className="space-y-8 order-1 lg:order-2">
-                        <div className="flex items-center gap-4 justify-end">
-                            <h2 className="text-3xl font-black text-white tracking-tight">הגיאומטריה של הדמיון</h2>
-                            <Compass className="text-blue-500" size={32} />
-                        </div>
-                        <div className="prose prose-invert text-slate-300 text-[15px] leading-relaxed space-y-6">
-                            <p>
-                                כדי להבין מה דומה למה, המודל צריך מדד מספרי. כאן נכנסות לתמונה <strong>הנורמות</strong> (גודל הוקטור) ו<strong>המרחקים</strong>.
-                            </p>
-                            <p>
-                                דמיון אמיתי בין שני וקטורים נקבע לפי הכיוון שלהם. אם שני משפטים מצביעים לאותו כיוון (גם אם הם רחוקים), זווית קטנה ביניהם מספרת למודל: &quot;זה דומה במהות&quot;.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {/* שלב 3: לוס וצמצום טעות */}
-        <section className="py-24 border-t border-slate-800/50 text-right">
-            <div className="max-w-5xl mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                    <div className="space-y-8 order-2 lg:order-1">
-                        <div className="flex items-center gap-4 justify-end">
-                            <h2 className="text-3xl font-black text-white tracking-tighter">לוס: הדלק שמניע למידה</h2>
-                            <AlertTriangle className="text-red-500" size={32} />
-                        </div>
-                        <div className="prose prose-invert text-slate-300 text-[15px] leading-relaxed space-y-6">
-                            <p>
-                                מודלים לא לומדים מ״הצלחה״. הם לומדים מטעויות. ה-<strong>Loss</strong> הוא הפער בין התחזית למציאות.
-                            </p>
-                            <p>
-                                נניח שהמודל מנבא 30, אבל הערך האמיתי הוא 35. המודל רואה את הסטייה הזו, מפרש אותה כטעות, ומשתמש בה כדי לכוון מחדש את ההתנהגות שלו.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="bg-slate-900 border border-slate-800 p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden order-1 lg:order-2">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-red-500/50 opacity-20 animate-pulse"></div>
-                        <h5 className="text-slate-500 font-mono text-[10px] uppercase mb-4 tracking-widest italic">Simulation Context: Numeric Regression</h5>
-                         <div className="font-mono text-sm text-red-400 bg-black/60 p-6 rounded-xl border border-slate-800 mb-6 text-left" dir="ltr">
-                            y_true = np.array([<span className="text-white">35</span>])<br/>
-                            y_pred = np.array([<span className="text-white">30</span>])<br/><br/>
-                            error = y_true - y_pred<br/>
-                            <span className="text-slate-500"># Output: 5 (The mistake fuel)</span>
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {/* בוחן סופי */}
-        <CertificationQuiz />
 
     </ChapterLayout>
   );
