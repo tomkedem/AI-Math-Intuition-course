@@ -148,7 +148,7 @@ export const AssessmentEngine = ({ title, subtitle, questions }: AssessmentProps
             </div>
 
             {/* מעטפת הסליידר עם עומק */}
-            <div className="relative min-h-[560px] perspective-2000">
+            <div className="relative min-h-140 perspective-2000">
                 <AnimatePresence mode="wait" custom={direction}>
                     <motion.div 
                         key={currentIndex} 

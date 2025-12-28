@@ -2,9 +2,10 @@
 
 import React from 'react';
 import { 
-    Binary, Compass, Target, Layers, 
+    Compass, Target, Layers, 
     ShieldAlert, Zap, MousePointer2, BrainCircuit,
-    LineChart, Terminal, GraduationCap, ArrowRightLeft
+    LineChart, Terminal, GraduationCap,
+    Info, Code2
 } from 'lucide-react';
 
 import { InsightBox } from '@/components/content/InsightBox';
@@ -22,63 +23,64 @@ export default function Chapter1() {
   
   const vectorInitCode = `import numpy as np
 
-# וקטור המייצג תכונות מופשטות של מילה
+# הגדרת וקטור המייצג תכונות מופשטות של מילה (למשל: "טכנולוגיה")
 v = np.array([0.3, 1.2, 4.8])
 
-print("Vector:", v)`;
-  const vectorInitOutput = `Vector: [0.3 1.2 4.8]`;
+print("Vector Representation:", v)`;
+  const vectorInitOutput = `Vector Representation: [0.3 1.2 4.8]`;
 
   const distanceCalcCode = `import numpy as np
 
-a = np.array([1.0, 2.0, 3.0])
-b = np.array([1.5, 2.3, 2.7])
+a = np.array([1.0, 2.0, 3.0]) # וקטור א'
+b = np.array([1.5, 2.3, 2.7]) # וקטור ב'
 
 # חישוב מרחק אוקלידי (Euclidean Distance)
 distance = np.linalg.norm(a - b)
-print("Distance:", distance)`;
-  const distanceCalcOutput = `Distance: 0.655`;
+print("Euclidean Distance:", distance)`;
+  const distanceCalcOutput = `Euclidean Distance: 0.655`;
 
   const cosineSimCode = `import numpy as np
 
 a = np.array([1.0, 2.0, 3.0])
 b = np.array([1.0, 2.0, 2.5])
 
+# חישוב דמיון קוסינוס - בוחן את הזווית והכיוון
 dot_product = np.dot(a, b)
 norm_a = np.linalg.norm(a)
 norm_b = np.linalg.norm(b)
 
-# דמיון קוסינוס - בוחן את הזווית בין הוקטורים
 cosine_sim = dot_product / (norm_a * norm_b)
 print("Cosine Similarity:", cosine_sim)`;
   const cosineSimOutput = `Cosine Similarity: 0.985`;
 
-  const gradientStepCode = `def loss(x): return (x - 3) ** 2
-def slope(x): return 2 * (x - 3)
+  const gradientStepCode = `def loss(x): return (x - 3) ** 2 # פונקציית הטעות
+def slope(x): return 2 * (x - 3)     # הנגזרת (השיפוע)
 
-x = -1        # ניחוש התחלתי
-lr = 0.1      # קצב למידה (Learning Rate)
+x = -1        # ניחוש התחלתי של המודל
+lr = 0.1      # Learning Rate (קצב למידה)
 
-# צעד אחד של Gradient Descent להקטנת השגיאה
+# עדכון הפרמטר: הולכים נגד כיוון השיפוע כדי להקטין את הטעות
 x = x - lr * slope(x)
 
-print(f"Loss after step: {loss(x):.4f}")`;
-  const gradientStepOutput = `Loss after step: 10.2400`;
+print(f"New Loss after update: {loss(x):.4f}")`;
+  const gradientStepOutput = `New Loss after update: 10.2400`;
 
   const dataSensitivityCode = `import numpy as np
 
 x = np.array([1, 2, 3, 4])
 y = np.array([2, 4, 6, 8]) # יחס מושלם y=2x
 
-# הוספת שינוי זעיר (0.8) לנקודה אחת
+# הכנסת שיבוש זעיר (0.8) רק לנקודה אחת
 y_modified = y.copy()
 y_modified[2] += 0.8 
 
-slope_modified = np.sum(x * y_modified) / np.sum(x * x)
-print(f"Modified slope: {slope_modified:.3f}")`;
-  const dataSensitivityOutput = `Modified slope: 2.114`;
+# חישוב השיפוע החדש של המודל בעקבות השיבוש
+new_slope = np.sum(x * y_modified) / np.sum(x * x)
+print(f"Modified Slope: {new_slope:.3f}")`;
+  const dataSensitivityOutput = `Modified Slope: 2.114`;
 
-  // --- Quiz Questions (5 Standardized Questions) ---
-  const questions = [
+  // --- Quiz Questions ---
+  const chapterQuestions = [
     {
         id: 1,
         question: "מהי המשמעות המעשית של 'מיקום וקטורי' עבור מודל AI?",
@@ -148,21 +150,21 @@ print(f"Modified slope: {slope_modified:.3f}")`;
         <section className="space-y-6">
             <div className="flex items-center gap-3 text-blue-400 mb-2">
                 <Terminal size={24} />
-                <span className="font-mono text-sm tracking-wider uppercase">Math Foundations 01</span>
+                <span className="font-mono text-sm tracking-wider uppercase">Applied Intuition 01</span>
             </div>
             <h1 className="text-4xl font-black text-white leading-tight">
                 למה אנחנו צריכים מתמטיקה יישומית בעולם של AI?
             </h1>
             <p className="text-lg text-slate-300 leading-relaxed">
                 בכל פעולה שהמודל מבצע - מסכם טקסט, משלים קוד או מסווג תמונה - מתרחש שם משחק מתמטי מדויק. 
-                כאן נבין איך משמעות הופכת לגיאומטריה ושגיאות הופכות ללמידה.
+                כאן נלמד להפסיק לראות במודל &quot;קופסה שחורה&quot; ולהבין את חוקי הגיאומטריה שמניעים אותו.
             </p>
             <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 flex gap-4 mt-6">
                 <BrainCircuit className="text-blue-500 shrink-0" size={24} />
-                <div>
-                    <h4 className="font-bold text-white mb-1">הקופסה השחורה נפתחת</h4>
-                    <p className="text-sm text-slate-400">
-                        כשמבינים את ההיגיון שמאחורי המספרים, המודל מפסיק להיות קסם. במקום לנחש, תוכל להגיד בביטחון אם התוצאה הגיונית או שהדאטה מטעה.
+                <div className="text-right">
+                    <h4 className="font-bold text-white mb-1 text-right">המתמטיקה היא המצפן שלך</h4>
+                    <p className="text-sm text-slate-400 text-right">
+                        כשמבינים את המספרים שמאחורי הקלעים, אפשר להגיד בביטחון מתי המודל פועל בהיגיון ומתי הדאטה מטעה אותו.
                     </p>
                 </div>
             </div>
@@ -172,12 +174,16 @@ print(f"Modified slope: {slope_modified:.3f}")`;
         <section className="mt-16 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-blue-500 pr-4 flex items-center gap-2 text-right">
                 <Layers size={24} className="text-blue-500"/>
-                וקטורים: ה-DNA של המידע
+                1. וקטורים: ה-DNA של המידע
             </h3>
             
-            <p className="text-slate-300">
-                המודל מתרגם כל פיסת מידע לוקטור - רשימה מסודרת של מספרים המייצגת משמעות במרחב רב-ממדי.
-            </p>
+            <div className="space-y-4 text-slate-300 leading-loose text-right">
+                <p>המודל מתרגם כל פיסת מידע לוקטור - רשימה מסודרת של מספרים המייצגת משמעות במרחב רב-ממדי.</p>
+                <div className="flex flex-row-reverse items-start gap-3 bg-blue-500/5 p-4 rounded-lg border border-blue-500/10">
+                    <Info size={18} className="text-blue-400 shrink-0 mt-1" />
+                    <p className="text-sm italic text-right">הנחיה למעבדה: הקלד מילה ושים לב איך היא הופכת ל&quot;חתימה&quot; מתמטית. מילים עם הקשר דומה יציגו תבניות מספרים דומות.</p>
+                </div>
+            </div>
             
             <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
                 <VectorLab />
@@ -189,54 +195,69 @@ print(f"Modified slope: {slope_modified:.3f}")`;
                 output={vectorInitOutput} 
             />
 
-            <InsightBox type="intuition" title="וקטור הוא כתובת">
-                תחשוב על וקטור כעל כתובת GPS במרחב ה&quot;משמעות&quot;. מושגים דומים יגורו באותה שכונה מתמטית.
+            <InsightBox type="intuition" title="וקטור הוא כתובת גיאומטרית">
+                עבור המודל, מילה היא נקודה במרחב. ככל ששתי מילים &quot;קרובות&quot; יותר מתמטית, המודל תופס אותן כבעלות משמעות דומה.
             </InsightBox>
         </section>
 
         {/* --- 2. נורמות ומרחקים --- */}
+        
         <section className="mt-20 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-emerald-500 pr-4 flex items-center gap-2 text-right">
                 <Compass size={24} className="text-emerald-400"/>
-                נורמות ומרחקים: הגיאומטריה של הדמיון
+                2. נורמות ומרחקים: הגיאומטריה של הדמיון
             </h3>
             
-            <p className="text-slate-300">
-                כדי להבין מה דומה למה, המודל מודד מרחק. המרחק האוקלידי בודק את הקו הישר, בעוד שדמיון קוסינוס בודק את כיוון הוקטורים.
-            </p>
+            <div className="space-y-4 text-slate-300 leading-loose text-right">
+                <p>כדי להבין מה דומה למה, המודל מודד מרחק. המרחק האוקלידי בודק את הקו הישר, בעוד שדמיון קוסינוס בודק את הכיוון (הזווית) בין המושגים.</p>
+                <div className="flex flex-row-reverse items-start gap-3 bg-emerald-500/5 p-4 rounded-lg border border-emerald-500/10">
+                    <MousePointer2 size={18} className="text-emerald-400 shrink-0 mt-1" />
+                    <p className="text-sm italic text-right">קריאה לפעולה: שחק עם הסליידרים בסימולטור. שים לב איך שינוי במיקום וקטור אחד משנה את ה-Cosine Similarity. נסה להגיע לזהות מוחלטת (1.000).</p>
+                </div>
+            </div>
 
             <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
                 <DistanceSim />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-                <CodeBlock 
-                    language="python" 
-                    code={distanceCalcCode} 
-                    output={distanceCalcOutput} 
-                />
-                <CodeBlock 
-                    language="python" 
-                    code={cosineSimCode} 
-                    output={cosineSimOutput} 
-                />
+            <div className="grid md:grid-cols-2 gap-8 text-right">
+                <div className="space-y-2">
+                    <div className="flex flex-row-reverse items-center gap-2 text-emerald-400 mb-2 font-mono text-xs uppercase tracking-widest">
+                        <Code2 size={14} /> <span>Euclidean Distance</span>
+                    </div>
+                    <CodeBlock language="python" code={distanceCalcCode} output={distanceCalcOutput} />
+                    <p className="text-xs text-slate-500 italic mt-2 text-right">שימוש ב-Numpy לחישוב הנורמה של ההפרש בין הוקטורים.</p>
+                </div>
+                <div className="space-y-2">
+                    <div className="flex flex-row-reverse items-center gap-2 text-blue-400 mb-2 font-mono text-xs uppercase tracking-widest">
+                        <Code2 size={14} /> <span>Cosine Similarity</span>
+                    </div>
+                    <CodeBlock language="python" code={cosineSimCode} output={cosineSimOutput} />
+                    <p className="text-xs text-slate-500 italic mt-2 text-right">נרמול המכפלה הסקלרית נותן לנו את הקוסינוס של הזווית.</p>
+                </div>
             </div>
             
-            <InsightBox type="info" title="דמיון קוסינוס">
-                כשהמספר קרוב ל-1, הוקטורים מצביעים לאותו כיוון. זהו הבסיס לחיפוש סמנטי ו-Embeddings.
+            <InsightBox type="info" title="דמיון קוסינוס בחיפוש סמנטי">
+                זהו המנגנון המאפשר למודל להבין ש&quot;מלך&quot; ו-&quot;מלכה&quot; הם מושגים דומים, למרות שהן מילים שונות לחלוטין.
             </InsightBox>
         </section>
 
-        {/* --- 3. לוס (Loss) --- */}
-        <section className="mt-20 space-y-8">
+        {/* --- 3. לוס --- */}
+        
+        <section className="mt-24 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-red-500 pr-4 flex items-center gap-2 text-right">
                 <Target size={24} className="text-red-500"/>
-                לוס: למה מודלים לומדים מטעויות?
+                3. לוס: למה מודלים לומדים מטעויות?
             </h3>
             
-            <p className="text-slate-300">
-                מודלים לא לומדים מ&quot;הצלחה&quot;, אלא מטעויות. הלוס מודד את הפער בין הניבוי למציאות, והוא המצפן שמוביל את המודל לשיפור.
-            </p>
+            <div className="space-y-4 text-slate-300 leading-loose text-right">
+                <p>מודלים לומדים מטעויות, לא מהצלחה. הלוס (Loss) מודד את הפער בין הניבוי למציאות.</p>
+                <div className="bg-red-500/5 border border-red-500/20 p-6 rounded-xl italic text-right">
+                    <p className="text-sm text-slate-200 text-right">
+                        <span className="text-red-400 font-bold ml-2">תרחיש:</span> המודל ניבא 30 והאמת היא 35. השגיאה היא 5. המודל ישתמש במספר הזה כדי לכוון מחדש את הפרמטרים שלו בצעד הבא.
+                    </p>
+                </div>
+            </div>
 
             <CodeBlock 
                 language="python" 
@@ -244,42 +265,39 @@ print(f"Modified slope: {slope_modified:.3f}")`;
                 output={gradientStepOutput} 
             />
 
-            <div className="bg-red-500/5 border border-red-500/20 p-6 rounded-xl flex gap-4">
-                <Zap className="text-red-400 shrink-0" size={24} />
-                <p className="text-sm text-slate-300 italic leading-relaxed">
-                    נניח שהמודל ניבא 30 והאמת היא 35. השגיאה (5) משמשת את ה-Gradient Descent כדי לכוון מחדש את הפרמטרים ולהקטין את הלוס בצעד הבא.
-                </p>
-            </div>
+            <InsightBox type="warning" title="הסכנה בקצב למידה גבוה">
+                אם ה-Learning Rate גבוה מדי, המודל עשוי &quot;לדלג&quot; מעל נקודת המינימום של השגיאה ולא להגיע לתוצאה אופטימלית לעולם.
+            </InsightBox>
         </section>
 
         {/* --- 4. טעויות נפוצות --- */}
-        <section className="mt-20 space-y-8">
+        <section className="mt-24 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-amber-500 pr-4 flex items-center gap-2 text-right">
                 <ShieldAlert size={24} className="text-amber-500"/>
-                בורות נפוצים של מפתחים
+                4. איפה מפתחים טועים?
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 bg-slate-800/40 rounded-xl border border-slate-700">
-                    <h4 className="text-white font-bold mb-2">התעלמות מגודל השגיאה</h4>
-                    <p className="text-slate-400 text-sm">ראיית הפלט כאמת מוחלטת בלי לשאול מה הלוס סיפר למודל על הביטחון שלו בתוצאה.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                <div className="p-8 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/4 transition-all group text-right shadow-lg">
+                    <h4 className="text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right">התעלמות מהלוס <Zap size={16} className="text-amber-400" /></h4>
+                    <p className="text-sm text-slate-400 leading-relaxed text-right">מפתחים רואים בפלט אמת מוחלטת בלי לבדוק את הלוס. בלי הבנת השגיאה, אי אפשר לדעת אם המודל מנחש או באמת יודע.</p>
                 </div>
-                <div className="p-6 bg-slate-800/40 rounded-xl border border-slate-700">
-                    <h4 className="text-white font-bold mb-2">קצב למידה שגוי</h4>
-                    <p className="text-slate-400 text-sm">בחירת Learning Rate גבוה מדי גורמת למודל לדלג מעל הפתרון הנכון ולא להתכנס לעולם.</p>
+                <div className="p-8 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/4 transition-all group text-right shadow-lg">
+                    <h4 className="text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right">אמון עיוור בדאטה <ShieldAlert size={16} className="text-red-400" /></h4>
+                    <p className="text-sm text-slate-400 leading-relaxed text-right">דאטה הוא חומר הגלם. אם הוא מוטה או לא יציב, המודל ילמד טעות יציבה. הבנת המתמטיקה עוזרת לזהות הטיות בנתונים.</p>
                 </div>
             </div>
         </section>
 
         {/* --- 5. רגישות לדאטה --- */}
-        <section className="mt-20 space-y-8">
+        <section className="mt-24 space-y-8">
             <h3 className="text-2xl font-bold text-white border-r-4 border-pink-500 pr-4 flex items-center gap-2 text-right">
                 <LineChart size={24} className="text-pink-500"/>
-                דוגמה הנדסית: רגישות המודל לדאטה
+                5. דוגמה הנדסית: רגישות המודל לדאטה
             </h3>
             
-            <p className="text-slate-300">
-                צפה איך שינוי זעיר (Data Drift) בנקודת קלט אחת מסוגל להסיט את כל כיוון הניבוי של המודל.
+            <p className="text-slate-300 leading-relaxed max-w-3xl mr-0 text-right">
+                צפה איך שינוי זעיר (Data Drift) בנקודת קלט אחת בלבד מסוגל להסיט את כל כיוון הניבוי של המודל.
             </p>
 
             <CodeBlock 
@@ -287,27 +305,30 @@ print(f"Modified slope: {slope_modified:.3f}")`;
                 code={dataSensitivityCode} 
                 output={dataSensitivityOutput} 
             />
-            
-            <InsightBox type="warning" title="כלל הברזל">
-                מודלים מגיבים בצורה מדויקת ועקבית למספרים. אם הדאטה מוטה או לא יציב, הלמידה תנוע בכיוון שגוי.
+
+            <InsightBox type="intuition" title="שיתוף פעולה עם המודל">
+                שיתוף פעולה מוצלח עם ה-AI דורש הבנה שהמודל הוא מערכת של סיבה ותוצאה. ככל שתבין את המתמטיקה, תוכל להנחות אותו בצורה מדויקת יותר.
             </InsightBox>
         </section>
 
         {/* --- Quiz Section --- */}
-        <section className="mt-32 border-t border-white/5 pt-20">
-            <div className="max-w-4xl mx-auto">
-                <div className="flex items-center gap-4 justify-center mb-16">
-                    <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400">
-                        <GraduationCap size={24} />
+        <section className="mt-32 border-t border-white/5 pt-20 pb-20 text-right">
+            <div className="max-w-4xl mx-auto text-right">
+                <div className="flex flex-row-reverse items-center gap-4 justify-start mb-16 pr-6 border-r-4 border-blue-400/30 text-right">
+                    <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-inner">
+                        <GraduationCap size={28} className="text-blue-400 opacity-80" />
                     </div>
-                    <h2 className="text-3xl font-black text-white">בוחן הסמכה: פרק 1</h2>
+                    <div className="text-right">
+                        <h2 className="text-3xl font-black text-white tracking-tight text-right">בוחן הסמכה: פרק 1</h2>
+                        <p className="text-slate-500 text-base font-medium opacity-70 text-right">הוכח שליטה באבני היסוד של ה-AI להמשך הקורס</p>
+                    </div>
                 </div>
                 
-                <div className="bg-[#0a0f1a]/50 p-1 rounded-[3rem] border border-white/5 backdrop-blur-3xl shadow-2xl">
+                <div className="bg-[#0a0f1a]/50 p-4 rounded-[4rem] border border-white/5 backdrop-blur-3xl shadow-2xl text-right">
                     <AssessmentEngine 
-                        title="הוכח שליטה באבני היסוד" 
+                        title="מבדק אינטואיציה מתמטית" 
                         subtitle="ענה על 5 שאלות בעיון כדי לקבל הסמכה להמשך" 
-                        questions={questions} 
+                        questions={chapterQuestions} 
                     />
                 </div>
             </div>
