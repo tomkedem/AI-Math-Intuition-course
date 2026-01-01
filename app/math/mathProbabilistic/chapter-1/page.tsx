@@ -179,9 +179,9 @@ print(f"Modified Slope: {new_slope:.3f}")`;
             
             <div className="space-y-4 text-slate-300 leading-loose text-right">
                 <p>המודל מתרגם כל פיסת מידע לוקטור - רשימה מסודרת של מספרים המייצגת משמעות במרחב רב-ממדי.</p>
-                <div className="flex flex-row-reverse items-start gap-3 bg-blue-500/5 p-4 rounded-lg border border-blue-500/10">
-                    <Info size={18} className="text-blue-400 shrink-0 mt-1" />
-                    <p className="text-sm italic text-right">הנחיה למעבדה: הקלד מילה ושים לב איך היא הופכת ל&quot;חתימה&quot; מתמטית. מילים עם הקשר דומה יציגו תבניות מספרים דומות.</p>
+                <div className="flex items-center gap-3 bg-blue-500/5 p-4 rounded-lg border border-blue-500/10" dir="rtl">
+                    <Info size={18} className="text-blue-400 shrink-0" />
+                    <p className="text-sm italic text-right flex-1">הנחיה למעבדה: הקלד מילה ושים לב איך היא הופכת ל&quot;חתימה&quot; מתמטית. מילים עם הקשר דומה יציגו תבניות מספרים דומות.</p>
                 </div>
             </div>
             
