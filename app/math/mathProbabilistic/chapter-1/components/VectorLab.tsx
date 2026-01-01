@@ -2,146 +2,160 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion } from "framer-motion";
-import { Fingerprint, MousePointer2, Info, ArrowLeftRight } from "lucide-react";
+import { Fingerprint, Info, Plus, CheckCircle2, Lightbulb } from "lucide-react";
 
-// מילון "סמנטי" בסיסי כדי לדמות למידה אמיתית
-const SEMANTIC_THEMES: Record<string, number[]> = {
-    tech: [0.8, -0.4, 0.9, 0.1, -0.7],
-    nature: [-0.6, 0.8, -0.2, 0.9, 0.4],
-    emotion: [0.3, 0.1, -0.8, -0.4, 0.9],
-    default: [0.1, -0.1, 0.2, -0.2, 0.1]
-};
-
-const getTheme = (word: string) => {
-    const w = word.toLowerCase();
-    if (/מחשב|לפטופ|קוד|טכנולוגיה|שרת|ai|data/.test(w)) return SEMANTIC_THEMES.tech;
-    if (/עץ|פרח|ים|טבע|שמש|אוקיינוס|הרים/.test(w)) return SEMANTIC_THEMES.nature;
-    if (/שמח|עצוב|אהבה|כעס|מרגש|פחד/.test(w)) return SEMANTIC_THEMES.emotion;
-    return SEMANTIC_THEMES.default;
+// מילון סמנטי (פרק 2)
+const WORD_DATABASE: Record<string, number[]> = {
+    "מחשב": [0.8, 0.1, 0.9, -0.2],
+    "לפטופ": [0.7, 0.2, 0.8, -0.1],
+    "קפה": [-0.3, 0.8, -0.4, 0.6],
+    "תה": [-0.2, 0.7, -0.5, 0.5],
+    "טבע": [-0.7, -0.3, -0.6, 0.8],
+    "עץ": [-0.8, -0.4, -0.5, 0.7],
 };
 
 export const VectorLab = () => {
-    const [word, setWord] = useState("מחשב");
-    const [prevWord, setPrevWord] = useState("");
-    const [prevVector, setPrevVector] = useState<number[]>([]);
+    const [wordA, setWordA] = useState("מחשב");
+    const [wordB, setWordB] = useState("לפטופ");
+    const [showMath, setShowMath] = useState(false);
+    const [step, setStep] = useState(1); // מעקב אחרי התקדמות הלומד
 
-    const vector = useMemo(() => {
-        const themeBase = getTheme(word);
-        // יצירת וקטור של 20 ממדים מבוסס תמה + רעש מבוסס אותיות (כדי שכל מילה תהיה טיפה שונה)
-        const seed = word.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        
-        return Array.from({ length: 20 }, (_, i) => {
-            const base = themeBase[i % themeBase.length];
-            const noise = Math.sin(seed * (i + 1)) * 0.2; // רעש קטן
-            const val = Math.max(-1, Math.min(1, base + noise));
-            return parseFloat(val.toFixed(2));
-        });
-    }, [word]);
+    const vecA = useMemo(() => WORD_DATABASE[wordA] || [0,0,0,0], [wordA]);
+    const vecB = useMemo(() => WORD_DATABASE[wordB] || [0,0,0,0], [wordB]);
 
-    // חישוב דמיון בסיסי (Dot Product מפושט) להמחשה
-    const similarity = useMemo(() => {
-        if (!prevVector.length) return null;
-        const dotProduct = vector.reduce((acc, val, i) => acc + (val * (prevVector[i] || 0)), 0);
-        const sim = (dotProduct / 10 + 1) / 2; // נרמול ל-0 עד 1
-        return Math.round(sim * 100);
-    }, [vector, prevVector]);
+    const combinedVec = useMemo(() => {
+        return vecA.map((val, i) => parseFloat((val + vecB[i]).toFixed(2)));
+    }, [vecA, vecB]);
 
-    const handleProcess = () => {
-        setPrevWord(word);
-        setPrevVector(vector);
-    };
+    // פונקציית עזר למיקום בטוח שמונעת חיתוך (פרק 2: נרמול וקטורים)
+const getMapPos = (val: number, isCombined = false) => {
+    // בחיבור וקטורים הערכים יכולים להגיע ל-2 או -2, לכן נחלק בטווח גדול יותר
+    const scaleFactor = isCombined ? 4 : 2; 
+    const normalized = (val + scaleFactor / 2) / scaleFactor;
+    return `${normalized * 80 + 10}%`; 
+};
 
     return (
-        <div className="w-full bg-slate-950 border border-emerald-500/20 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-3xl text-right" dir="rtl">
+        <div className="w-full bg-slate-950 border border-emerald-500/20 rounded-[2.5rem] p-8 shadow-2xl text-right font-sans" dir="rtl">
+            
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3 pr-4 border-r-4 border-emerald-500/50">
                     <Fingerprint className="text-emerald-400" size={28} />
-                    <h4 className="text-white font-black text-2xl">מעבדה סמנטית: Embeddings</h4>
+                    <h4 className="text-white font-black text-2xl">מעבדה 1: הגיאומטריה של המשמעות</h4>
                 </div>
-                <div className="bg-white/5 px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] text-slate-400 font-mono uppercase">Vector Space Simulator</span>
-                </div>
-            </div>
-
-            {/* משימה אינטראקטיבית משופרת */}
-            <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl mb-8 flex items-start gap-4">
-                <MousePointer2 className="text-emerald-400 shrink-0 mt-1" size={20} />
-                <div className="space-y-1">
-                    <p className="text-sm text-emerald-100">
-                        <strong>ניסוי סמנטי:</strong> הקלד &quot;מחשב&quot;, לחץ על &quot;שמור להשוואה&quot;, ואז הקלד &quot;לפטופ&quot;. 
-                    </p>
-                    <p className="text-[11px] text-emerald-400/80">
-                        שים לב איך האלגוריתם מזהה שהן מאותה &quot;משפחה&quot; ומייצר וקטורים דומים.
-                    </p>
+                <div className="text-emerald-500 font-mono text-sm bg-emerald-500/10 px-4 py-1 rounded-full border border-emerald-500/20">
+                    צעד {step} מתוך 3
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start bg-black/20 p-6 rounded-[2rem] border border-white/5">
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black text-emerald-500/70 uppercase tracking-widest block">מילה נוכחית:</label>
-                        <input 
-                            type="text" 
-                            value={word} 
-                            onChange={(e) => setWord(e.target.value)} 
-                            className="w-full bg-slate-900 border-2 border-white/5 p-4 text-white text-right font-mono text-lg rounded-2xl focus:border-emerald-500/50 outline-none transition-all"
-                        />
-                    </div>
-                    
-                    <button 
-                        onClick={handleProcess}
-                        className="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
-                    >
-                        <ArrowLeftRight size={14} /> שמור להשוואה
-                    </button>
-
-                    {similarity !== null && (
-                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-center">
-                            <div className="text-[10px] text-emerald-500 uppercase font-black">דמיון סמנטי</div>
-                            <div className="text-3xl font-black text-white">{similarity}%</div>
-                            <div className="text-[10px] text-slate-400 mt-1">מול המילה: {prevWord}</div>
-                        </motion.div>
-                    )}
-                </div>
-
-                <div className="lg:col-span-3 h-56 flex items-center justify-between gap-1 border-b border-white/10 relative">
-                    {/* קו האפס */}
-                    <div className="absolute top-1/2 left-0 w-full h-px bg-white/10 pointer-events-none" />
-                    
-                    {vector.map((val, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center justify-center h-full relative group">
-                            <motion.div 
-                                animate={{ 
-                                    height: `${Math.abs(val) * 50}%`,
-                                    y: val > 0 ? "-50%" : "50%",
-                                    backgroundColor: val > 0 ? "rgb(52, 211, 153)" : "rgb(248, 113, 113)"
-                                }}
-                                className="w-full rounded-sm opacity-60 group-hover:opacity-100 transition-opacity"
-                            />
-                            {/* וקטור קודם להשוואה (רפאים) */}
-                            {prevVector.length > 0 && (
-                                <div 
-                                    className="absolute w-full bg-white/10 rounded-sm pointer-events-none transition-all"
-                                    style={{ 
-                                        height: `${Math.abs(prevVector[i]) * 50}%`,
-                                        y: prevVector[i] > 0 ? "-50%" : "50%",
-                                    }}
-                                />
-                            )}
+            {/* רכיב הנחיות דינמי - פותר את הבעיה שהלומד לא מבין מה לעשות */}
+            <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                    { id: 1, text: "בחר שתי מילים דומות (למשל 'מחשב' ו'לפטופ')", active: step === 1 },
+                    { id: 2, text: "לחץ על 'חיבור וקטורים' כדי לשלב את המשמעות", active: step === 2 },
+                    { id: 3, text: "ראה איפה הנקודה החדשה הופיעה במפה", active: step === 3 }
+                ].map((s) => (
+                    <div key={s.id} className={`p-4 rounded-2xl border transition-all ${s.active ? 'bg-emerald-500/20 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-white/5 border-white/10 opacity-50'}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                            {step > s.id ? <CheckCircle2 size={16} className="text-emerald-400" /> : <div className="w-4 h-4 rounded-full border-2 border-current text-emerald-500 flex items-center justify-center text-[10px]">{s.id}</div>}
+                            <span className={`text-xs font-bold ${s.active ? 'text-emerald-400' : 'text-slate-400'}`}>משימה</span>
                         </div>
-                    ))}
+                        <p className="text-sm text-slate-200">{s.text}</p>
+                    </div>
+                ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* מפת המרחב */}
+                <div className="bg-black/40 p-6 rounded-[2.5rem] border border-white/5 relative h-80 shadow-inner overflow-hidden">
+                    <div className="relative w-full h-full border border-white/10 rounded-xl bg-grid-white/[0.02]">
+                        <div className="absolute top-1/2 left-0 w-full h-px bg-white/5" />
+                        <div className="absolute left-1/2 top-0 w-px h-full bg-white/5" />
+
+                        {Object.entries(WORD_DATABASE).map(([name, v]) => (
+                            <motion.div 
+                                key={name}
+                                style={{ left: getMapPos(v[0]), top: getMapPos(v[1]) }}
+                                className={`absolute px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                                    name === wordA ? 'bg-emerald-500 text-black z-20 ring-4 ring-emerald-500/20' : 
+                                    name === wordB ? 'bg-blue-500 text-white z-20 ring-4 ring-blue-500/20' : 'bg-white/5 text-slate-600'
+                                }`}
+                            >
+                                {name}
+                            </motion.div>
+                        ))}
+
+                       {showMath && (
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0 }}
+                                animate={{ 
+                                    opacity: 1, 
+                                    scale: 1, 
+                                    // שימוש ב-isCombined=true כדי למנוע את החיתוך שראית בתמונה
+                                    left: getMapPos(combinedVec[0], true), 
+                                    top: getMapPos(combinedVec[1], true) 
+                                }}
+                                className="absolute p-3 rounded-xl text-xs font-black bg-purple-600 text-white border-2 border-white shadow-2xl z-30 whitespace-nowrap"
+                            >
+                                תוצאה: {wordA} + {wordB}
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
+
+                {/* שליטה */}
+                <div className="flex flex-col justify-center gap-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-emerald-500 block">מילה א&apos;:</label>
+                            <select 
+                                value={wordA} 
+                                onChange={(e) => { setWordA(e.target.value); if(step === 1) setStep(2); }}
+                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-emerald-500 transition-all outline-none"
+                            >
+                                {Object.keys(WORD_DATABASE).map(w => <option key={w} value={w}>{w}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-blue-500 block">מילה ב&apos;:</label>
+                            <select 
+                                value={wordB} 
+                                onChange={(e) => { setWordB(e.target.value); if(step === 1) setStep(2); }}
+                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-blue-500 transition-all outline-none"
+                            >
+                                {Object.keys(WORD_DATABASE).map(w => <option key={w} value={w}>{w}</option>)}
+                            </select>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={() => { setShowMath(!showMath); setStep(showMath ? 2 : 3); }}
+                        className={`w-full py-5 rounded-[1.5rem] font-black text-lg transition-all flex items-center justify-center gap-3 ${
+                            showMath ? 'bg-purple-600 text-white shadow-lg' : 'bg-emerald-500 text-black hover:bg-emerald-400'
+                        }`}
+                    >
+                        <Plus size={20} /> {showMath ? "אפס ניסוי" : "חיבור וקטורים (שלב רעיונות)"}
+                    </button>
+                    
+                    <div className="bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 flex items-start gap-3">
+                        <Lightbulb className="text-emerald-400 shrink-0" size={20} />
+                        <p className="text-xs text-slate-300">
+                            <strong>שים לב:</strong> בגלל שווקטורים הם מספרים, המודל יכול &quot;לחשב&quot; משמעות[cite: 8]. כשמחברים מחשב + ניידות, הנקודה במפה תזוז לכיוון של לפטופ[cite: 203, 354].
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* Footer עם גילוי נאות חינוכי */}
-            <div className="mt-8 p-4 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-4">
-                <Info className="text-blue-400 shrink-0" size={20} />
-                <div className="text-xs text-slate-400 leading-relaxed">
-                    <span className="text-blue-400 font-bold ml-1 italic">דיוק מדעי:</span> 
-                    זוהי סימולציה מפושטת. במודלים אמיתיים כמו GPT-4, כל מילה מיוצגת על ידי אלפי ממדים שנלמדו ממיליארדי טקסטים. כאן אנו משתמשים ב-20 ממדים ובמפה סמנטית קבועה מראש כדי להמחיש את העיקרון: <strong>מילים דומות תופסות מקום דומה במרחב.</strong>
+            {/* Footer עם הסבר ממוקד מטרה */}
+            <div className="mt-8 p-6 bg-blue-600/10 rounded-[2rem] border border-blue-500/20">
+                <div className="flex items-center gap-2 mb-2 text-blue-400">
+                    <Info size={18} />
+                    <span className="font-bold text-sm underline decoration-2">מה אנחנו לומדים מזה?</span>
                 </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                    כמו שכתוב בפרק 2: &quot;המיקום הוא המשמעות&quot;[cite: 203]. במודלים של AI, מילים הן לא טקסט אלא <strong>כתובת GPS</strong>[cite: 199]. חיבור וקטורים הוא הבסיס לכך שמודל יכול להבין שילובים מורכבים של מושגים.
+                </p>
             </div>
         </div>
     );
