@@ -210,10 +210,13 @@ print(f"Modified Slope: {new_slope:.3f}")`;
             
             <div className="space-y-4 text-slate-300 leading-loose text-right">
                 <p>כדי להבין מה דומה למה, המודל מודד מרחק. המרחק האוקלידי בודק את הקו הישר, בעוד שדמיון קוסינוס בודק את הכיוון (הזווית) בין המושגים.</p>
-                <div className="flex flex-row-reverse items-start gap-3 bg-emerald-500/5 p-4 rounded-lg border border-emerald-500/10">
-                    <MousePointer2 size={18} className="text-emerald-400 shrink-0 mt-1" />
-                    <p className="text-sm italic text-right">קריאה לפעולה: שחק עם הסליידרים בסימולטור. שים לב איך שינוי במיקום וקטור אחד משנה את ה-Cosine Similarity. נסה להגיע לזהות מוחלטת (1.000).</p>
-                </div>
+                        <div className="flex flex-row-reverse items-start gap-3 bg-emerald-500/5 p-4 rounded-lg border border-emerald-500/10">
+                <MousePointer2 size={18} className="text-emerald-400 shrink-0 mt-1" />
+                <p className="text-sm italic text-right">
+                    קריאה לפעולה: שחק עם הסליידרים בסימולטור. שים לב איך שינוי במיקום של כל מושג משנה את ציון הקרבה ביניהם. נסה להביא את המושגים למצב שבו הם כמעט חופפים.
+                </p>
+            </div>
+
             </div>
 
             <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
