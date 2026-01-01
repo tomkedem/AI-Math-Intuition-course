@@ -277,13 +277,14 @@ print(f"Modified Slope: {new_slope:.3f}")`;
                 4. איפה מפתחים טועים?
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-right" >
                 <div className="p-8 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/4 transition-all group text-right shadow-lg">
-                    <h4 className="text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right">התעלמות מהלוס <Zap size={16} className="text-amber-400" /></h4>
+                
+                <h4 className="w-full text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right justify-end">התעלמות מהלוס <Zap size={16} className="text-amber-400" /></h4>
                     <p className="text-sm text-slate-400 leading-relaxed text-right">מפתחים רואים בפלט אמת מוחלטת בלי לבדוק את הלוס. בלי הבנת השגיאה, אי אפשר לדעת אם המודל מנחש או באמת יודע.</p>
                 </div>
                 <div className="p-8 rounded-2xl bg-white/2 border border-white/5 hover:bg-white/4 transition-all group text-right shadow-lg">
-                    <h4 className="text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right">אמון עיוור בדאטה <ShieldAlert size={16} className="text-red-400" /></h4>
+                    <h4 className="w-full text-white font-bold mb-4 text-lg flex flex-row-reverse items-center gap-2 text-right justify-end">אמון עיוור בדאטה <ShieldAlert size={16} className="text-red-400" /></h4>
                     <p className="text-sm text-slate-400 leading-relaxed text-right">דאטה הוא חומר הגלם. אם הוא מוטה או לא יציב, המודל ילמד טעות יציבה. הבנת המתמטיקה עוזרת לזהות הטיות בנתונים.</p>
                 </div>
             </div>
@@ -312,17 +313,26 @@ print(f"Modified Slope: {new_slope:.3f}")`;
         </section>
 
         {/* --- Quiz Section --- */}
-        <section className="mt-32 border-t border-white/5 pt-20 pb-20 text-right">
+        <section className="mt-32 border-t border-white/5 pt-10 text-right">
             <div className="max-w-4xl mx-auto text-right">
-                <div className="flex flex-row-reverse items-center gap-4 justify-start mb-16 pr-6 border-r-4 border-blue-400/30 text-right">
+               <div
+                    dir="rtl"
+                    className="flex items-center gap-4 justify-start mb-16 pr-6 border-r-4 border-blue-400/30 text-right"
+                    >
                     <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-inner">
                         <GraduationCap size={28} className="text-blue-400 opacity-80" />
                     </div>
-                    <div className="text-right">
-                        <h2 className="text-3xl font-black text-white tracking-tight text-right">בוחן הסמכה: פרק 1</h2>
-                        <p className="text-slate-500 text-base font-medium opacity-70 text-right">הוכח שליטה באבני היסוד של ה-AI להמשך הקורס</p>
+
+                    <div className="flex flex-col gap-1">
+                        <h2 className="text-3xl font-black text-white tracking-tight pr-4 text-right">
+                        בוחן הסמכה: פרק 1
+                        </h2>
+
+                        <p className="text-slate-500 text-base font-medium opacity-70 text-right">
+                        הוכח שליטה באבני היסוד של ה-AI להמשך הקורס
+                        </p>
                     </div>
-                </div>
+                    </div>
                 
                 <div className="bg-[#0a0f1a]/50 p-4 rounded-[4rem] border border-white/5 backdrop-blur-3xl shadow-2xl text-right">
                     <AssessmentEngine 

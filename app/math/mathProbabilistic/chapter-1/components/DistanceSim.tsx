@@ -19,7 +19,7 @@ export const DistanceSim = () => {
 
     return (
         <div className="w-full bg-slate-900/60 border border-blue-500/30 rounded-[2.5rem] p-10 shadow-2xl backdrop-blur-md text-right mb-16 overflow-hidden" dir="rtl">
-            <div className="flex items-center gap-4 justify-end mb-8">
+            <div className="flex items-center gap-4 justify-start mb-8">
                 <h4 className="text-white font-black text-2xl tracking-tighter">סימולטור הגיאומטריה של הדמיון</h4>
                 <div className="p-3 bg-blue-500/20 rounded-2xl text-blue-400"><Compass size={24} /></div>
             </div>
