@@ -280,7 +280,7 @@ export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({ initialCode, onS
                         style={{
                             ...COMMON_STYLES,
                             color: 'transparent',
-                            top: '8px',
+                             
                         }}
                     />
                 </div>
