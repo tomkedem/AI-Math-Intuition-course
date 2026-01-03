@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { motion } from "framer-motion";
 import { Fingerprint, Info, Plus, CheckCircle2, Lightbulb } from "lucide-react";
 
-// מילון סמנטי (פרק 2)
+// מילון סמנטי - ייצוג רעיונות כמספרים
 const WORD_DATABASE: Record<string, number[]> = {
     "מחשב": [0.8, 0.1, 0.9, -0.2],
     "לפטופ": [0.7, 0.2, 0.8, -0.1],
@@ -18,22 +18,21 @@ export const VectorLab = () => {
     const [wordA, setWordA] = useState("מחשב");
     const [wordB, setWordB] = useState("לפטופ");
     const [showMath, setShowMath] = useState(false);
-    const [step, setStep] = useState(1); // מעקב אחרי התקדמות הלומד
+    const [step, setStep] = useState(1);
 
-    const vecA = useMemo(() => WORD_DATABASE[wordA] || [0,0,0,0], [wordA]);
-    const vecB = useMemo(() => WORD_DATABASE[wordB] || [0,0,0,0], [wordB]);
+    const vecA = useMemo(() => WORD_DATABASE[wordA] || [0, 0, 0, 0], [wordA]);
+    const vecB = useMemo(() => WORD_DATABASE[wordB] || [0, 0, 0, 0], [wordB]);
 
     const combinedVec = useMemo(() => {
         return vecA.map((val, i) => parseFloat((val + vecB[i]).toFixed(2)));
     }, [vecA, vecB]);
 
-    // פונקציית עזר למיקום בטוח שמונעת חיתוך (פרק 2: נרמול וקטורים)
-const getMapPos = (val: number, isCombined = false) => {
-    // בחיבור וקטורים הערכים יכולים להגיע ל-2 או -2, לכן נחלק בטווח גדול יותר
-    const scaleFactor = isCombined ? 4 : 2; 
-    const normalized = (val + scaleFactor / 2) / scaleFactor;
-    return `${normalized * 80 + 10}%`; 
-};
+    // פונקציית עזר למיקום בטוח שמונעת חיתוך ויזואלי
+    const getMapPos = (val: number, isResult = false) => {
+        const scaleFactor = isResult ? 4 : 2; 
+        const normalized = (val + (scaleFactor / 2)) / scaleFactor;
+        return `${normalized * 80 + 10}%`; 
+    };
 
     return (
         <div className="w-full bg-slate-950 border border-emerald-500/20 rounded-[2.5rem] p-8 shadow-2xl text-right font-sans" dir="rtl">
@@ -49,7 +48,7 @@ const getMapPos = (val: number, isCombined = false) => {
                 </div>
             </div>
 
-            {/* רכיב הנחיות דינמי - פותר את הבעיה שהלומד לא מבין מה לעשות */}
+            {/* רכיב הנחיות */}
             <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
                     { id: 1, text: "בחר שתי מילים דומות (למשל 'מחשב' ו'לפטופ')", active: step === 1 },
@@ -77,22 +76,21 @@ const getMapPos = (val: number, isCombined = false) => {
                             <motion.div 
                                 key={name}
                                 style={{ left: getMapPos(v[0]), top: getMapPos(v[1]) }}
-                                className={`absolute px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                                    name === wordA ? 'bg-emerald-500 text-black z-20 ring-4 ring-emerald-500/20' : 
-                                    name === wordB ? 'bg-blue-500 text-white z-20 ring-4 ring-blue-500/20' : 'bg-white/5 text-slate-600'
+                                className={`absolute px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                                    name === wordA ? 'bg-emerald-500 text-black z-20 ring-4 ring-emerald-500/20 shadow-lg' : 
+                                    name === wordB ? 'bg-blue-500 text-white z-20 ring-4 ring-blue-500/20 shadow-lg' : 'bg-white/5 text-slate-600'
                                 }`}
                             >
                                 {name}
                             </motion.div>
                         ))}
 
-                       {showMath && (
+                        {showMath && (
                             <motion.div 
                                 initial={{ opacity: 0, scale: 0 }}
                                 animate={{ 
                                     opacity: 1, 
                                     scale: 1, 
-                                    // שימוש ב-isCombined=true כדי למנוע את החיתוך שראית בתמונה
                                     left: getMapPos(combinedVec[0], true), 
                                     top: getMapPos(combinedVec[1], true) 
                                 }}
@@ -105,14 +103,14 @@ const getMapPos = (val: number, isCombined = false) => {
                 </div>
 
                 {/* שליטה */}
-                <div className="flex flex-col justify-center gap-6">
+                <div className="flex flex-col justify-center gap-6 text-right">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-emerald-500 block">מילה א&apos;:</label>
                             <select 
                                 value={wordA} 
                                 onChange={(e) => { setWordA(e.target.value); if(step === 1) setStep(2); }}
-                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-emerald-500 transition-all outline-none"
+                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-emerald-500 outline-none"
                             >
                                 {Object.keys(WORD_DATABASE).map(w => <option key={w} value={w}>{w}</option>)}
                             </select>
@@ -122,7 +120,7 @@ const getMapPos = (val: number, isCombined = false) => {
                             <select 
                                 value={wordB} 
                                 onChange={(e) => { setWordB(e.target.value); if(step === 1) setStep(2); }}
-                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-blue-500 transition-all outline-none"
+                                className="w-full bg-slate-900 border-2 border-white/10 p-4 text-white rounded-2xl focus:border-blue-500 outline-none"
                             >
                                 {Object.keys(WORD_DATABASE).map(w => <option key={w} value={w}>{w}</option>)}
                             </select>
@@ -141,20 +139,19 @@ const getMapPos = (val: number, isCombined = false) => {
                     <div className="bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 flex items-start gap-3">
                         <Lightbulb className="text-emerald-400 shrink-0" size={20} />
                         <p className="text-xs text-slate-300">
-                            <strong>שים לב:</strong> בגלל שווקטורים הם מספרים, המודל יכול &quot;לחשב&quot; משמעות[cite: 8]. כשמחברים מחשב + ניידות, הנקודה במפה תזוז לכיוון של לפטופ[cite: 203, 354].
+                            <strong>שים לב:</strong> בגלל שווקטורים הם רשימות של מספרים, המודל יכול לחשב משמעות בצורה גיאומטרית[cite: 8].
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* Footer עם הסבר ממוקד מטרה */}
+            {/* Footer */}
             <div className="mt-8 p-6 bg-blue-600/10 rounded-[2rem] border border-blue-500/20">
-                <div className="flex items-center gap-2 mb-2 text-blue-400">
-                    <Info size={18} />
-                    <span className="font-bold text-sm underline decoration-2">מה אנחנו לומדים מזה?</span>
+                <div className="flex items-center gap-2 mb-2 text-blue-400 text-sm font-bold">
+                    <Info size={18} /> מה אנחנו לומדים מזה?
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                    כמו שכתוב בפרק 2: &quot;המיקום הוא המשמעות&quot;[cite: 203]. במודלים של AI, מילים הן לא טקסט אלא <strong>כתובת GPS</strong>[cite: 199]. חיבור וקטורים הוא הבסיס לכך שמודל יכול להבין שילובים מורכבים של מושגים.
+                <p className="text-xs text-slate-400 leading-relaxed italic">
+                    ב-AI, מילים הן לא טקסט אלא &quot;כתובת GPS&quot; במפה דיגיטלית עצומה[cite: 199]. חיבור וקטורים מדגים איך המודל משלב רעיונות לכדי משמעות חדשה[cite: 203].
                 </p>
             </div>
         </div>

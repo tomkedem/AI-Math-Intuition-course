@@ -20,6 +20,7 @@
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "prismjs": "^1.30.0",
+    "pyodide": "^0.29.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-intersection-observer": "^10.0.0",
