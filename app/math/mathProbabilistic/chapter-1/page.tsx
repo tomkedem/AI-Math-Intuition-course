@@ -29,7 +29,7 @@ export default function Chapter1() {
             "דירוג הפופולריות של המילה"
         ],
         correctAnswer: 1,
-        explanation: "וקטור הוא הדרך של המודל לייצג משמעות כמיקום גיאומטרי. פריטים קרובים במרחב נתפסים כדומים רעיונית."
+        explanation: "וקטור הוא הדרך של המודל לייצג משמעות כמיקום גיאומטרי[cite: 61, 199]. פריטים קרובים במרחב נתפסים כדומים רעיונית[cite: 71, 204]."
     },
     {
         id: 2,
@@ -41,7 +41,43 @@ export default function Chapter1() {
             "הוא תמיד נותן תוצאה חיובית"
         ],
         correctAnswer: 1,
-        explanation: "דמיון קוסינוס בודק את הזווית. אם שני וקטורים מצביעים לאותו כיוון, הם חולקים את אותו הקשר נושאי, גם אם האורך שלהם שונה."
+        explanation: "דמיון קוסינוס בודק את הזווית והכיוון [cite: 243-247]. אם שני וקטורים מצביעים לאותו כיוון, הם חולקים הקשר נושאי דומה גם אם עוצמתם המספרית שונה[cite: 245, 258]."
+    },
+    {
+        id: 3,
+        question: "מה מייצגת ה'נורמה' של וקטור בעולם ה-Embeddings?",
+        options: [
+            "את אורך הווקטור, המעיד על עוצמת האות או חשיבות המידע",
+            "את כמות השגיאות שיש בנתונים",
+            "את מספר הממדים שיש לוקטור",
+            "את הזמן שלקח למודל לעבד את הנתון"
+        ],
+        correctAnswer: 0,
+        explanation: "הנורמה היא מספר יחיד המייצג את 'גודל' או עוצמת הווקטור כולו [cite: 228-230, 323]. נורמה גבוהה מעידה על וקטור 'חזק' יותר מבחינה מספרית[cite: 236]."
+    },
+    {
+        id: 4,
+        question: "מדוע מודלים לומדים מ'לוס' (Loss) ולא ישירות מהצלחה?",
+        options: [
+            "כי קל יותר למחשב לחסר מאשר לחבר",
+            "כי הלוס מגדיר את כיוון התיקון הנדרש כדי לצמצם את הפער מהמציאות",
+            "כי לוס תופס פחות מקום בזיכרון",
+            "כי הצלחה היא עניין סובייקטיבי למודל"
+        ],
+        correctAnswer: 1,
+        explanation: "הלוס הוא המצפן שמורה למודל כמה הוא טעה ובאיזה כיוון עליו להשתפר [cite: 93, 662-663]. זהו הדלק שמניע את תהליך הלמידה[cite: 109]."
+    },
+    {
+        id: 5,
+        question: "מהי הסכנה ההנדסית בשימוש בנתונים עם 'ערכים חריגים' (Outliers)?",
+        options: [
+            "הם גורמים למודל לעבוד לאט יותר",
+            "הם עלולים להסיט את הניבוי של המודל ולייצר 'טעות יציבה' שאינה משקפת את המציאות",
+            "הם גורמים למחיקת וקטורים אחרים",
+            "הם משנים את שפת התכנות של המודל"
+        ],
+        correctAnswer: 1,
+        explanation: "מודלים מגיבים בצורה עקבית ומדויקת למספרים[cite: 184]. שינוי קטן או חריג בדאטה עלול להסיט את כיוון הלמידה כולו, בדיוק כמו שמדרון משנה את מסלול הגלגול של כדור [cite: 184, 503-505]."
     }
   ];
 
@@ -136,6 +172,77 @@ export default function Chapter1() {
                 <DistanceSim />
             </div>
         </section>
+        
+        {/* --- אתגר יישומי: דמיון סמנטי --- */}
+        <section className="mt-24 space-y-8 text-right bg-blue-500/5 p-8 rounded-[3rem] border border-blue-500/20" dir="rtl">
+            <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-blue-500/20 rounded-2xl border border-blue-500/40">
+                    <Zap size={24} className="text-blue-400 animate-pulse" />
+                </div>
+                <div>
+                    <h3 className="text-2xl font-black text-white">אתגר 01: המרדף אחרי הדמיון המושלם</h3>
+                    <p className="text-slate-400 text-sm">הפוך את המתמטיקה לכלי עבודה בשטח</p>
+                </div>
+            </div>
+
+            <div className="space-y-4 text-slate-300">
+                <p>
+                    וקטור המטרה שלנו (<code>vector_a</code>) מייצג את המושג <strong>&quot;בינה מלאכותית&quot;</strong> במרחב הסמנטי. 
+                </p>
+                <p className="font-bold text-white">
+                    המשימה שלך: שנה את הערכים בוקטור <code>vector_b</code> כך שהמודל יזהה דמיון של 98% לפחות (0.98 ומעלה).
+                </p>
+                <div className="bg-black/30 p-4 rounded-xl text-xs border border-white/5 italic">
+                    💡 <strong>רמז מהספר:</strong> דמיון קוסינוס בוחן כיוון. נסה לשמור על יחס דומה בין המספרים לזה של וקטור המטרה.
+                </div>
+            </div>
+
+            
+            <LiveCodeEditor 
+                initialCode={`
+        import numpy as np
+
+# וקטור המטרה (בינה מלאכותית)
+vector_a = np.array([1.2, 2.4, 0.5])
+# המשימה שלך: שנה את הערכים כאן כדי להגיע לדמיון של 0.98 ומעלה
+vector_b = np.array([5.0, 1.0, 2.0]) 
+
+def calculate_similarity(a, b):
+    dot_product = np.dot(a, b)
+    norm_a = np.linalg.norm(a)
+    norm_b = np.linalg.norm(b)
+    return dot_product / (norm_a * norm_b)
+
+def draw_vectors(a, b):
+    # ויזואליזציה בסיסית של כיוון הווקטורים ב-2D (ממדים ראשונים)
+    print("\n--- מפת כיוונים (2D Projection) ---")
+    grid_size = 10
+    grid = [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
+    
+    for vec, char in [(a, 'A'), (b, 'B')]:
+        # נרמול למיקום על הגריד
+        x = int((vec[0] / np.max([a[0], b[0], 1])) * (grid_size - 1))
+        y = int((vec[1] / np.max([a[1], b[1], 1])) * (grid_size - 1))
+        grid[grid_size - 1 - y][x] = char
+    
+    for row in grid:
+        print('|' + ''.join(row) + '|')
+    print(' ' + '-' * grid_size)
+    print("A = Target, B = Your Guess")
+
+sim = calculate_similarity(vector_a, vector_b)
+print(f"Current Similarity: {sim:.4f}")
+
+# הצגת המפה רק אם אין שגיאת תחביר
+draw_vectors(vector_a, vector_b)
+
+if sim >= 0.98:
+    print("\n🌟 הצלחת! הבנת איך כיוון הווקטור קובע דמיון.")
+else:
+    print("\n❌ עדיין לא שם... נסה לשנות את הערכים ב-vector_b.")`}
+            />
+        </section>
+
 
         {/* --- 3. לוס --- */}
         <section className="mt-24 space-y-8 text-right" dir="rtl">
