@@ -198,14 +198,13 @@ export default function Chapter1() {
             </div>
 
             
-            <LiveCodeEditor 
-                initialCode={`
-        import numpy as np
+            <LiveCodeEditor
+                initialCode={`import numpy as np
 
 # וקטור המטרה (בינה מלאכותית)
 vector_a = np.array([1.2, 2.4, 0.5])
 # המשימה שלך: שנה את הערכים כאן כדי להגיע לדמיון של 0.98 ומעלה
-vector_b = np.array([5.0, 1.0, 2.0]) 
+vector_b = np.array([5.0, 1.0, 2.0])
 
 def calculate_similarity(a, b):
     dot_product = np.dot(a, b)
@@ -215,16 +214,16 @@ def calculate_similarity(a, b):
 
 def draw_vectors(a, b):
     # ויזואליזציה בסיסית של כיוון הווקטורים ב-2D (ממדים ראשונים)
-    print("\n--- מפת כיוונים (2D Projection) ---")
+    print("\\n--- מפת כיוונים (2D Projection) ---")
     grid_size = 10
     grid = [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
-    
+
     for vec, char in [(a, 'A'), (b, 'B')]:
         # נרמול למיקום על הגריד
         x = int((vec[0] / np.max([a[0], b[0], 1])) * (grid_size - 1))
         y = int((vec[1] / np.max([a[1], b[1], 1])) * (grid_size - 1))
         grid[grid_size - 1 - y][x] = char
-    
+
     for row in grid:
         print('|' + ''.join(row) + '|')
     print(' ' + '-' * grid_size)
@@ -237,9 +236,9 @@ print(f"Current Similarity: {sim:.4f}")
 draw_vectors(vector_a, vector_b)
 
 if sim >= 0.98:
-    print("\n🌟 הצלחת! הבנת איך כיוון הווקטור קובע דמיון.")
+    print("\\n🌟 הצלחת! הבנת איך כיוון הווקטור קובע דמיון.")
 else:
-    print("\n❌ עדיין לא שם... נסה לשנות את הערכים ב-vector_b.")`}
+    print("\\n❌ עדיין לא שם... נסה לשנות את הערכים ב-vector_b.")`}
             />
         </section>
 
@@ -327,13 +326,13 @@ else:
                     </div>
                 </div>
                 
-                <div className="bg-[#0a0f1a]/50 p-4 rounded-[4rem] border border-white/5 backdrop-blur-3xl shadow-2xl">
+               
                     <AssessmentEngine 
                         title="מבדק אינטואיציה מתמטית" 
                         subtitle="ענה על השאלות בעיון כדי לקבל הסמכה להמשך" 
                         questions={chapterQuestions} 
                     />
-                </div>
+               
             </div>
         </section>
 
