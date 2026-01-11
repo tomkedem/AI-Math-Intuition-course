@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { ProjectStructureTree, TheBigAssembler } from '@/components/demos/chapter-17';
@@ -154,14 +154,16 @@ def load_config(path: str = "config.json") -> dict:
                         <strong>ההסבר ההנדסי:</strong> מנגנון ה-<code>logging</code> הוא הקופסה השחורה של המהנדס. כשהמערכת תרוץ על שרת מרוחק ב-3 בלילה, הלוגים יהיו הדרך היחידה שלכם להבין למה היא נכשלה, היכן נוצרה החריגה (Exception) ואיך לתקן אותה במהירות.
                     </div>
                 </div>
-                <CodeBlock language="python" dir="ltr" code={`import logging
+                <LiveCodeEditor
+                initialCode={`import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 try:
     config = load_config()
 except FileNotFoundError:
     logging.error("Critical failure: config.json not found. Check project root.")
-    raise`} />
+    raise`}
+            />
             </section>
 
             {/* --- Exercise 6 --- */}

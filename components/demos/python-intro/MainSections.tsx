@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import { Terminal, Zap, Box, Layers, ShieldCheck } from "lucide-react";
-import { CodeBlock } from "@/components/content/CodeBlock";
+import { StaticCodeBlock } from "@/components/content/StaticCodeBlock";
 
 // --- רכיב ה-Hook המרכזי: הכוח של פייתון כ-Leverage ---
 export const AILeverageHero = () => (
@@ -41,7 +41,7 @@ export const AILeverageHero = () => (
                     <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
                     <span className="ml-2">production_ai_pipeline.py</span>
                 </div>
-                <CodeBlock 
+                <StaticCodeBlock
                     language="python"
                     code={`# מה שדרש פעם שבועות ב-C++, קורה היום ב-3 שורות
 from transformers import pipeline

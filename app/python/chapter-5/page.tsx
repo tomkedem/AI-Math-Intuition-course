@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { ProjectStructureDemo, NameMainDemo } from '@/components/demos/chapter-5';
 import { 
@@ -124,16 +124,12 @@ def normalize(text):
             </p>
             
             <div className="grid md:grid-cols-2 gap-6">
-                <CodeBlock 
-                    language="python" 
-                    code={importMathCode} 
-                    output={importMathOutput} 
-                />
-                <CodeBlock 
-                    language="python" 
-                    code={importAliasCode} 
-                    output={importAliasOutput} 
-                />
+                <LiveCodeEditor
+                initialCode={importMathCode}
+            />
+                <LiveCodeEditor
+                initialCode={importAliasCode}
+            />
             </div>
         </section>
 
@@ -176,7 +172,9 @@ def normalize(text):
                 <strong>ייבוא יחסי:</strong> משתמש בנקודות (<code>..</code>) כדי לנווט. טוב לשימוש פנימי בתוך חבילה.
             </p>
             
-            <CodeBlock language="python" code={absoluteVsRelativeCode} />
+            <LiveCodeEditor
+                initialCode={absoluteVsRelativeCode}
+            />
         </section>
 
         {/* --- 4. Docstrings --- */}
@@ -189,7 +187,9 @@ def normalize(text):
             <p className="text-slate-300">
                 תיעוד הוא לא רק לפונקציות. בראש כל קובץ צריך להיות הסבר קצר: מה הקובץ עושה ואיך משתמשים בו.
             </p>
-            <CodeBlock language="python" code={docstringModuleCode} />
+            <LiveCodeEditor
+                initialCode={docstringModuleCode}
+            />
         </section>
 
         {/* --- 5. __name__ == "__main__" --- */}

@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 // --- התיקון: ייבוא מהתיקייה הייעודית של פרק 2 ---
 import { AgeDemo, SlicingDemo, ComprehensionDemo, CleanSentencesDemo } from '@/components/demos/chapter-2';
@@ -16,55 +16,7 @@ import { ChapterLayout } from '@/components/ChapterLayout';
 
 export default function Chapter2() {
 
-  // --- דוגמאות קוד סטטיות (למקומות שאין צורך באינטראקציה) ---
-  const typesCode = `name = "Tomer"      # str
-age = 32            # int
-active = True       # bool
-score = None        # NoneType
 
-print(f"name type: {type(name)}")
-print(f"age type: {type(age)}")`;
-
-  const typesOutput = `name type: <class 'str'>
-age type: <class 'int'>`;
-
-  const typeHintsCode = `def add(a: int, b: int) -> int:
-    return a + b
-
-# ה-IDE יצעק עליך אם תנסה:
-# add("10", 20)`;
-
-  const conditionalCode = `temperature = 31
- 
-if temperature > 30:
-    print("חם מאוד היום!")
-elif temperature > 20:
-    print("מזג אוויר נעים")
-else:
-    print("קריר בחוץ")`;
-
-  const conditionalOutput = `חם מאוד היום!`;
-
-  const dictLogicCode = `actions = {
-    "hot": "הפעל מזגן",
-    "cold": "הפעל חימום",
-    "normal": "אין צורך בפעולה"
-}
- 
-state = "hot"
-print(f"Action: {actions[state]}")`;
-
-  const dictLogicOutput = `Action: הפעל מזגן`;
-
-  const loopCode = `names = ["תמר", "נועם", "תומר"]
- 
-# גם הערך וגם האינדקס
-for i, name in enumerate(names):
-    print(f"{i}: {name}")`;
-
-  const loopOutput = `0: תמר
-1: נועם
-2: תומר`;
 
   // --- שאלות למבחן ---
   const questions = [
@@ -148,11 +100,13 @@ for i, name in enumerate(names):
                     <p className="text-slate-300 mb-4">
                         בארבע שורות קצרות יצרנו ארבעה טיפוסים שונים לגמרי, בלי שום הצהרה מוקדמת:
                     </p>
-                    <CodeBlock 
-                        language="python" 
-                        code={typesCode} 
-                        output={typesOutput}
-                    />
+                    <LiveCodeEditor initialCode={`name = "Tomer"      # str
+age = 32            # int
+active = True       # bool
+score = None        # NoneType
+
+print(f"name type: {type(name)}")
+print(f"age type: {type(age)}")`} />
                 </div>
                 
                 <div className="bg-slate-900/50 rounded-xl border border-slate-800 overflow-hidden">
@@ -177,12 +131,14 @@ for i, name in enumerate(names):
                 </div>
             </div>
 
-            <CodeBlock 
-                language="python" 
-                filename="type_safety.py" 
-                code={typeHintsCode}
-                output="Result: 30" 
-            />
+            <LiveCodeEditor initialCode={`def add(a: int, b: int) -> int:
+    return a + b
+
+# ה-IDE יצעק עליך אם תנסה:
+# add("10", 20)
+
+result = add(10, 20)
+print(f"Result: {result}")`} />
         </section>
 
         {/* --- תנאים --- */}
@@ -195,11 +151,14 @@ for i, name in enumerate(names):
             <p className="text-slate-300">
                 התחביר פשוט להפליא: אין סוגריים, אין נקודה-פסיק. הקוד נקרא כמו אנגלית.
             </p>
-            <CodeBlock 
-                language="python" 
-                code={conditionalCode} 
-                output={conditionalOutput}
-            />
+            <LiveCodeEditor initialCode={`temperature = 31
+ 
+if temperature > 30:
+    print("חם מאוד היום!")
+elif temperature > 20:
+    print("מזג אוויר נעים")
+else:
+    print("קריר בחוץ")`} />
 
             <div className="grid md:grid-cols-2 gap-6 my-6">
                 <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6">
@@ -230,11 +189,14 @@ for i, name in enumerate(names):
                 במערכות מורכבות, שרשרת של if/elif הופכת לספגטי. הדרך הפייתונית היא להשתמש במילון (Dictionary) לניהול החלטות.
             </InsightBox>
             
-            <CodeBlock 
-                language="python" 
-                code={dictLogicCode} 
-                output={dictLogicOutput}
-            />
+            <LiveCodeEditor initialCode={`actions = {
+    "hot": "הפעל מזגן",
+    "cold": "הפעל חימום",
+    "normal": "אין צורך בפעולה"
+}
+ 
+state = "hot"
+print(f"Action: {actions[state]}")`} />
         </section>
 
         {/* --- לולאות --- */}
@@ -246,7 +208,11 @@ for i, name in enumerate(names):
             <p className="text-slate-300">
                 בפייתון, for לא נועדה &quot;לספור צעדים&quot; אלא לעבור על אובייקטים (Iterables).
             </p>
-            <CodeBlock language="python" code={loopCode} output={loopOutput} />
+            <LiveCodeEditor initialCode={`names = ["תמר", "נועם", "תומר"]
+ 
+# גם הערך וגם האינדקס
+for i, name in enumerate(names):
+    print(f"{i}: {name}")`} />
         </section>
 
         {/* --- חיתוכים (עם הדגמה אינטראקטיבית מתוך התיקייה החדשה) --- */}

@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { DataFrameVis, PandasLab } from '@/components/demos/chapter-14';
 import { 
@@ -212,11 +212,8 @@ print(merged)`;
                 <DataFrameVis />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={basicPandasCode} 
-                output={basicPandasOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={basicPandasCode}
             />
         </section>
 
@@ -232,11 +229,8 @@ print(merged)`;
                 טיפ: השתמש ב-<code>Parquet</code> לקבצים גדולים.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={readCsvCode} 
-                output={readCsvOutput} 
-                dir="ltr" // הפלט מכיל עברית ולכן נכריח LTR כדי שהטבלה לא תתהפך
+            <LiveCodeEditor
+                initialCode={readCsvCode}
             />
         </section>
 
@@ -259,11 +253,8 @@ print(merged)`;
                 <PandasLab />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={locIlocCode} 
-                output={locIlocOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={locIlocCode}
             />
         </section>
 
@@ -278,11 +269,8 @@ print(merged)`;
                 עיבוד הנתונים בפועל. <code>map</code> לעמודה בודדת, <code>apply</code> ללוגיקה מורכבת יותר.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={transformationsCode} 
-                output={transformationsOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={transformationsCode}
             />
         </section>
 
@@ -296,21 +284,15 @@ print(merged)`;
             <div className="grid md:grid-cols-2 gap-6">
                 <div>
                     <h4 className="text-white font-bold mb-2">טיפול ב-NaN</h4>
-                    <CodeBlock 
-                        language="python" 
-                        code={missingValuesCode} 
-                        output={missingValuesOutput} 
-                        dir="ltr"
-                    />
+                    <LiveCodeEditor
+                initialCode={missingValuesCode}
+            />
                 </div>
                 <div>
                     <h4 className="text-white font-bold mb-2">מיזוג (Merge)</h4>
-                    <CodeBlock 
-                        language="python" 
-                        code={mergeCode} 
-                        output={mergeOutput} 
-                        dir="ltr"
-                    />
+                    <LiveCodeEditor
+                initialCode={mergeCode}
+            />
                 </div>
             </div>
 

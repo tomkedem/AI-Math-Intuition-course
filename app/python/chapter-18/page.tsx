@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 // פתרון Hydration: טעינה דינמית של בלוק הקוד רק בצד הלקוח
-const CodeBlock = dynamic(() => import('@/components/content/CodeBlock').then(mod => mod.CodeBlock), { 
+const StaticCodeBlock = dynamic(() => import('@/components/content/StaticCodeBlock').then(mod => mod.StaticCodeBlock), {
   ssr: false,
   loading: () => <div className="h-24 w-full bg-slate-900/50 animate-pulse rounded-xl" />
 });
@@ -201,7 +201,7 @@ export default function Chapter18() {
                             </ul>
                         </div>
                         <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 shadow-2xl" dir="ltr">
-                            <CodeBlock language="yaml" code={`name: Quality Assurance\non: [push]\njobs:\n  run_tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install -r requirements.txt\n      - run: pytest tests/`} />
+                            <StaticCodeBlock language="yaml" code={`name: Quality Assurance\non: [push]\njobs:\n  run_tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: pip install -r requirements.txt\n      - run: pytest tests/`} />
                         </div>
                     </div>
                 </div>

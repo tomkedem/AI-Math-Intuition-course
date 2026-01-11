@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 // ייבוא מהמבנה החדש והמסודר
 import { ListLabDemo, DictLabDemo, TextStatsDemo } from '@/components/demos/chapter-3';
@@ -37,11 +37,6 @@ print(f"Intersection (&): {a & b}")
 print(f"Difference (-): {a - b}")
 print(f"Symmetric Diff (^): {a ^ b}")`;
 
-  const setOperationsOutput = `Union (|): {'Vision', 'Data', 'AI', 'ML', 'Robotics'}
-Intersection (&): {'AI'}
-Difference (-): {'Data', 'ML'}
-Symmetric Diff (^): {'Data', 'ML', 'Vision', 'Robotics'}`;
-
   const tupleCode = `def analyze(text: str) -> tuple[int, int]:
     """returns (word count, character count)."""
     return len(text.split()), len(text)
@@ -53,9 +48,6 @@ print(f"Words: {words}, Chars: {chars}")
 # Tuple כ-Key במילון (אפשרי כי הוא קבוע)
 coords = {(10, 20): "Point A", (15, 25): "Point B"}
 print(coords[(10, 20)])`;
-
-  const tupleOutput = `Words: 2, Chars: 9
-Point A`;
 
   const collectionsCode = `from collections import defaultdict, Counter, deque
 
@@ -72,10 +64,6 @@ print(f"Freq: {dict(freq)}")
 q = deque(["task1", "task2"])
 q.appendleft("urgent")
 print(f"Queue: {q}")`;
-
-  const collectionsOutput = `Counts: Counter({'ai': 3, 'is': 2, 'amazing': 1})
-Freq: {'new_key': 1}
-Queue: deque(['urgent', 'task1', 'task2'])`;
 
   const textStatsCode = `from collections import Counter
 import re
@@ -227,10 +215,8 @@ def simple_word_stats(text: str) -> dict:
 [Image of Venn diagram showing set operations]
 
 
-            <CodeBlock 
-                language="python" 
-                code={setOperationsCode} 
-                output={setOperationsOutput}
+            <LiveCodeEditor
+                initialCode={setOperationsCode}
             />
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-4">
@@ -257,10 +243,8 @@ def simple_word_stats(text: str) -> dict:
                 במערכות חכמות, היכולת לא להשתנות היא יתרון עצום כשמעבירים נתונים בין שלבים ב-Pipeline ורוצים להיות בטוחים שהמידע נשאר אמין.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={tupleCode} 
-                output={tupleOutput}
+            <LiveCodeEditor
+                initialCode={tupleCode}
             />
 
             <InsightBox type="info" title="מתי להשתמש ב-Tuple?">
@@ -295,10 +279,8 @@ def simple_word_stats(text: str) -> dict:
                 </li>
             </ul>
 
-            <CodeBlock 
-                language="python" 
-                code={collectionsCode} 
-                output={collectionsOutput}
+            <LiveCodeEditor
+                initialCode={collectionsCode}
             />
         </section>
 
@@ -314,7 +296,7 @@ def simple_word_stats(text: str) -> dict:
                 נשתמש ב-dict ו-Counter כדי לנתח טקסט: לספור מילים ולמצוא את הנפוצה ביותר.
             </p>
 
-            <CodeBlock language="python" code={textStatsCode} />
+            <LiveCodeEditor initialCode={textStatsCode} />
 
             <div className="mt-8">
                 <p className="text-sm text-slate-400 mb-2">

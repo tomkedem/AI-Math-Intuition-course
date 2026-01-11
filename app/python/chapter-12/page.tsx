@@ -3,7 +3,8 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
+import { StaticCodeBlock } from '@/components/content/StaticCodeBlock';
 import { Quiz } from '@/components/content/Quiz';
 import { TestRunnerVis, MockingLab } from '@/components/demos/chapter-12';
 import { 
@@ -167,11 +168,8 @@ Action triggered: Tests passed ✅`;
                 <TestRunnerVis />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={fixtureCode} 
-                output={fixtureOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={fixtureCode}
             />
         </section>
 
@@ -186,11 +184,8 @@ Action triggered: Tests passed ✅`;
                 אנחנו רוצים לוודא שהקוד נכשל בצורה נכונה. <code>pytest.raises</code> בודק שהפונקציה זורקת את השגיאה המצופה.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={raisesCode} 
-                output={raisesOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={raisesCode}
             />
         </section>
 
@@ -213,11 +208,8 @@ Action triggered: Tests passed ✅`;
                 <MockingLab />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={mockCode} 
-                output={mockOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={mockCode}
             />
         </section>
 
@@ -234,8 +226,7 @@ Action triggered: Tests passed ✅`;
                 כלים כמו <strong>Ruff</strong> ו-<strong>Black</strong> דואגים שהקוד יהיה אחיד ויפה לפני שהוא נכנס למערכת.
             </p>
 
-            <CodeBlock 
-                language="yaml" 
+            <StaticCodeBlock language="yaml" 
                 code={cicdCode} 
                 output={cicdOutput} 
                 dir="ltr"

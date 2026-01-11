@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { MutableTrapDemo, PipelineBuilderDemo } from '@/components/demos/chapter-4';
 import { 
@@ -185,10 +185,8 @@ print(result)`;
                 תחילה, נראה את המבנה הבסיסי ביותר:
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={basicFuncCode} 
-                output={basicFuncOutput} 
+            <LiveCodeEditor
+                initialCode={basicFuncCode}
             />
 
             <p className="text-slate-300 mt-4">
@@ -196,10 +194,8 @@ print(result)`;
                 אחד הפיצ&apos;רים הכי נוחים בפייתון הוא היכולת להחזיר מספר ערכים בבת אחת (Tuple Unpacking), מה שחוסך יצירת מבנים מיותרים.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={returnCode} 
-                output={returnOutput} 
+            <LiveCodeEditor
+                initialCode={returnCode}
             />
             
             <InsightBox type="info" title="פרמטרים בעלי שם (Keyword Arguments)">
@@ -245,10 +241,8 @@ print(result)`;
                 <code>**kwargs</code> מאפשר לך לאסוף פרמטרים לא צפויים למילון, ולשמור על הקוד יציב.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={argsKwargsCode} 
-                output={argsKwargsOutput} 
+            <LiveCodeEditor
+                initialCode={argsKwargsCode}
             />
         </section>
 
@@ -266,20 +260,16 @@ print(result)`;
                 </p>
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={firstClassCode} 
-                output={firstClassOutput}
+            <LiveCodeEditor
+                initialCode={firstClassCode}
             />
 
             <h4 className="text-xl font-bold text-white mt-8 mb-4">Lambda: פונקציות אנונימיות</h4>
             <p className="text-slate-300 mb-4">
                 לפעמים צריך פונקציה קטנה וחד-פעמית (למשל עבור מיון או map). במקום להגדיר אותה עם שם, משתמשים ב-lambda.
             </p>
-            <CodeBlock 
-                language="python" 
-                code={lambdaCode} 
-                output={lambdaOutput}
+            <LiveCodeEditor
+                initialCode={lambdaCode}
             />
         </section>
 
@@ -305,11 +295,9 @@ print(result)`;
                     <p className="text-slate-300 text-sm mb-2">
                         תיעוד הוא לא בונוס, הוא חלק מהקוד. השתמש ב-<code>&quot;&quot;&quot; &quot;&quot;&quot;</code> כדי להסביר מה הפונקציה עושה.
                     </p>
-                    <CodeBlock 
-                        language="python" 
-                        code={docstringCode} 
-                        output={docstringOutput}
-                    />
+                    <LiveCodeEditor
+                initialCode={docstringCode}
+            />
                 </div>
             </div>
         </section>
@@ -332,10 +320,8 @@ print(result)`;
                 <PipelineBuilderDemo />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={mainExampleCode} 
-                output={mainExampleOutput}
+            <LiveCodeEditor
+                initialCode={mainExampleCode}
             />
         </section>
 

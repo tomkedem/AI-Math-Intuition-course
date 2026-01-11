@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { PathNavigator, EnvConfigLab } from '@/components/demos/chapter-7';
 import { 
@@ -193,21 +193,15 @@ DataFrame[rows=100, cols=5]`;
             </div>
 
             {/* כאן היה חסר השימוש במשתנים - הוספתי אותם כעת */}
-            <CodeBlock 
-                language="python" 
-                code={pathlibCode} 
-                output={pathlibOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={pathlibCode}
             />
             
             <InsightBox type="info" title="איתור שורש הפרויקט">
                 במקום לנחש איפה הקובץ נמצא, אפשר לחפש דינמית את תיקיית הגיט או ה-pyproject.toml:
-                <CodeBlock 
-                    language="python" 
-                    code={findRootCode} 
-                    output={findRootOutput} 
-                    dir="ltr"
-                />
+                <LiveCodeEditor
+                initialCode={findRootCode}
+            />
             </InsightBox>
         </section>
 
@@ -223,11 +217,8 @@ DataFrame[rows=100, cols=5]`;
                 ב-JSON, פרמטר הקסם הוא <code>ensure_ascii=False</code>.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={jsonUnicodeCode} 
-                output={jsonUnicodeOutput} 
-                dir="ltr" // מכריח כיוון LTR כדי שהסוגריים המסולסלים לא ישברו
+            <LiveCodeEditor
+                initialCode={jsonUnicodeCode}
             />
         </section>
 
@@ -243,11 +234,8 @@ DataFrame[rows=100, cols=5]`;
                 פורמט <strong>Parquet</strong> מהיר פי כמה ותופס פחות מקום.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={parquetCode} 
-                output={parquetOutput}
-                dir="ltr" 
+            <LiveCodeEditor
+                initialCode={parquetCode}
             />
         </section>
 
@@ -270,11 +258,8 @@ DataFrame[rows=100, cols=5]`;
                 <EnvConfigLab />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={envLoadCode} 
-                output={envLoadOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={envLoadCode}
             />
         </section>
 
@@ -289,11 +274,8 @@ DataFrame[rows=100, cols=5]`;
                 במקום לכתוב פונקציה לכל סוג קובץ, נכתוב פונקציה אחת חכמה שמזהה את הסיומת ומחזירה את המידע.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={universalLoaderCode} 
-                output={universalLoaderOutput}
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={universalLoaderCode}
             />
         </section>
 

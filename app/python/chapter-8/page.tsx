@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox'; // הרכיב שיצרנו
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { TryExceptVis, LoggerLab, ErrorFlowChart } from '@/components/demos/chapter-8';
 import { 
@@ -212,11 +212,8 @@ run_pipeline([])`;
                 <TryExceptVis />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={basicTryCode} 
-                output={basicTryOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={basicTryCode}
             />
 
             {/* InsightBox 1: Intuition */}
@@ -236,11 +233,8 @@ run_pipeline([])`;
                 אל תזרוק סתם <code>Exception</code>. צור שגיאות משלך כמו <code>ModelNotFoundError</code> כדי שהקוד שיטפל בשגיאה ידע בדיוק מה קרה.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={customExceptionCode} 
-                output={customExceptionOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={customExceptionCode}
             />
         </section>
 
@@ -265,11 +259,8 @@ run_pipeline([])`;
                 <LoggerLab />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={loggingBasicCode} 
-                output={loggingBasicOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={loggingBasicCode}
             />
 
             {/* InsightBox 2: Warning */}
@@ -290,11 +281,8 @@ run_pipeline([])`;
                 הוספת <strong>Correlation ID</strong> מאפשרת לעקוב אחרי בקשה אחת לאורך כל חיי המערכת.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={structuredLogCode} 
-                output={structuredLogOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={structuredLogCode}
             />
 
             {/* InsightBox 3: Info */}
@@ -314,11 +302,8 @@ run_pipeline([])`;
                 שילוב של הכל ביחד: טעינת נתונים, עיבוד, טיפול בשגיאות ספציפיות, ולוגים ברורים.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={fullPipelineCode} 
-                output={fullPipelineOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={fullPipelineCode}
             />
         </section>
 

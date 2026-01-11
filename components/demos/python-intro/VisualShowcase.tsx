@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { ChevronDown } from "lucide-react"; // הייבוא שהיה חסר
-import { CodeBlock } from "@/components/content/CodeBlock";
+import { StaticCodeBlock } from "@/components/content/StaticCodeBlock";
 
 // הגדרת טיפוסים למניעת שגיאת any
 interface XRayCardProps {
@@ -84,7 +84,7 @@ export const CodeEvolutionDemo = () => {
                 <button onClick={() => setMode('old')} className={`flex-1 py-3 text-xs font-bold transition-colors ${mode === 'old' ? 'text-white bg-slate-800' : 'text-slate-500 hover:text-slate-300'}`}>Legacy Style</button>
                 <button onClick={() => setMode('pythonic')} className={`flex-1 py-3 text-xs font-bold transition-colors ${mode === 'pythonic' ? 'text-emerald-400 bg-slate-800' : 'text-slate-500 hover:text-slate-300'}`}>Pythonic</button>
             </div>
-            <div className="p-4" dir="ltr"><CodeBlock language="python" code={codes[mode]} /></div>
+            <div className="p-4" dir="ltr"><StaticCodeBlock language="python" code={codes[mode]} /></div>
         </div>
     );
 };
@@ -106,7 +106,7 @@ export const CapabilityExplorer = () => {
                 ))}
             </div>
             <div className="bg-slate-950 rounded-2xl p-6 border border-slate-800 shadow-inner flex flex-col justify-center" dir="ltr">
-                <CodeBlock language="python" code={caps[active].code} />
+                <StaticCodeBlock language="python" code={caps[active].code} />
             </div>
         </div>
     );

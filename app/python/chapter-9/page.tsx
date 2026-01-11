@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { ClassVsInstance, DataclassLab, CompositionVis } from '@/components/demos/chapter-9';
 import { 
@@ -217,11 +217,8 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
                 המחלקה היא התבנית, האובייקט הוא התוצר. <code>__init__</code> מאתחלת את הנתונים, ו-<code>self</code> הוא הגישה לאובייקט עצמו.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={basicClassCode} 
-                output={basicClassOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={basicClassCode}
             />
         </section>
 
@@ -236,11 +233,8 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
                 מתודות כמו <code>__str__</code> ו-<code>__len__</code> מאפשרות לאובייקט שלך להתנהג כמו אובייקט פייתון טבעי.
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={magicMethodsCode} 
-                output={magicMethodsOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={magicMethodsCode}
             />
         </section>
 
@@ -260,11 +254,8 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
                 <ClassVsInstance />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={classVarCode} 
-                output={classVarOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={classVarCode}
             />
         </section>
 
@@ -279,11 +270,8 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
                 לא כל פעולה קשורה למופע ספציפי. לפעמים אנחנו רוצים &quot;מפעל&quot; ליצירת אובייקטים (classmethod) או סתם פונקציית עזר (staticmethod).
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={decoratorsCode} 
-                output={decoratorsOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={decoratorsCode}
             />
         </section>
 
@@ -307,18 +295,12 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mt-6">
-                <CodeBlock 
-                    language="python" 
-                    code={dataclassCode} 
-                    output={dataclassOutput} 
-                    dir="ltr"
-                />
-                <CodeBlock 
-                    language="python" 
-                    code={frozenCode} 
-                    output={frozenOutput} 
-                    dir="ltr"
-                />
+                <LiveCodeEditor
+                initialCode={dataclassCode}
+            />
+                <LiveCodeEditor
+                initialCode={frozenCode}
+            />
             </div>
 
             <InsightBox type="info" title="מתי להשתמש ב-frozen?">
@@ -340,11 +322,8 @@ print(cleaner.clean("!שלום, עולם!!!"))`;
             <CompositionVis />
 
             <h4 className="text-xl font-bold text-white mt-8 mb-4">דוגמה מסכמת: TextCleaner</h4>
-            <CodeBlock 
-                language="python" 
-                code={textCleanerCode} 
-                output={textCleanerOutput} 
-                // כאן אין dir=ltr כי הפלט הוא בעברית תקינה
+            <LiveCodeEditor
+                initialCode={textCleanerCode}
             />
         </section>
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { MemoryVisualizer, VectorizationRace } from '@/components/demos/chapter-13';
 import { 
@@ -173,18 +173,12 @@ print(word_freq_numpy(words))`;
                 לפני שמתקנים, מודדים. <code>timeit</code> נותן זמן מדויק, ו-<code>cProfile</code> מראה איפה בדיוק צוואר הבקבוק.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={timeitCode} 
-                output={timeitOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={timeitCode}
             />
 
-            <CodeBlock 
-                language="python" 
-                code={profileCode} 
-                output={profileOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={profileCode}
             />
         </section>
 
@@ -208,11 +202,8 @@ print(word_freq_numpy(words))`;
                 <MemoryVisualizer />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={generatorCode} 
-                output={generatorOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={generatorCode}
             />
         </section>
 
@@ -236,11 +227,8 @@ print(word_freq_numpy(words))`;
                 <VectorizationRace />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={numpyCode} 
-                output={numpyOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={numpyCode}
             />
 
             <InsightBox type="info" title="למה זה מהיר?">
@@ -259,11 +247,8 @@ print(word_freq_numpy(words))`;
                 השוואה בין פתרון &quot;נאיבי&quot; לפתרון מבוסס NumPy. בנפחים גדולים, ההבדל הוא עצום.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={numpyVsNaiveCode} 
-                output={numpyVsNaiveOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={numpyVsNaiveCode}
             />
         </section>
 

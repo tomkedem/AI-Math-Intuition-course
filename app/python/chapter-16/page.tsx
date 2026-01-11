@@ -5,7 +5,7 @@ import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
 import { Quiz } from '@/components/content/Quiz';
 
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { CLITerminalSim, ArgparseVsTyper } from '@/components/demos/chapter-16';
 import { 
     Terminal as TerminalIcon, Zap, 
@@ -200,12 +200,9 @@ if __name__ == "__main__":
                     כדי שהכלי שלכם יהיה שימושי באמת, אתם רוצים להריץ אותו כפקודה (כמו <code>mintx</code>) ולא כקובץ פייתון. עושים זאת על ידי הגדרת <strong>entry points</strong> בקובץ ההגדרות של הפרויקט:
                 </p>
                 
-                <CodeBlock 
-                    language="python" 
-                    filename="pyproject.toml"
-                    dir="ltr"
-                    code={`[project.scripts]\nmintx = "mintx.main:app"`}
-                />
+                <LiveCodeEditor
+                initialCode={`[project.scripts]\nmintx = "mintx.main:app"`}
+            />
                 
                 <p>
                     לאחר מכן, התקנה במצב {`"עריכה"`} (Editable) תאפשר לכם להריץ את הפקודה מכל מקום במחשב, בעוד שהשינויים בקוד יתעדכנו מיידית:
@@ -230,7 +227,9 @@ if __name__ == "__main__":
                     <li><strong className="text-emerald-400">0 – הצלחה:</strong> הכל עבר בשלום, ה-CI יכול להמשיך לשלב הבא.</li>
                     <li><strong className="text-red-400">כל מספר אחר (1-255) – שגיאה:</strong> המערכת תזהה את הכשל ותעצור את ה-Pipeline מיד.</li>
                 </ul>
-                <CodeBlock language="python" dir="ltr" code={`if not file.endswith(".csv"):\n    typer.echo("Error: CSV only")\n    raise typer.Exit(code=1)\n\nraise typer.Exit(code=0) # Success`} />
+                <LiveCodeEditor
+                initialCode={`if not file.endswith(".csv"):\n    typer.echo("Error: CSV only")\n    raise typer.Exit(code=1)\n\nraise typer.Exit(code=0) # Success`}
+            />
             </div>
         </section>
 

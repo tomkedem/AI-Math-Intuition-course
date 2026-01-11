@@ -10,7 +10,7 @@ import {
 
 import { motion } from "framer-motion";
 
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 
 import { InsightBox } from '@/components/content/InsightBox';
 import { Quiz } from '@/components/content/Quiz';
@@ -75,9 +75,6 @@ print(f"Matrix Z shape: {z.shape}")
 print(f"Device: {z.device}")
 `;
 
-  const torchOutput = `Matrix Z shape: torch.Size([1000, 1000])
-Device: cuda:0`;
-
   const messyCode = `def calc(x,y):
    res=x*y+10
    if res>100:return True
@@ -125,11 +122,6 @@ if __name__ == "__main__":
     result = to_json(stats)
     print(result)
 `;
-
-  const engineeringOutput = `{
-  "word_count": 6,
-  "char_count": 31
-}`;
 
   const chapterQuestions = [
     {
@@ -257,11 +249,9 @@ if __name__ == "__main__":
 
             <div className="my-8">
                 <p className="text-sm text-slate-400 mb-2">דוגמה חיה: חישוב ב-GPU דרך פייתון</p>
-                <CodeBlock 
-                    language="python"
-                    filename="under_the_hood.py"
-                    code={torchCode}
-                    output={torchOutput} 
+                <LiveCodeEditor
+                    initialCode={torchCode}
+                    pythonPackages={['torch']}
                 />
             </div>
 
@@ -319,10 +309,8 @@ if __name__ == "__main__":
                     animate={{ opacity: 1, filter: 'blur(0px)' }}
                     transition={{ duration: 0.4 }}
                 >
-                    <CodeBlock 
-                        language="python"
-                        filename={pep8Fixed ? "clean_code.py (PEP 8 Compliant)" : "messy_code.py (Bad Style)"}
-                        code={pep8Fixed ? cleanCode : messyCode}
+                    <LiveCodeEditor
+                        initialCode={pep8Fixed ? cleanCode : messyCode}
                     />
                 </motion.div>
             </div>
@@ -373,11 +361,8 @@ if __name__ == "__main__":
                 המטרה: לכתוב סקריפט שמקבל טקסט, מנקה אותו משוליים ורווחים, סופר מילים ומחזיר תוצאה כ-JSON תקין.
             </p>
 
-            <CodeBlock 
-                language="python"
-                filename="text_to_json.py"
-                code={engineeringCode}
-                output={engineeringOutput}
+            <LiveCodeEditor
+                initialCode={engineeringCode}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">

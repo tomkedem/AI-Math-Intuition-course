@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { DecoratorBuilder, ContextManagerVis } from '@/components/demos/chapter-11';
 import { 
@@ -236,11 +236,8 @@ print(res)`;
                 <DecoratorBuilder />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={simpleDecoratorCode} 
-                output={simpleDecoratorOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={simpleDecoratorCode}
             />
         </section>
 
@@ -256,18 +253,12 @@ print(res)`;
             </p>
             
             <div className="grid md:grid-cols-2 gap-6">
-                <CodeBlock 
-                    language="python" 
-                    code={repeatDecoratorCode} 
-                    output={repeatDecoratorOutput} 
-                    dir="ltr"
-                />
-                <CodeBlock 
-                    language="python" 
-                    code={lruCacheCode} 
-                    output={lruCacheOutput} 
-                    dir="ltr"
-                />
+                <LiveCodeEditor
+                initialCode={repeatDecoratorCode}
+            />
+                <LiveCodeEditor
+                initialCode={lruCacheCode}
+            />
             </div>
         </section>
 
@@ -290,16 +281,15 @@ print(res)`;
                 <ContextManagerVis />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={contextManagerCode} 
-                output={contextManagerOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={contextManagerCode}
             />
 
             <InsightBox type="intuition" title="קיצור דרך: @contextmanager">
                 לא חייבים לכתוב מחלקה שלמה. הספרייה <code>contextlib</code> מאפשרת להפוך פונקציה פשוטה (עם <code>yield</code>) למנהל הקשר חכם.
-                <CodeBlock language="python" code={contextLibCode} output={contextLibOutput} dir="ltr"/>
+                <LiveCodeEditor
+                initialCode={contextLibCode}
+            />
             </InsightBox>
         </section>
 
@@ -315,11 +305,8 @@ print(res)`;
                 זהו הכלי המושלם לאובייקטים שכל תפקידם הוא להחזיק נתונים.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={dataclassCode} 
-                output={dataclassOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={dataclassCode}
             />
         </section>
 
@@ -334,11 +321,8 @@ print(res)`;
                 נשלב דקורטור למדידת זמן עם <code>dataclass</code> כדי להחזיר תוצאה עשירה ומדויקת.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={finalExampleCode} 
-                output={finalExampleOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={finalExampleCode}
             />
         </section>
 

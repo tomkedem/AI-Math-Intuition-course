@@ -3,7 +3,8 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
+import { StaticCodeBlock } from '@/components/content/StaticCodeBlock';
 import { Quiz } from '@/components/content/Quiz';
 import { VenvSimulator, ConfigComparator } from '@/components/demos/chapter-6';
 import { 
@@ -159,8 +160,7 @@ Git will now ignore .venv and secrets.`;
                 <VenvSimulator />
             </div>
 
-            <CodeBlock 
-                language="bash" 
+            <StaticCodeBlock language="bash" 
                 code={venvCommands} 
                 output={venvOutput}
             />
@@ -181,8 +181,7 @@ Git will now ignore .venv and secrets.`;
                 <code>pip</code> הוא הכלי שמתקין חבילות מהאינטרנט. כדי לזכור מה התקנו, אנחנו שומרים את הרשימה לקובץ.
             </p>
             
-            <CodeBlock 
-                language="bash" 
+            <StaticCodeBlock language="bash" 
                 code={pipInstallCode} 
                 output={pipOutput}
             />
@@ -202,8 +201,7 @@ Git will now ignore .venv and secrets.`;
                 </p>
             </div>
 
-            <CodeBlock 
-                language="bash" 
+            <StaticCodeBlock language="bash" 
                 code={poetryInstallCode} 
                 output={poetryOutput}
             />
@@ -218,8 +216,7 @@ Git will now ignore .venv and secrets.`;
                 <ConfigComparator />
             </div>
 
-            <CodeBlock 
-                language="bash" 
+            <StaticCodeBlock language="bash" 
                 code={poetryGroupsCode} 
                 output={poetryGroupsOutput}
             />
@@ -240,8 +237,7 @@ Git will now ignore .venv and secrets.`;
                     <p className="text-slate-300 text-sm mb-2">
                         לעולם אל תעלה את תיקיית <code>.venv</code> או קבצים זמניים ל-Git.
                     </p>
-                    <CodeBlock 
-                        language="bash" 
+                    <StaticCodeBlock language="bash" 
                         code={gitIgnoreCode} 
                         output={gitIgnoreOutput}
                     />

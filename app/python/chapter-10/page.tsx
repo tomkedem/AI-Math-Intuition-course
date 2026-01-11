@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
-import { CodeBlock } from '@/components/content/CodeBlock';
+import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { TypeSafetyLab, ProtocolVis } from '@/components/demos/chapter-10';
 import { 
@@ -204,11 +204,8 @@ print(stats)`;
                 <TypeSafetyLab />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={basicTypesCode} 
-                output={basicTypesOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={basicTypesCode}
             />
         </section>
 
@@ -224,11 +221,8 @@ print(stats)`;
                 <code>Literal</code> מאפשר להגביל ערכים למחרוזות ספציפיות בלבד (כמו Enum).
             </p>
             
-            <CodeBlock 
-                language="python" 
-                code={unionOptionalCode} 
-                output={unionOptionalOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={unionOptionalCode}
             />
         </section>
 
@@ -244,18 +238,12 @@ print(stats)`;
                 וכשעובדים עם מילונים שמתנהגים כמו אובייקטים, <code>TypedDict</code> הוא החבר הכי טוב שלך.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={collectionsCode} 
-                output={collectionsOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={collectionsCode}
             />
 
-            <CodeBlock 
-                language="python" 
-                code={typedDictCode} 
-                output={typedDictOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={typedDictCode}
             />
         </section>
 
@@ -275,11 +263,8 @@ print(stats)`;
                 <ProtocolVis />
             </div>
 
-            <CodeBlock 
-                language="python" 
-                code={protocolCode} 
-                output={protocolOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={protocolCode}
             />
 
             <InsightBox type="intuition" title="מה זה mypy?">
@@ -298,11 +283,8 @@ print(stats)`;
                 הנה הפרויקט המוכר שלנו, אבל הפעם כשהוא כתוב כמו שמערכת Enterprise צריכה להיות כתובה.
             </p>
 
-            <CodeBlock 
-                language="python" 
-                code={finalExampleCode} 
-                output={finalExampleOutput} 
-                dir="ltr"
+            <LiveCodeEditor
+                initialCode={finalExampleCode}
             />
         </section>
 
