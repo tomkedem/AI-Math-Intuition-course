@@ -75,6 +75,44 @@ print(f"Matrix Z shape: {z.shape}")
 print(f"Device: {z.device}")
 `;
 
+  const mockTorchSetup = `
+import sys
+import types
+
+class MockTensor:
+    def __init__(self, shape, device="cpu"):
+        self.shape = shape
+        self.device = device
+
+    def cuda(self):
+        self.device = "cuda:0"
+        return self
+
+    def __matmul__(self, other):
+        return MockTensor(self.shape, self.device)
+
+    def __str__(self):
+         return f"Tensor({self.shape}, device='{self.device}')"
+
+    @property
+    def dtype(self):
+        return "float32"
+
+class MockTorch:
+    def ones(self, shape):
+        return MockTensor(shape)
+    
+    def tensor(self, data):
+        return MockTensor(len(data))
+
+torch_module = types.ModuleType("torch")
+torch_module.ones = MockTorch().ones
+torch_module.tensor = MockTorch().tensor
+sys.modules["torch"] = torch_module
+
+print("⚠️ Running in browser environment (Mocking GPU operations)")
+`;
+
   const messyCode = `def calc(x,y):
    res=x*y+10
    if res>100:return True
@@ -251,7 +289,7 @@ if __name__ == "__main__":
                 <p className="text-sm text-slate-400 mb-2">דוגמה חיה: חישוב ב-GPU דרך פייתון</p>
                 <LiveCodeEditor
                     initialCode={torchCode}
-                    pythonPackages={['torch']}
+                    setupCode={mockTorchSetup}
                 />
             </div>
 

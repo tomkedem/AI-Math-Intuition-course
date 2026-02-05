@@ -4,7 +4,6 @@ import React from 'react';
 import { ChapterLayout } from '@/components/ChapterLayout';
 import { InsightBox } from '@/components/content/InsightBox';
 import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
-import { LiveCodeEditor } from '@/components/content/LiveCodeEditor';
 import { Quiz } from '@/components/content/Quiz';
 import { ProjectStructureTree, TheBigAssembler } from '@/components/demos/chapter-17';
 import { 

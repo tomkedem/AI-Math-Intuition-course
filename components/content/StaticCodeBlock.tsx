@@ -26,6 +26,10 @@
 
 import React, { useState, useMemo } from 'react';
 import Prism from 'prismjs';
+
+// Disable Prism's auto-highlighting to prevent hydration mismatches
+Prism.manual = true;
+
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-bash';
@@ -176,7 +180,7 @@ export const StaticCodeBlock: React.FC<StaticCodeBlockProps> = ({
             </div>
 
             {/* Code Area */}
-            <div className={`relative ${heightClass || 'max-h-[500px]'} bg-[#0B1120] overflow-auto flex`}>
+            <div className={`relative ${heightClass || 'max-h-125'} bg-[#0B1120] overflow-auto flex`}>
                 {/* Line Numbers */}
                 {showLineNumbers && (
                     <div

@@ -7,7 +7,7 @@ import { ArrowLeft, CodeXml, Sigma, BrainCog, BookOpen } from "lucide-react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine, ISourceOptions } from "tsparticles-engine";
-import { Tilt } from 'react-tilt';
+import { Tilt } from '@/components/ui/Tilt';
 
 export default function HomePage() {
 

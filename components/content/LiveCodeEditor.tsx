@@ -58,6 +58,9 @@ export interface LiveCodeEditorProps {
     /** Initial Python code to display */
     initialCode: string;
 
+    /** Optional callback to simulate execution without running Pyodide */
+    onRun?: (code: string) => string;
+
     /** Callback fired when code runs successfully */
     onSuccess?: (output: string) => void;
 
@@ -94,6 +97,9 @@ export interface LiveCodeEditorProps {
         background?: string;
         border?: string;
     };
+
+    /** Hidden setup code to run before the user's code (useful for mocking libraries) */
+    setupCode?: string;
 }
 
 interface ExecutionResult {
@@ -394,13 +400,9 @@ function useAutoSave(
  */
 function useDebouncedHighlight(code: string, delay: number = 300) {
     const [highlightedCode, setHighlightedCode] = useState('');
-    const [isClient, setIsClient] = useState(false);
+    // Fix: Use lazy initialization instead of useEffect to detect client-side
+    const [isClient] = useState(() => typeof window !== 'undefined');
     const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
-
-    // Detect client-side hydration
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
 
     useEffect(() => {
         // Only highlight on client-side after hydration
@@ -735,6 +737,7 @@ const COMMON_STYLES: React.CSSProperties = {
 
 export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({
     initialCode,
+    onRun,
     onSuccess,
     onError,
     onChange,
@@ -745,6 +748,7 @@ export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({
     height = 'h-64',
     pythonPackages = ['numpy'],
     readOnly = false,
+    setupCode,
     // theme = {} // TODO: Implement theme customization
 }) => {
     // ========================================================================
@@ -824,6 +828,14 @@ export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({
         setExecutionTime(null);
 
         try {
+            if (onRun) {
+                const simulatedOutput = onRun(code) ?? "";
+                setOutput(simulatedOutput);
+                onSuccess?.(simulatedOutput);
+                setExecutionTime(0);
+                return;
+            }
+
             // Initialize Pyodide on first run (lazy loading)
             if (!pyodide.isLoaded) {
                 console.log('🔄 Starting Pyodide initialization...');
@@ -834,7 +846,8 @@ export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({
             // Now run the code
             console.log('▶️ Running Python code...');
 
-            const result = await pyodide.execute(code, maxExecutionTime);
+            const fullCode = setupCode ? `${setupCode}\n${code}` : code;
+            const result = await pyodide.execute(fullCode, maxExecutionTime);
 
             if (result.error) {
                 setError(result.error);
@@ -857,7 +870,7 @@ export const LiveCodeEditor: React.FC<LiveCodeEditorProps> = ({
         } finally {
             setIsRunning(false);
         }
-    }, [code, isRunning, pyodide, maxExecutionTime, onSuccess, onError]);
+    }, [code, isRunning, pyodide, maxExecutionTime, onRun, onSuccess, onError]);
 
     const handleCopy = useCallback(() => {
         navigator.clipboard.writeText(code);
